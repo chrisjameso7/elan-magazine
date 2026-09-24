@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  --color-warm-ivory: #F5F0E8;
+  --color-ink-black: #11100F;
+  --color-elan-wine: #751F3D;
+  --color-dusty-rose: #C98B9D;
+  --color-soft-blush: #EAD6D8;
+  --color-champagne: #C5A46D;
+  --color-deep-espresso: #211B19;
+
+  --font-serif-display: var(--font-playfair), Didot, "Bodoni MT", Georgia, serif;
+  --font-serif-reading: var(--font-newsreader), "Cormorant Garamond", Georgia, serif;
+  --font-sans-editorial: var(--font-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono-meta: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --background: #F5F0E8;
+  --foreground: #11100F;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans-editorial);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: #751F3D;
+  color: #FFFFFF;
+}
+
+/* Custom editorial typography utility classes */
+.font-display {
+  font-family: var(--font-serif-display);
+}
+
+.font-reading {
+  font-family: var(--font-serif-reading);
+}
+
+.font-editorial-sans {
+  font-family: var(--font-sans-editorial);
+}
+
+.font-mono-meta {
+  font-family: var(--font-mono-meta);
+}
+
+/* Drop-cap utility for reading experience */
+.drop-cap::first-letter {
+  font-family: var(--font-serif-display);
+  float: left;
+  font-size: 4.25rem;
+  line-height: 0.8;
+  padding-top: 0.15rem;
+  padding-right: 0.65rem;
+  padding-bottom: 0.1rem;
+  color: #751F3D;
+  font-weight: 600;
+}
+
+/* Subtle hairline rules */
+.editorial-rule {
+  border-color: rgba(17, 16, 15, 0.12);
+}
+
+.editorial-rule-wine {
+  border-color: rgba(117, 31, 61, 0.25);
+}
+
+/* Translucent surfaces used occasionally for layered editorial moments */
+.glass-veil {
+  background: rgba(245, 240, 232, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-veil-dark {
+  background: rgba(17, 16, 15, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
