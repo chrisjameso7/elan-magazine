@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { Share2, Bookmark, ArrowLeft, ArrowUpRight, Globe, ExternalLink } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -15,6 +16,21 @@ export function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = MOCK_ARTICLES.find((a) => a.slug === slug);
+  if (!article || !article.interview) return { title: 'Interview Not Found — ÉLAN' };
+  return {
+    title: `${article.interview.subjectName}: "${article.interview.keyQuote}" — ÉLAN Interviews`,
+    description: article.dek,
+    openGraph: {
+      title: `${article.interview.subjectName} — ÉLAN Interviews`,
+      description: article.dek,
+      images: [{ url: article.interview.portrait.url, alt: article.interview.subjectName }],
+    },
+  };
 }
 
 export default async function InterviewPage({ params }: PageProps) {

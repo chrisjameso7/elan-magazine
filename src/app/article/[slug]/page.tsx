@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { Clock, Share2, Bookmark, ArrowLeft, ArrowUpRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -15,6 +16,21 @@ export function generateStaticParams() {
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = MOCK_ARTICLES.find((a) => a.slug === slug);
+  if (!article) return { title: 'Story Not Found — ÉLAN' };
+  return {
+    title: `${article.title} — ÉLAN`,
+    description: article.dek,
+    openGraph: {
+      title: `${article.title} — ÉLAN`,
+      description: article.dek,
+      images: [{ url: article.coverImage.url, alt: article.title }],
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: PageProps) {
