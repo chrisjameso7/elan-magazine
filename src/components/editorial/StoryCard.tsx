@@ -29,48 +29,56 @@ export default function StoryCard({
 
   const href = getHref();
 
-  // VARIANT 1: THE LEAD HERO
+  // VARIANT 1: THE ART-DIRECTED LEAD HERO (NOVA & Pink Couture Asymmetry)
   if (variant === 'lead') {
     return (
-      <article className="relative w-full group overflow-hidden border-b border-[#11100F]/12 pb-12 sm:pb-16">
-        <Link href={href} className="block">
-          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/9] overflow-hidden bg-[#11100F]/5">
-            <img
-              src={article.coverImage.url}
-              alt={article.coverImage.alt}
-              className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-            />
-            {/* Subtle gradient vignette for text legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#11100F]/80 via-[#11100F]/30 to-transparent" />
+      <article className="relative w-full group border-b border-[#11100F]/12 pb-14 sm:pb-20 lg:pb-24 pt-2">
+        <Link href={href} className="block focus:outline-none">
+          {/* Asymmetric 12-Column Editorial Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-0 items-center relative">
+            {/* Photographic Canvas (Columns 5–12 on desktop with offset layer breaking rectangular frame) */}
+            <div className="lg:col-span-8 lg:col-start-5 relative">
+              {/* Subtle offset physical paper plane behind photo */}
+              <div
+                aria-hidden="true"
+                className="absolute -top-3 -right-3 sm:-top-5 sm:-right-5 w-full h-full bg-[#EAD6D8]/35 border border-[#751F3D]/10 pointer-events-none transition-transform duration-700 ease-out group-hover:translate-x-1 group-hover:-translate-y-1"
+              />
 
-            {/* Overlaid Headline & Editorial Metadata */}
-            <div className="absolute inset-0 p-6 sm:p-10 lg:p-16 flex flex-col justify-end text-white">
-              <div className="max-w-4xl space-y-3 sm:space-y-4">
-                <div className="flex items-center gap-3">
-                  <span className="px-2.5 py-1 bg-[#751F3D] text-white text-[10px] sm:text-xs uppercase tracking-[0.2em] font-semibold">
-                    {article.categoryLabel}
-                  </span>
-                  <span className="text-white/60 text-xs tracking-wider uppercase">
-                    {article.readTime}
-                  </span>
-                  {article.coverImage.caption && (
-                    <span className="hidden md:inline-block text-white/50 text-xs italic font-reading">
-                      — {article.coverImage.caption}
-                    </span>
-                  )}
-                </div>
+              {/* High-fashion photographic frame */}
+              <div className="relative aspect-[4/5] sm:aspect-[16/10] lg:aspect-[16/11] overflow-hidden bg-[#11100F]/5 z-0">
+                <img
+                  src={article.coverImage.url}
+                  alt={article.coverImage.alt}
+                  className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                />
+                {/* Very subtle warm edge veil where typography meets photo on desktop */}
+                <div className="hidden lg:block absolute inset-y-0 left-0 w-2/5 bg-gradient-to-r from-[#F5F0E8]/80 via-[#F5F0E8]/30 to-transparent pointer-events-none" />
+              </div>
+            </div>
 
-                <h2 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.02] tracking-tight group-hover:text-[#EAD6D8] transition-colors duration-300">
-                  {article.title}
-                </h2>
+            {/* Typographic Composition Layer (Columns 1–8 on desktop, overlapping the photograph) */}
+            <div className="lg:col-span-8 lg:col-start-1 lg:row-start-1 z-10 space-y-4 sm:space-y-6 lg:pr-6 xl:pr-10">
+              {/* Category Kicker */}
+              <div>
+                <span className="text-[11px] sm:text-xs uppercase tracking-[0.28em] font-semibold text-[#751F3D]">
+                  The Lead // {article.categoryLabel}
+                </span>
+              </div>
 
-                <p className="font-reading text-base sm:text-xl md:text-2xl text-white/85 max-w-2xl leading-relaxed line-clamp-2">
+              {/* Monumental Overlapping Headline */}
+              <h2 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] xl:text-[6.5rem] font-bold leading-[0.92] tracking-[-0.02em] text-[#11100F] group-hover:text-[#751F3D] transition-colors duration-300">
+                {article.title}
+              </h2>
+
+              {/* Dek in comfortable Newsreader serif & Byline in clean sans */}
+              <div className="space-y-4 pt-1 max-w-xl">
+                <p className="font-reading text-lg sm:text-xl lg:text-2xl text-[#11100F]/80 leading-relaxed">
                   {article.dek}
                 </p>
 
-                <div className="pt-2 flex items-center gap-3 text-xs sm:text-sm text-white/70">
-                  <span>By <strong className="font-medium text-white">{article.author.name}</strong></span>
-                  <span>•</span>
+                <div className="pt-2 flex items-center gap-3 text-xs sm:text-sm text-[#11100F]/65 uppercase tracking-wider font-sans">
+                  <span>By <strong className="font-medium text-[#11100F]">{article.author.name}</strong></span>
+                  <span className="text-[#11100F]/30">•</span>
                   <span>{article.dateFormatted}</span>
                 </div>
               </div>
