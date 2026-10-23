@@ -5,12 +5,14 @@ import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
-import { MOCK_ARTICLES } from '@/data/mockArticles';
+import { getArticles } from '@/lib/cmsAdapter';
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  if (process.env.DATABASE_URI) return [];
+  const articles = await getArticles();
   const allTags = Array.from(
     new Set(
-      MOCK_ARTICLES.flatMap((a) =>
+      articles.flatMap((a) =>
         a.tags.map((t) => t.toLowerCase().replace(/\s+/g, '-'))
       )
     )
@@ -24,9 +26,10 @@ interface PageProps {
 
 export default async function TagPage({ params }: PageProps) {
   const { slug } = await params;
+  const articles = await getArticles();
   const decodedSlug = decodeURIComponent(slug).toLowerCase();
 
-  const matchingArticles = MOCK_ARTICLES.filter((a) =>
+  const matchingArticles = articles.filter((a) =>
     a.tags.some(
       (t) => t.toLowerCase().replace(/\s+/g, '-') === decodedSlug || t.toLowerCase() === decodedSlug
     )

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { Search, X, ArrowUpRight, BookOpen } from 'lucide-react';
-import { MOCK_ARTICLES, CATEGORIES } from '@/data/mockArticles';
+import { CATEGORIES } from '@/data/mockArticles';
 import { Article } from '@/types/editorial';
 
 interface SearchModalProps {
@@ -13,6 +13,22 @@ interface SearchModalProps {
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [searchError, setSearchError] = useState(false);
+  useEffect(() => {
+    if (!isOpen) return;
+    const controller = new AbortController();
+    fetch('/api/editorial/search', { signal: controller.signal }).then((response) => {
+      if (!response.ok) throw new Error('Search unavailable');
+      return response.json();
+    }).then((results) => {
+      setArticles(results);
+      setSearchError(false);
+    }).catch(() => {
+      if (!controller.signal.aborted) setSearchError(true);
+    });
+    return () => controller.abort();
+  }, [isOpen]);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const close = useCallback(() => {
@@ -50,7 +66,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   if (!isOpen) return null;
 
   const filteredArticles = query.trim()
-    ? MOCK_ARTICLES.filter((art) => {
+    ? articles.filter((art) => {
         const q = query.toLowerCase();
         return (
           art.title.toLowerCase().includes(q) ||
@@ -90,6 +106,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
         {/* Content Area */}
         <div className="overflow-y-auto p-6 sm:p-8 space-y-6">
+          {searchError && <p role="alert">Search is temporarily unavailable. Please try again.</p>}
           {query.trim() === '' ? (
             <div>
               <div className="text-xs uppercase tracking-widest text-[#751F3D] font-medium mb-3">

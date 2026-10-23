@@ -7,10 +7,12 @@ import { Clock, Share2, Bookmark, ArrowLeft, ArrowUpRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
-import { MOCK_ARTICLES } from '@/data/mockArticles';
+import { getArticles } from '@/lib/cmsAdapter';
 
-export function generateStaticParams() {
-  return MOCK_ARTICLES.map((art) => ({
+export async function generateStaticParams() {
+  if (process.env.DATABASE_URI) return [];
+  const articles = await getArticles();
+  return articles.map((art) => ({
     slug: art.slug,
   }));
 }
@@ -21,7 +23,8 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = MOCK_ARTICLES.find((a) => a.slug === slug);
+  const articles = await getArticles();
+  const article = articles.find((a) => a.slug === slug);
   if (!article) return { title: 'Story Not Found — ÉLAN' };
   return {
     title: `${article.title} — ÉLAN`,
@@ -36,14 +39,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
-  const article = MOCK_ARTICLES.find((a) => a.slug === slug);
+  const articles = await getArticles();
+  const article = articles.find((a) => a.slug === slug);
 
   if (!article) {
     notFound();
   }
 
   // Related articles from the same category or general picks
-  const relatedArticles = MOCK_ARTICLES.filter(
+  const relatedArticles = articles.filter(
     (a) => a.id !== article.id && (a.category === article.category || a.isEditorPick)
   ).slice(0, 3);
 

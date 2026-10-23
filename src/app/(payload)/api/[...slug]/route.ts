@@ -1,0 +1,10 @@
+import config from '@payload-config';
+import { REST_GET, REST_POST, REST_DELETE, REST_PATCH, REST_PUT, REST_OPTIONS } from '@payloadcms/next/routes';
+export const dynamic = 'force-dynamic';
+const disabled = () => Response.json({ error: 'CMS is not configured.' }, { status: 503 });
+export const GET = process.env.DATABASE_URI ? REST_GET(config) : disabled;
+export const POST = process.env.DATABASE_URI ? REST_POST(config) : disabled;
+export const DELETE = process.env.DATABASE_URI ? REST_DELETE(config) : disabled;
+export const PATCH = process.env.DATABASE_URI ? REST_PATCH(config) : disabled;
+export const PUT = process.env.DATABASE_URI ? REST_PUT(config) : disabled;
+export const OPTIONS = process.env.DATABASE_URI ? REST_OPTIONS(config) : disabled;

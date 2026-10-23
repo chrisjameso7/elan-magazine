@@ -1,90 +1,126 @@
 # ÉLAN
 
-A premium digital culture publication covering people, culture, and modern life.
+A premium publication about people, culture, and modern life.
 
-## Editorial structure
+The six desks are CULTURE, PEOPLE, ENTERTAINMENT, STYLE, LIFE, and PLACES.
+Franchises include The New Guard, Élan Conversations, Portfolio, The Edit,
+After Dark, and The Élan 50. Story accents, backgrounds, and focal points live
+in the CMS alongside all seven block types and structured interview Q&A.
 
-The six primary desks are **CULTURE, PEOPLE, ENTERTAINMENT, STYLE, LIFE, PLACES**.
-`DESKS` in `src/types/editorial.ts` supplies navigation, category pages, composer
-filters, and Payload category options. Fashion, beauty, and design belong to Style;
-travel belongs to Places. Existing article slugs stay unchanged.
-
-Optional franchises: The New Guard, Élan Conversations, Portfolio, The Edit,
-After Dark, and The Élan 50. Stories can also remain standalone.
-
-## Story art direction
-
-`Article.artDirection` supports:
-
-```ts
-{
-  accentHex: '#6B2236',
-  bgOverrideHex: '#11100F', // optional
-  heroFocalPoint: { x: 50, y: 35 } // percentages, 0–100
-}
-```
-
-Cards and reading templates scope their own CSS variables. Feature backgrounds
-and foregrounds adapt together; colored badges select dark or light text, and
-low-contrast accent text falls back to the surface foreground. Hero photos use
-the focal point. Missing metadata uses a neutral ivory surface, oxblood accent,
-and centered crop. Site navigation remains independent of story styling.
-
-The prototype composer exposes franchise, accent, background, and framing fields.
-Its opening paragraph and first quote controls update only those blocks. Remaining
-paragraphs, headings, quotes, images, image duos, callouts, dividers, and interview
-metadata stay in place. Clearing an existing quote keeps its block and metadata.
-
-## Development
-
-Next.js 16 App Router, React 19, TypeScript, Tailwind v4.
+## Preview without PostgreSQL
 
 ```sh
 npm ci
 npm run dev
-npm run lint
-npm run typecheck
+```
+
+Leave `DATABASE_URI` unset to serve `src/data/mockArticles.ts` without loading
+Payload or opening a database connection. `/admin` redirects to the session-only
+prototype at `/editorial-preview`. Configured database failures are surfaced;
+they do not silently show mock content. An empty live database displays an empty
+editorial state until stories are published.
+
+## Persistent local editing
+
+1. Start a local PostgreSQL instance. Docker users can run `docker compose up -d`.
+2. Copy `.env.example` to `.env.local`, set `DATABASE_URI`, a random
+   `PAYLOAD_SECRET`, and `NEXT_PUBLIC_SERVER_URL=http://localhost:3000`.
+3. For a disposable local database only, set `PAYLOAD_DB_PUSH=true` and run
+   `npm run seed`. This creates the development schema and seeds four authors
+   and ten stories. Existing records are never overwritten.
+4. Optionally set `ELAN_EDITOR_EMAIL` and `ELAN_EDITOR_PASSWORD` before seeding
+   to bootstrap the first editor. Otherwise create the first account at `/admin`.
+   Seeding never adds another account when any editor already exists.
+5. Run `npm run dev`, then visit `http://localhost:3000/admin`.
+
+A workspace-local Postgres instance was also provisioned for this checkout.
+Its startup helper and database files live beside the checkout in
+`../local-postgres`; `node ../local-postgres/start.mjs` starts it again.
+The generated `.env.local` and local access credentials are ignored by Git.
+
+Payload's admin and REST API have their own root layout under `(payload)`.
+The magazine has its own `(frontend)` layout. Public pages and search use the
+server-only `cmsAdapter.ts`, query published records with populated authors,
+and adapt native Payload rows to the existing public Article model. Reads are
+request-time when configured, so published edits appear without a rebuild.
+
+The prototype composer preserves all original blocks when editing its opening
+paragraph and first quote. Live Payload editing supports the complete block array.
+
+## Staging and Supabase
+
+Use an existing project with a dedicated server-side PostgreSQL connection.
+Payload stores its tables in an isolated `elan` schema. The initial migration
+creates this schema and revokes direct access for PUBLIC and, when present,
+Supabase's anon/authenticated roles. Keep `elan` out of Supabase's exposed Data
+API schemas; all editorial access goes through Payload's authentication and
+collection access rules. A Supabase publishable key is not a database URI.
+
+Set the following in the staging host's secret/environment settings:
+
+```ini
+DATABASE_URI=<server-side PostgreSQL URI with verified TLS>
+PAYLOAD_SECRET=<unique random staging secret>
+NEXT_PUBLIC_SERVER_URL=https://<staging-host>
+PAYLOAD_DB_PUSH=false
+```
+
+Use a distinct staging database or a dedicated schema approved for this app.
+Before applying migrations, inspect the existing project's schema. Never point
+local push mode at staging or production, and never run the initial migration
+against a database already managed using development schema push.
+
+```sh
+npm run payload -- migrate
+npm run payload -- migrate:status
+npm run build
+npm run start
+```
+
+Run the migration using the schema owner's database role. The `elan` schema is
+separate from an existing Supabase public/auth/storage schema. An initial
+migration has been tested against a fresh local PostgreSQL database with push
+disabled. Remote staging activation requires project authorization and a
+server-side database connection; neither passwords nor connection URIs belong
+in Git. Do not use the local editor password or secret for staging.
+
+## Adapter contract
+
+`src/lib/payload-adapter.ts` converts native `blockType` to public `type`,
+stringifies IDs, unwraps tags, requires a populated author, preserves two-image
+arrays and Q&A, and removes native nested row IDs and nullable optional values.
+This also prevents duplicate child IDs when copying a story. Canonical category
+labels and missing formatted dates are derived consistently.
+
+## Validation
+
+```sh
 npm test
+npm run typecheck
+npm run lint
 npm run build
 ```
 
-## Payload v3 preparation
+The tests cover mixed-block preservation, schema constraints, nested-ID cleanup,
+Payload conversion, story colors/framing, and the missing-DATABASE_URI fallback.
+Live integration checks additionally cover editor login, denied anonymous writes,
+persisted edits, published public pages, draft protection, and search filtering.
 
-Payload and its Next.js, PostgreSQL, and Lexical packages use matching versions.
-`sharp` is included. `src/payload.config.ts` registers Articles, Authors, and
-Users; `src/collections/` defines every public editorial field and all seven
-block variants, including structured interview Q&A and validated art direction.
-Article and author IDs use text to preserve existing mock IDs. Articles support
-drafts; unauthenticated reads are restricted to published records. Writes require
-an authenticated user. Database schema auto-push is disabled.
+## Dependency triage (2026-10-23)
 
-**This prepares the schema; it does not activate persistent publishing.** The
-public pages still read `MOCK_ARTICLES`, and `/admin` remains a session-only
-prototype. Its saves do not persist across reloads or update public pages.
+Next.js and eslint-config-next were updated to 16.4.2. Targeted overrides pin
+DOMPurify 3.4.17, Sass 1.106.1, and source-map-js 1.2.2 to resolve the affected
+runtime/editor/build dependencies.
 
-For the later integration:
+`npm audit --omit=dev` reports zero high/critical findings and five moderate
+findings in the bundled Drizzle migration-tool chain (drizzle-kit, its esbuild
+loader, and esbuild). This app does not start their vulnerable development
+server, and they are not request handlers. The full audit additionally reports
+five high findings in the ESLint glob/braces dependency chain, which runs during
+local linting. These are tracked tooling findings, not public-route or upload
+buffer vulnerabilities. There is no sharp advisory in the audit, and this
+configuration has no upload collection or uploaded-media processing endpoint.
+Review future dependency updates before production rollout.
 
-1. Copy `.env.example` into `.env.local`, supply PostgreSQL and a random secret.
-2. Wire Payload's Next.js route group, admin layout/import map, API handlers, and
-   `withPayload` configuration. Move the prototype `/admin` out of the way first.
-3. Generate and review PostgreSQL migrations, then migrate the target database.
-   Bootstrap the initial authenticated editor through Payload's first-user flow.
-4. Import authors before articles. `toStoredArticle` converts mock blocks and tags
-   to native Payload shapes and replaces author objects with relationship IDs.
-5. Query published articles with populated authors (`depth: 1`) and pass them
-   through `toArticle` before rendering existing public components. The adapter
-   restores block `type`, string tags, category labels, and formatted dates.
-6. Replace the prototype save handler with authenticated CMS operations and add
-   preview/revalidation behavior before enabling production publishing.
-
-Native Payload blocks use `blockType` rather than `type`; conversion is isolated
-in `src/lib/payload-adapter.ts`, following [Payload's blocks schema](https://payloadcms.com/docs/fields/blocks).
-
-## Dependency audit
-
-The installation audit reports 18 advisories, including critical findings in the
-existing Next.js 16.3.6 dependency and DOMPurify bundled transitively through
-Payload's Monaco editor. The latter is pinned by Monaco, so a normal transitive
-update does not resolve it. Framework and editor dependency remediation remains
-required before activating the CMS in production; no forced major upgrades or
-security overrides are included in this preparation change.
+Next/Payload integration follows the [official installation guide](https://payloadcms.com/docs/getting-started/installation),
+with [explicit PostgreSQL migrations](https://payloadcms.com/docs/database/migrations).

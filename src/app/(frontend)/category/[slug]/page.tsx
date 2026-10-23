@@ -5,9 +5,11 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
-import { CATEGORIES, MOCK_ARTICLES } from '@/data/mockArticles';
+import { CATEGORIES } from '@/data/mockArticles';
+import { getArticles } from '@/lib/cmsAdapter';
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  if (process.env.DATABASE_URI) return [];
   return CATEGORIES.map((cat) => ({
     slug: cat.slug,
   }));
@@ -19,14 +21,15 @@ interface PageProps {
 
 export default async function CategoryPage({ params }: PageProps) {
   const { slug } = await params;
+  const articles = await getArticles();
   const category = CATEGORIES.find((c) => c.slug === slug);
 
   if (!category) {
     notFound();
   }
 
-  const categoryArticles = MOCK_ARTICLES.filter((a) => a.category === slug);
-  const otherArticles = MOCK_ARTICLES.filter((a) => a.category !== slug).slice(0, 3);
+  const categoryArticles = articles.filter((a) => a.category === slug);
+  const otherArticles = articles.filter((a) => a.category !== slug).slice(0, 3);
 
   const leadArticle = categoryArticles[0];
   const secondaryArticles = categoryArticles.slice(1);

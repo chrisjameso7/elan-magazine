@@ -7,10 +7,12 @@ import { Share2, Bookmark, ArrowLeft, ArrowUpRight, Globe, ExternalLink } from '
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
-import { MOCK_ARTICLES } from '@/data/mockArticles';
+import { getArticles } from '@/lib/cmsAdapter';
 
-export function generateStaticParams() {
-  return MOCK_ARTICLES.filter((a) => a.type === 'interview').map((art) => ({
+export async function generateStaticParams() {
+  if (process.env.DATABASE_URI) return [];
+  const articles = await getArticles();
+  return articles.filter((a) => a.type === 'interview').map((art) => ({
     slug: art.slug,
   }));
 }
@@ -21,7 +23,8 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = MOCK_ARTICLES.find((a) => a.slug === slug);
+  const articles = await getArticles();
+  const article = articles.find((a) => a.slug === slug);
   if (!article || !article.interview) return { title: 'Interview Not Found — ÉLAN' };
   return {
     title: `${article.interview.subjectName}: "${article.interview.keyQuote}" — ÉLAN Interviews`,
@@ -36,14 +39,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function InterviewPage({ params }: PageProps) {
   const { slug } = await params;
-  const article = MOCK_ARTICLES.find((a) => a.slug === slug);
+  const articles = await getArticles();
+  const article = articles.find((a) => a.slug === slug);
 
   if (!article || !article.interview) {
     notFound();
   }
 
   const interview = article.interview;
-  const relatedArticles = MOCK_ARTICLES.filter((a) => a.id !== article.id).slice(0, 3);
+  const relatedArticles = articles.filter((a) => a.id !== article.id).slice(0, 3);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F0E8] text-[#11100F]">

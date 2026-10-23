@@ -1,9 +1,9 @@
 import type { Field, Block, TextField } from 'payload';
 import { HEX_COLOR } from '../lib/editorial';
-export const text = (name: string, required = false): Field => ({ name, type: 'text', required });
+export const text = (name: string, required = false): TextField => ({ name, type: 'text', required });
 export const mediaFields = (required = true): Field[] => [
   text('url', required), text('alt', required), text('caption'), text('credit'),
-  { name: 'aspectRatio', type: 'select', options: ['landscape', 'portrait', 'square', 'wide'] },
+  { name: 'aspectRatio', type: 'select', enumName: 'media_aspect_ratio', options: ['landscape', 'portrait', 'square', 'wide'] },
 ];
 export const media = (name: string, required = false): Field => ({
   name, type: 'group', required, fields: mediaFields(false),

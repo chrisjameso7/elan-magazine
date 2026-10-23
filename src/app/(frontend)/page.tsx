@@ -5,20 +5,22 @@ import { ArrowUpRight, Sparkles, Clock, ArrowRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
-import { MOCK_ARTICLES } from '@/data/mockArticles';
+import { getArticles } from '@/lib/cmsAdapter';
 
-export default function HomePage() {
-  const leadStory = MOCK_ARTICLES.find((a) => a.isLead) || MOCK_ARTICLES[0];
-  const pinkCoutureStory = MOCK_ARTICLES.find((a) => a.slug === 'a-radical-softness-couture') || MOCK_ARTICLES[1];
-  const interviewStory = MOCK_ARTICLES.find((a) => a.slug === 'elena-vance-thunderous-elegance') || MOCK_ARTICLES[2];
-  const beautyStory = MOCK_ARTICLES.find((a) => a.id === 'anatomy-of-fragrance') || MOCK_ARTICLES[4];
-  const cultureStory = MOCK_ARTICLES.find((a) => a.category === 'culture') || MOCK_ARTICLES[5];
-  const designStory = MOCK_ARTICLES.find((a) => a.id === 'kyoto-brutalism') || MOCK_ARTICLES[3];
-  const lifeStory = MOCK_ARTICLES.find((a) => a.category === 'life') || MOCK_ARTICLES[7];
-  const travelStory = MOCK_ARTICLES.find((a) => a.category === 'places') || MOCK_ARTICLES[8];
+export default async function HomePage() {
+  const articles = await getArticles();
+  if (!articles.length) return <><Header /><main className="p-16 text-center"><h1 className="font-display text-5xl">The next chapter is coming.</h1><p>Our editors are preparing new stories.</p></main><Footer /></>;
+  const leadStory = articles.find((a) => a.isLead) || articles[0];
+  const pinkCoutureStory = articles.find((a) => a.slug === 'a-radical-softness-couture') || articles[1] || articles[0];
+  const interviewStory = articles.find((a) => a.type === 'interview' && a.interview);
+  const beautyStory = articles.find((a) => a.id === 'anatomy-of-fragrance') || articles[4] || articles[0];
+  const cultureStory = articles.find((a) => a.category === 'culture') || articles[5] || articles[0];
+  const designStory = articles.find((a) => a.id === 'kyoto-brutalism') || articles[3] || articles[0];
+  const lifeStory = articles.find((a) => a.category === 'life') || articles[7] || articles[0];
+  const travelStory = articles.find((a) => a.category === 'places') || articles[8] || articles[0];
 
-  const latestArticles = MOCK_ARTICLES.slice(0, 4);
-  const trendingArticles = MOCK_ARTICLES.filter((a) => a.isTrending).slice(0, 5);
+  const latestArticles = articles.slice(0, 4);
+  const trendingArticles = articles.filter((a) => a.isTrending).slice(0, 5);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F0E8] text-[#11100F]">
@@ -195,7 +197,7 @@ export default function HomePage() {
             SECTION 4: ÉLAN SPOTLIGHT INTERVIEW (NOVA Editorial Drama)
             Prestige Q&A feature showcase with monumental contrast and subject bio
             ========================================================================= */}
-        <section
+        {interviewStory && <section
           style={storyStyle(interviewStory.artDirection, '#11100F')}
           aria-label="ÉLAN Spotlight Interview"
           className="bg-[var(--story-bg)] text-[var(--story-ink)] p-8 sm:p-12 lg:p-16 border border-[var(--story-bg)] overflow-hidden"
@@ -214,21 +216,21 @@ export default function HomePage() {
 
               <Link href={`/interview/${interviewStory.slug}`} className="block group">
                 <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.08] tracking-tight text-[var(--story-ink)] group-hover:text-[var(--story-accent-text)] transition-colors">
-                  &ldquo;I Don’t Believe in Modesty When the Work Speaks With Thunder.&rdquo;
+                  &ldquo;{interviewStory.interview?.keyQuote}&rdquo;
                 </h2>
               </Link>
 
               <div className="space-y-3 font-reading text-base sm:text-lg text-[var(--story-ink)]/75 leading-relaxed">
                 <p>
-                  Elena Vance has spent a decade dismantling the polite consensus of European couture. In this exclusive conversation, she talks creative solitude, why glamour requires presence, and the courage to make dangerous art.
+                  {interviewStory.interview?.intro || interviewStory.dek}
                 </p>
               </div>
 
               <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 border-t border-white/15 pt-6">
                 <div>
-                  <h4 className="font-display text-lg font-bold text-[var(--story-ink)]">Elena Vance</h4>
+                  <h4 className="font-display text-lg font-bold text-[var(--story-ink)]">{interviewStory.interview?.subjectName}</h4>
                   <p className="text-xs text-[var(--story-accent-text)] uppercase tracking-wider">
-                    Founder & Artistic Director, Vance Atelier
+                    {interviewStory.interview?.subjectTitle}
                   </p>
                 </div>
                 <Link
@@ -259,7 +261,7 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-        </section>
+        </section>}
 
         {/* =========================================================================
             SECTION 5: BEAUTY & CULTURE DUALITY (Asymmetric Editorial Rhythm)

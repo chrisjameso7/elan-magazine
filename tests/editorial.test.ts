@@ -71,3 +71,26 @@ test('interview validation applies only to interview stories', async () => {
   assert.equal(typeof await field.validate({}, { siblingData: { type: 'interview' } } as never), 'string');
   assert.equal(await field.validate(MOCK_ARTICLES.find((article) => article.interview)?.interview, { siblingData: { type: 'interview' } } as never), true);
 });
+
+
+test('unset DATABASE_URI serves mocks without initializing Payload', async () => {
+  const { readArticles } = await import('../src/lib/cmsReader');
+  const fail = async () => { throw new Error('Database should not be touched'); };
+  assert.equal(await readArticles(undefined, fail), MOCK_ARTICLES);
+  assert.equal(await readArticles('  ', fail), MOCK_ARTICLES);
+  assert.deepEqual(await readArticles('postgres://configured', async () => []), []);
+  await assert.rejects(readArticles('postgres://configured', fail), /Database should not be touched/);
+});
+
+test('adapter strips native nested row IDs before copying an interview', () => {
+  const source = MOCK_ARTICLES.find((article) => article.interview)!;
+  const stored = toStoredArticle(source);
+  const native = { ...stored, author: source.author, createdAt: 'native-metadata',
+    interview: { ...source.interview!, qas: source.interview!.qas.map((qa) => ({ ...qa, id: 'native-qa-id' })) },
+    coverImage: { ...source.coverImage, id: 'native-media-id' } };
+  const article = toArticle(native);
+  assert.ok(!('createdAt' in article));
+  assert.ok(!('id' in article.coverImage));
+  assert.ok(article.interview!.qas.every((qa) => !('id' in qa)));
+  assert.deepEqual(toStoredArticle(article).interview, source.interview);
+});

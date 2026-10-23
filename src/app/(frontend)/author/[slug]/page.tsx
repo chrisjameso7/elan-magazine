@@ -5,10 +5,12 @@ import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
-import { MOCK_AUTHORS, MOCK_ARTICLES } from '@/data/mockArticles';
+import { getArticles } from '@/lib/cmsAdapter';
 
-export function generateStaticParams() {
-  return Object.values(MOCK_AUTHORS).map((author) => ({
+export async function generateStaticParams() {
+  if (process.env.DATABASE_URI) return [];
+  const articles = await getArticles();
+  return Array.from(new Map(articles.map((article) => [article.author.id, article.author])).values()).map((author) => ({
     slug: author.id,
   }));
 }
@@ -19,13 +21,14 @@ interface PageProps {
 
 export default async function AuthorPage({ params }: PageProps) {
   const { slug } = await params;
-  const author = Object.values(MOCK_AUTHORS).find((a) => a.id === slug);
+  const articles = await getArticles();
+  const author = Array.from(new Map(articles.map((article) => [article.author.id, article.author])).values()).find((a) => a.id === slug);
 
   if (!author) {
     notFound();
   }
 
-  const authorArticles = MOCK_ARTICLES.filter((a) => a.author.id === author.id);
+  const authorArticles = articles.filter((a) => a.author.id === author.id);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F0E8] text-[#11100F]">

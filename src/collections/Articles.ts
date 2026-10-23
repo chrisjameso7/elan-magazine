@@ -9,7 +9,8 @@ export const Articles: CollectionConfig = {
     create: ({ req }) => !!req.user, update: ({ req }) => !!req.user, delete: ({ req }) => !!req.user,
   },
   fields: [
-    text('id', true), { name: 'slug', type: 'text', required: true, unique: true, index: true },
+    { ...text('id', true), defaultValue: () => crypto.randomUUID(), admin: { readOnly: true } },
+    { name: 'slug', type: 'text', required: true, unique: true, index: true, hooks: { beforeValidate: [({ value, siblingData }) => value || (typeof siblingData.title === 'string' ? siblingData.title.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : '')] } },
     text('title', true), { name: 'dek', type: 'textarea', required: true },
     { name: 'category', type: 'select', required: true, options: DESKS.map(({ slug, label }) => ({ value: slug, label })) },
     { name: 'categoryLabel', type: 'text', admin: { readOnly: true }, hooks: { beforeValidate: [({ siblingData }) => DESKS.find((d) => d.slug === siblingData.category)?.label] } },
