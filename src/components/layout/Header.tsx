@@ -66,7 +66,7 @@ export default function Header() {
               ÉLAN
             </h1>
             <p className="mt-2 sm:mt-3 text-[10px] sm:text-xs tracking-[0.32em] uppercase text-[#11100F]/60 font-medium">
-              Culture • Fashion • Society • Living
+              People • Culture • Modern Life
             </p>
           </Link>
         </div>
@@ -264,7 +264,7 @@ export default function Header() {
             <div className="pt-8 border-t border-[#11100F]/12 text-xs text-[#11100F]/60 space-y-2">
               <p className="font-display font-medium text-[#11100F]">ÉLAN Digital Magazine</p>
               <p className="text-[11px] leading-relaxed">
-                Culture, Fashion, Beauty & Contemporary Living.
+                People, Culture & Modern Life.
               </p>
               <p className="text-[10px] text-[#11100F]/40 pt-2">
                 © {new Date().getFullYear()} ÉLAN. All rights reserved.

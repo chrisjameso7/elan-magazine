@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { Search, X, ArrowUpRight, BookOpen } from 'lucide-react';
 import { MOCK_ARTICLES, CATEGORIES } from '@/data/mockArticles';
@@ -15,13 +15,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const close = useCallback(() => {
+    setQuery('');
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      setQuery('');
     }
     return () => {
       document.body.style.overflow = '';
@@ -31,17 +35,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        onClose();
+        close();
       }
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        if (isOpen) onClose();
-        else onClose(); // parent can toggle
+        if (isOpen) close();
+        else close(); // parent can toggle
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, close]);
 
   if (!isOpen) return null;
 
@@ -76,7 +80,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             className="w-full bg-transparent text-xl sm:text-2xl font-display text-[#11100F] placeholder-[#11100F]/40 focus:outline-none"
           />
           <button
-            onClick={onClose}
+            onClick={close}
             className="p-1.5 ml-3 text-[#11100F]/60 hover:text-[#751F3D] transition-colors"
             aria-label="Close search"
           >
@@ -96,7 +100,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <Link
                     key={cat.slug}
                     href={`/category/${cat.slug}`}
-                    onClick={onClose}
+                    onClick={close}
                     className="p-3 bg-white/60 hover:bg-white border border-[#11100F]/8 text-left transition-all hover:border-[#751F3D]/30 group"
                   >
                     <span className="block text-xs uppercase tracking-wider font-semibold text-[#11100F] group-hover:text-[#751F3D] transition-colors">
@@ -142,7 +146,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         ? `/feature/${article.slug}`
                         : `/article/${article.slug}`
                     }
-                    onClick={onClose}
+                    onClick={close}
                     className="py-4 flex items-start justify-between group block transition-all"
                   >
                     <div className="pr-4">

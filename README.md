@@ -1,82 +1,90 @@
 # ÉLAN
 
-> **ÉLAN** is a premium digital editorial publication covering modern culture, fashion, beauty, entertainment, people, relationships, travel, design, luxury, and contemporary life.
+A premium digital culture publication covering people, culture, and modern life.
 
----
+## Editorial structure
 
-## Creative Direction & Art Direction Triad
+The six primary desks are **CULTURE, PEOPLE, ENTERTAINMENT, STYLE, LIFE, PLACES**.
+`DESKS` in `src/types/editorial.ts` supplies navigation, category pages, composer
+filters, and Payload category options. Fashion, beauty, and design belong to Style;
+travel belongs to Places. Existing article slugs stay unchanged.
 
-ÉLAN synthesizes the visual confidence and tactile prestige of international magazines into a digital-first editorial experience:
+Optional franchises: The New Guard, Élan Conversations, Portfolio, The Edit,
+After Dark, and The Élan 50. Stories can also remain standalone.
 
-1. **Pink Couture (Primary Visual Identity)**: Layered composition, soft blush/rose warmth, subtle translucent glassveils, feminine sophistication, and typography interacting across photography boundaries.
-2. **NOVA (Editorial Drama)**: Monumental high-contrast serif typography, dramatic photography, and deliberate negative space.
-3. **Columns & Rows (Structural Discipline)**: Disciplined Swiss 12-column alignment, continuous live cultural feed, and asymmetric editorial pacing.
+## Story art direction
 
----
+`Article.artDirection` supports:
 
-## Brand Palette
-
-- **Warm Ivory (`#F5F0E8`)**: Tactile paper base across all daylight pages.
-- **Ink Black (`#11100F`)**: Deep typographic anchor for headlines, rules, and contrast.
-- **Élan Wine (`#751F3D`)**: **Signature Brand Colour**. Applied with strict editorial restraint for category kickers, active navigation indicators, and initial drop caps.
-- **Dusty Rose (`#C98B9D`) & Soft Blush (`#EAD6D8`)**: Subdued secondary accents for quote backdrops and tags.
-- **Champagne (`#C5A46D`)**: Refined metallic accents.
-- **Deep Espresso (`#211B19`)**: Rich shadow tone for dark-mode features and cover stories.
-
----
-
-## Core Features & Experiences
-
-- **Streamlined Iconic Masthead**: High-contrast serif lettering with responsive scale, sticky micro-masthead on scroll, and full mobile drawer navigation.
-- **Art-Directed Homepage**:
-  - **The Lead Cover Story**: Controlled asymmetry (12-column grid) with overlapping serif typography and broken rectangular framing.
-  - **The Continuous Dispatch**: 4-column live cultural ticker with real-time timestamps.
-  - **Pink Couture Spread**: Direct homage to the visual reference with layered tulle photography and the couture doctrine.
-  - **Spotlight Interview**: Dark, high-contrast feature inspired by NOVA.
-  - **Beauty & Culture Duality**: Asymmetric two-story layout.
-  - **Most Read (01–05)**: Numbered typographic ranking.
-- **Long-Form Reading Experiences**:
-  - **Standard Article (`/article/[slug]`)**: Drop caps, pull quotes, inline photo galleries, and author bio dossier.
-  - **Feature Article (`/feature/[slug]`)**: Cinematic full-bleed cover and curatorial dossier.
-  - **Prestige Interview (`/interview/[slug]`)**: Large portraiture, oversized quotes, Q&A speaker formatting (`ÉLAN // QUESTION` vs. subject initials), and social profile links.
-- **Interactive Search (`⌘K`)**: Instant modal search with real-time filtering across titles, topics, and authors.
-- **Editorial Admin CMS (`/admin`)**: Story management desk, interactive article composer with photo preview, homepage curation desk, and contributor directory.
-
----
-
-## Tech Stack
-
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Fonts**: `Playfair Display`, `Newsreader`, `Plus Jakarta Sans`, `JetBrains Mono` via `next/font/google`
-- **Icons**: Lucide React
-
----
-
-## Getting Started
-
-First, install dependencies:
-
-```bash
-npm install
+```ts
+{
+  accentHex: '#6B2236',
+  bgOverrideHex: '#11100F', // optional
+  heroFocalPoint: { x: 50, y: 35 } // percentages, 0–100
+}
 ```
 
-Run the development server:
+Cards and reading templates scope their own CSS variables. Feature backgrounds
+and foregrounds adapt together; colored badges select dark or light text, and
+low-contrast accent text falls back to the surface foreground. Hero photos use
+the focal point. Missing metadata uses a neutral ivory surface, oxblood accent,
+and centered crop. Site navigation remains independent of story styling.
 
-```bash
+The prototype composer exposes franchise, accent, background, and framing fields.
+Its opening paragraph and first quote controls update only those blocks. Remaining
+paragraphs, headings, quotes, images, image duos, callouts, dividers, and interview
+metadata stay in place. Clearing an existing quote keeps its block and metadata.
+
+## Development
+
+Next.js 16 App Router, React 19, TypeScript, Tailwind v4.
+
+```sh
+npm ci
 npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser.
-
-Access the Editorial Desk at [http://localhost:3000/admin](http://localhost:3000/admin).
-
----
-
-## Build & Production
-
-```bash
+npm run lint
+npm run typecheck
+npm test
 npm run build
-npm run start
 ```
+
+## Payload v3 preparation
+
+Payload and its Next.js, PostgreSQL, and Lexical packages use matching versions.
+`sharp` is included. `src/payload.config.ts` registers Articles, Authors, and
+Users; `src/collections/` defines every public editorial field and all seven
+block variants, including structured interview Q&A and validated art direction.
+Article and author IDs use text to preserve existing mock IDs. Articles support
+drafts; unauthenticated reads are restricted to published records. Writes require
+an authenticated user. Database schema auto-push is disabled.
+
+**This prepares the schema; it does not activate persistent publishing.** The
+public pages still read `MOCK_ARTICLES`, and `/admin` remains a session-only
+prototype. Its saves do not persist across reloads or update public pages.
+
+For the later integration:
+
+1. Copy `.env.example` into `.env.local`, supply PostgreSQL and a random secret.
+2. Wire Payload's Next.js route group, admin layout/import map, API handlers, and
+   `withPayload` configuration. Move the prototype `/admin` out of the way first.
+3. Generate and review PostgreSQL migrations, then migrate the target database.
+   Bootstrap the initial authenticated editor through Payload's first-user flow.
+4. Import authors before articles. `toStoredArticle` converts mock blocks and tags
+   to native Payload shapes and replaces author objects with relationship IDs.
+5. Query published articles with populated authors (`depth: 1`) and pass them
+   through `toArticle` before rendering existing public components. The adapter
+   restores block `type`, string tags, category labels, and formatted dates.
+6. Replace the prototype save handler with authenticated CMS operations and add
+   preview/revalidation behavior before enabling production publishing.
+
+Native Payload blocks use `blockType` rather than `type`; conversion is isolated
+in `src/lib/payload-adapter.ts`, following [Payload's blocks schema](https://payloadcms.com/docs/fields/blocks).
+
+## Dependency audit
+
+The installation audit reports 18 advisories, including critical findings in the
+existing Next.js 16.3.6 dependency and DOMPurify bundled transitively through
+Payload's Monaco editor. The latter is pinned by Monaco, so a normal transitive
+update does not resolve it. Framework and editor dependency remediation remains
+required before activating the CMS in production; no forced major upgrades or
+security overrides are included in this preparation change.

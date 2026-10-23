@@ -1,3 +1,4 @@
+import { storyStyle, heroPosition } from '@/lib/editorial';
 import React from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, Sparkles, Clock, ArrowRight } from 'lucide-react';
@@ -10,11 +11,11 @@ export default function HomePage() {
   const leadStory = MOCK_ARTICLES.find((a) => a.isLead) || MOCK_ARTICLES[0];
   const pinkCoutureStory = MOCK_ARTICLES.find((a) => a.slug === 'a-radical-softness-couture') || MOCK_ARTICLES[1];
   const interviewStory = MOCK_ARTICLES.find((a) => a.slug === 'elena-vance-thunderous-elegance') || MOCK_ARTICLES[2];
-  const beautyStory = MOCK_ARTICLES.find((a) => a.category === 'beauty') || MOCK_ARTICLES[4];
+  const beautyStory = MOCK_ARTICLES.find((a) => a.id === 'anatomy-of-fragrance') || MOCK_ARTICLES[4];
   const cultureStory = MOCK_ARTICLES.find((a) => a.category === 'culture') || MOCK_ARTICLES[5];
-  const designStory = MOCK_ARTICLES.find((a) => a.category === 'design') || MOCK_ARTICLES[3];
+  const designStory = MOCK_ARTICLES.find((a) => a.id === 'kyoto-brutalism') || MOCK_ARTICLES[3];
   const lifeStory = MOCK_ARTICLES.find((a) => a.category === 'life') || MOCK_ARTICLES[7];
-  const travelStory = MOCK_ARTICLES.find((a) => a.category === 'travel') || MOCK_ARTICLES[8];
+  const travelStory = MOCK_ARTICLES.find((a) => a.category === 'places') || MOCK_ARTICLES[8];
 
   const latestArticles = MOCK_ARTICLES.slice(0, 4);
   const trendingArticles = MOCK_ARTICLES.filter((a) => a.isTrending).slice(0, 5);
@@ -52,11 +53,12 @@ export default function HomePage() {
             {latestArticles.map((article, idx) => (
               <div
                 key={article.id}
+                style={storyStyle(article.artDirection)}
                 className={`${idx > 0 ? 'sm:pl-6 lg:pl-8 pt-6 sm:pt-0' : 'sm:pr-2'} flex flex-col justify-between`}
               >
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between text-[10px] uppercase tracking-wider">
-                    <span className="font-semibold text-[#751F3D]">
+                    <span className="font-semibold text-[var(--story-accent-text)]">
                       {article.categoryLabel}
                     </span>
                     <span className="text-[#11100F]/50 flex items-center gap-1 font-mono">
@@ -75,7 +77,7 @@ export default function HomePage() {
                     }
                     className="block group"
                   >
-                    <h3 className="font-display text-lg sm:text-xl font-bold leading-snug text-[#11100F] group-hover:text-[#751F3D] transition-colors line-clamp-3">
+                    <h3 className="font-display text-lg sm:text-xl font-bold leading-snug text-[#11100F] group-hover:text-[var(--story-accent-text)] transition-colors line-clamp-3">
                       {article.title}
                     </h3>
                   </Link>
@@ -99,13 +101,14 @@ export default function HomePage() {
             Feminine energy, layered composition, subtle rose backdrop, statement type
             ========================================================================= */}
         <section
+          style={storyStyle(pinkCoutureStory.artDirection)}
           aria-label="Couture Layered Spread"
-          className="relative bg-gradient-to-br from-[#EAD6D8]/30 via-[#F5F0E8] to-[#EAD6D8]/20 p-6 sm:p-10 lg:p-14 border border-[#751F3D]/15 overflow-hidden"
+          className="relative bg-gradient-to-br from-[var(--story-accent)]/30 via-[var(--story-bg)] to-[var(--story-accent)]/20 p-6 sm:p-10 lg:p-14 border border-[var(--story-accent)]/15 overflow-hidden"
         >
           {/* Subtle watermarked couture typography behind content */}
           <div
             aria-hidden="true"
-            className="absolute -bottom-8 -right-6 font-display font-black text-7xl sm:text-9xl lg:text-[14rem] text-[#751F3D]/5 select-none pointer-events-none tracking-tighter"
+            className="absolute -bottom-8 -right-6 font-display font-black text-7xl sm:text-9xl lg:text-[14rem] text-[var(--story-accent-text)]/5 select-none pointer-events-none tracking-tighter"
           >
             COUTURE
           </div>
@@ -116,21 +119,22 @@ export default function HomePage() {
               <Link href={`/feature/${pinkCoutureStory.slug}`} className="block group">
                 <div className="relative aspect-[4/5] sm:aspect-[3/4] overflow-hidden">
                   <img
+                    style={{ objectPosition: heroPosition(pinkCoutureStory.artDirection) }}
                     src={pinkCoutureStory.coverImage.url}
                     alt={pinkCoutureStory.coverImage.alt}
                     className="w-full h-full object-cover object-center group-hover:scale-[1.02] transition-transform duration-700"
                   />
                   {/* Subtle tinted glass card floating on corner */}
-                  <div className="absolute bottom-6 left-6 right-6 p-6 bg-[#F5F0E8]/85 backdrop-blur-md border border-white/50 space-y-2">
-                    <span className="text-[10px] uppercase tracking-[0.22em] text-[#751F3D] font-bold block">
+                  <div className="absolute bottom-6 left-6 right-6 p-6 bg-[var(--story-bg)]/85 backdrop-blur-md border border-white/50 space-y-2">
+                    <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--story-accent-text)] font-bold block">
                       Haute Couture Study
                     </span>
-                    <h3 className="font-display text-xl sm:text-2xl font-bold text-[#11100F] leading-tight">
+                    <h3 className="font-display text-xl sm:text-2xl font-bold text-[var(--story-ink)] leading-tight">
                       {pinkCoutureStory.title}
                     </h3>
-                    <div className="text-xs text-[#11100F]/60 flex items-center justify-between pt-1">
+                    <div className="text-xs text-[var(--story-ink)]/60 flex items-center justify-between pt-1">
                       <span>By {pinkCoutureStory.author.name}</span>
-                      <span className="text-[#751F3D] font-medium flex items-center gap-1">
+                      <span className="text-[var(--story-accent-text)] font-medium flex items-center gap-1">
                         Explore Feature <ArrowUpRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
@@ -142,33 +146,33 @@ export default function HomePage() {
             {/* Right Editorial Statement & Philosophy */}
             <div className="lg:col-span-6 space-y-6 sm:space-y-8">
               <div className="space-y-2">
-                <span className="text-[11px] uppercase tracking-[0.25em] text-[#751F3D] font-bold block">
+                <span className="text-[11px] uppercase tracking-[0.25em] text-[var(--story-accent-text)] font-bold block">
                   The Sartorial Doctrine
                 </span>
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#11100F] leading-[1.1]">
-                  EVERY <span className="text-[#751F3D] italic font-serif">WOMAN</span> DESERVES TO FEEL THE VISCERAL WEIGHT OF HER OWN ELEGANCE.
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[var(--story-ink)] leading-[1.1]">
+                  EVERY <span className="text-[var(--story-accent-text)] italic font-serif">WOMAN</span> DESERVES TO FEEL THE VISCERAL WEIGHT OF HER OWN ELEGANCE.
                 </h2>
               </div>
 
-              <p className="font-reading text-base sm:text-lg text-[#11100F]/80 leading-relaxed">
+              <p className="font-reading text-base sm:text-lg text-[var(--story-ink)]/80 leading-relaxed">
                 {pinkCoutureStory.dek}
               </p>
 
               {/* Editorial Keynotes Duo */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 bg-white/50 border border-[#11100F]/8">
-                  <span className="text-[10px] font-mono text-[#751F3D] block font-semibold">
+                <div className="p-4 bg-white/50 border border-[var(--story-ink)]/8">
+                  <span className="text-[10px] font-mono text-[var(--story-accent-text)] block font-semibold">
                     (01) TACTILE RESILIENCE
                   </span>
-                  <p className="text-xs text-[#11100F]/70 font-reading mt-1 leading-relaxed">
+                  <p className="text-xs text-[var(--story-ink)]/70 font-reading mt-1 leading-relaxed">
                     Pleated gossamer and raw silks engineered to move with sovereign natural grace.
                   </p>
                 </div>
-                <div className="p-4 bg-white/50 border border-[#11100F]/8">
-                  <span className="text-[10px] font-mono text-[#751F3D] block font-semibold">
+                <div className="p-4 bg-white/50 border border-[var(--story-ink)]/8">
+                  <span className="text-[10px] font-mono text-[var(--story-accent-text)] block font-semibold">
                     (02) CHROMATIC POWER
                   </span>
-                  <p className="text-xs text-[#11100F]/70 font-reading mt-1 leading-relaxed">
+                  <p className="text-xs text-[var(--story-ink)]/70 font-reading mt-1 leading-relaxed">
                     Reclaiming blush, wine, and rose as instruments of undeniable cultural presence.
                   </p>
                 </div>
@@ -177,7 +181,7 @@ export default function HomePage() {
               <div className="pt-2">
                 <Link
                   href={`/feature/${pinkCoutureStory.slug}`}
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#751F3D] hover:bg-[#8C2549] text-white text-xs uppercase tracking-widest font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-[var(--story-accent)] hover:opacity-90 text-[var(--story-accent-ink)] text-xs uppercase tracking-widest font-semibold transition-colors"
                 >
                   <span>Read The Full Feature</span>
                   <ArrowRight className="w-4 h-4" />
@@ -192,28 +196,29 @@ export default function HomePage() {
             Prestige Q&A feature showcase with monumental contrast and subject bio
             ========================================================================= */}
         <section
+          style={storyStyle(interviewStory.artDirection, '#11100F')}
           aria-label="ÉLAN Spotlight Interview"
-          className="bg-[#11100F] text-[#F5F0E8] p-8 sm:p-12 lg:p-16 border border-[#11100F] overflow-hidden"
+          className="bg-[var(--story-bg)] text-[var(--story-ink)] p-8 sm:p-12 lg:p-16 border border-[var(--story-bg)] overflow-hidden"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Subject Quote & Bio */}
             <div className="lg:col-span-7 space-y-6 sm:space-y-8 order-2 lg:order-1">
               <div className="flex items-center gap-3">
-                <span className="px-3 py-1 bg-[#751F3D] text-white text-[10px] uppercase tracking-[0.25em] font-semibold">
+                <span className="px-3 py-1 bg-[var(--story-accent)] text-[var(--story-accent-ink)] text-[10px] uppercase tracking-[0.25em] font-semibold">
                   ÉLAN Interview
                 </span>
-                <span className="text-xs uppercase tracking-widest text-[#C98B9D]">
+                <span className="text-xs uppercase tracking-widest text-[var(--story-accent-text)]">
                   The Vanguard Series
                 </span>
               </div>
 
               <Link href={`/interview/${interviewStory.slug}`} className="block group">
-                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.08] tracking-tight text-[#F5F0E8] group-hover:text-[#C98B9D] transition-colors">
+                <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold leading-[1.08] tracking-tight text-[var(--story-ink)] group-hover:text-[var(--story-accent-text)] transition-colors">
                   &ldquo;I Don’t Believe in Modesty When the Work Speaks With Thunder.&rdquo;
                 </h2>
               </Link>
 
-              <div className="space-y-3 font-reading text-base sm:text-lg text-white/75 leading-relaxed">
+              <div className="space-y-3 font-reading text-base sm:text-lg text-[var(--story-ink)]/75 leading-relaxed">
                 <p>
                   Elena Vance has spent a decade dismantling the polite consensus of European couture. In this exclusive conversation, she talks creative solitude, why glamour requires presence, and the courage to make dangerous art.
                 </p>
@@ -221,14 +226,14 @@ export default function HomePage() {
 
               <div className="pt-2 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 border-t border-white/15 pt-6">
                 <div>
-                  <h4 className="font-display text-lg font-bold text-white">Elena Vance</h4>
-                  <p className="text-xs text-[#C98B9D] uppercase tracking-wider">
+                  <h4 className="font-display text-lg font-bold text-[var(--story-ink)]">Elena Vance</h4>
+                  <p className="text-xs text-[var(--story-accent-text)] uppercase tracking-wider">
                     Founder & Artistic Director, Vance Atelier
                   </p>
                 </div>
                 <Link
                   href={`/interview/${interviewStory.slug}`}
-                  className="sm:ml-auto inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-[#751F3D] text-white text-xs uppercase tracking-widest font-semibold border border-white/20 transition-colors"
+                  className="sm:ml-auto inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-[var(--story-accent)] text-[var(--story-ink)] hover:text-[var(--story-accent-ink)] text-xs uppercase tracking-widest font-semibold border border-white/20 transition-colors"
                 >
                   <span>Read Interview</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -241,12 +246,13 @@ export default function HomePage() {
               <Link href={`/interview/${interviewStory.slug}`} className="block group overflow-hidden">
                 <div className="relative aspect-[3/4] overflow-hidden bg-white/5">
                   <img
+                    style={{ objectPosition: heroPosition(interviewStory.artDirection) }}
                     src={interviewStory.coverImage.url}
                     alt={interviewStory.coverImage.alt}
                     className="w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#11100F]/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4 right-4 text-xs text-white/70 italic font-reading">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--story-bg)]/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4 text-xs text-[var(--story-ink)]/70 italic font-reading">
                     {interviewStory.coverImage.caption}
                   </div>
                 </div>
@@ -261,7 +267,7 @@ export default function HomePage() {
         <section aria-label="Beauty and Culture Duality" className="space-y-8">
           <div className="flex items-center justify-between pb-4 border-b border-[#11100F]/12">
             <h2 className="text-xs uppercase tracking-[0.25em] font-semibold text-[#11100F]">
-              Beauty & Critical Culture
+              Style & Critical Culture
             </h2>
             <span className="text-[11px] text-[#751F3D] uppercase tracking-widest font-semibold">
               Curated Features
@@ -318,13 +324,13 @@ export default function HomePage() {
             <div className="lg:col-span-7 space-y-6">
               <div className="flex items-center justify-between pb-3 border-b border-[#11100F]/12">
                 <h2 className="text-xs uppercase tracking-[0.25em] font-semibold text-[#11100F]">
-                  Design & Living Spaces
+                  Style & Places
                 </h2>
                 <Link
-                  href="/category/design"
+                  href="/category/style"
                   className="text-[11px] uppercase tracking-wider text-[#751F3D] hover:underline"
                 >
-                  View All Design →
+                  View All Style →
                 </Link>
               </div>
 

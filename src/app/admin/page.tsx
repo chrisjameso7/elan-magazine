@@ -26,7 +26,9 @@ import {
   Share2
 } from 'lucide-react';
 import { MOCK_ARTICLES, MOCK_AUTHORS, CATEGORIES } from '@/data/mockArticles';
-import { Article, CategorySlug } from '@/types/editorial';
+import { Article, CategorySlug, Franchise, FRANCHISES } from '@/types/editorial';
+
+import { updateOpeningBlocks } from '@/lib/editorial';
 
 export default function AdminPage() {
   const [articles, setArticles] = useState<Article[]>(MOCK_ARTICLES);
@@ -35,11 +37,17 @@ export default function AdminPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
 
+  const [formFranchise, setFormFranchise] = useState<Franchise | ''>('');
+  const [formAccent, setFormAccent] = useState('#6B2236');
+  const [formBackground, setFormBackground] = useState('');
+  const [formFocalX, setFormFocalX] = useState(50);
+  const [formFocalY, setFormFocalY] = useState(50);
+
   // Edit / Composer State
   const [editingArticleId, setEditingArticleId] = useState<string | null>(null);
   const [formTitle, setFormTitle] = useState('');
   const [formDek, setFormDek] = useState('');
-  const [formCategory, setFormCategory] = useState<CategorySlug>('fashion');
+  const [formCategory, setFormCategory] = useState<CategorySlug>('style');
   const [formType, setFormType] = useState<'standard' | 'feature' | 'interview'>('standard');
   const [formAuthorId, setFormAuthorId] = useState('camille-laurent');
   const [formCoverUrl, setFormCoverUrl] = useState('');
@@ -66,9 +74,14 @@ export default function AdminPage() {
   // Open Composer for new story
   const handleOpenNewStory = () => {
     setEditingArticleId(null);
+    setFormFranchise('');
+    setFormAccent('#6B2236');
+    setFormBackground('');
+    setFormFocalX(50);
+    setFormFocalY(50);
     setFormTitle('');
     setFormDek('');
-    setFormCategory('fashion');
+    setFormCategory('style');
     setFormType('standard');
     setFormAuthorId('camille-laurent');
     setFormCoverUrl('https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&q=85&w=1600');
@@ -87,6 +100,11 @@ export default function AdminPage() {
   // Open Composer for existing story
   const handleEditStory = (art: Article) => {
     setEditingArticleId(art.id);
+    setFormFranchise(art.franchise || '');
+    setFormAccent(art.artDirection?.accentHex || '#6B2236');
+    setFormBackground(art.artDirection?.bgOverrideHex || '');
+    setFormFocalX(art.artDirection?.heroFocalPoint.x ?? 50);
+    setFormFocalY(art.artDirection?.heroFocalPoint.y ?? 50);
     setFormTitle(art.title);
     setFormDek(art.dek);
     setFormCategory(art.category);
@@ -148,6 +166,8 @@ export default function AdminPage() {
           if (art.id === editingArticleId) {
             return {
               ...art,
+              franchise: formFranchise || undefined,
+              artDirection: { accentHex: formAccent, bgOverrideHex: formBackground || undefined, heroFocalPoint: { x: formFocalX, y: formFocalY } },
               title: formTitle,
               dek: formDek,
               category: formCategory,
@@ -161,27 +181,18 @@ export default function AdminPage() {
                 url: formCoverUrl || art.coverImage.url,
                 caption: formCoverCaption,
               },
-              content: [
-                { type: 'paragraph', text: formParagraph1, dropCap: true },
-                ...(formQuote
-                  ? ([
-                      {
-                        type: 'quote',
-                        quote: formQuote,
-                        attribution: formQuoteAttribution || 'Atelier Note',
-                      },
-                    ] as const)
-                  : []),
-              ],
+              content: updateOpeningBlocks(art.content, formParagraph1, formQuote, formQuoteAttribution),
               interview:
                 formType === 'interview'
                   ? {
+                      ...art.interview,
                       subjectName: formSubjectName || 'Creative Subject',
                       subjectTitle: formSubjectTitle || 'Artistic Director',
-                      intro: formDek,
+                      intro: formDek === art.dek ? (art.interview?.intro || formDek) : formDek,
                       portrait: {
-                        url: formCoverUrl,
-                        alt: formSubjectName,
+                        ...art.interview?.portrait,
+                        url: formCoverUrl === art.coverImage.url ? (art.interview?.portrait.url || formCoverUrl) : formCoverUrl,
+                        alt: formSubjectName === art.interview?.subjectName ? art.interview.portrait.alt : formSubjectName,
                       },
                       keyQuote: formKeyQuote || formQuote || 'True luxury is standing alone with an idea.',
                       qas: art.interview?.qas || [
@@ -192,7 +203,7 @@ export default function AdminPage() {
                         },
                       ],
                     }
-                  : undefined,
+                  : art.interview,
             };
           }
           return art;
@@ -202,6 +213,8 @@ export default function AdminPage() {
     } else {
       // Create new
       const newArticle: Article = {
+        franchise: formFranchise || undefined,
+        artDirection: { accentHex: formAccent, bgOverrideHex: formBackground || undefined, heroFocalPoint: { x: formFocalX, y: formFocalY } },
         id: `dispatch-${Date.now()}`,
         slug: slug || `dispatch-${Date.now()}`,
         title: formTitle,
@@ -670,6 +683,26 @@ export default function AdminPage() {
             </div>
 
             <form onSubmit={handleSaveStory} className="space-y-6">
+              <fieldset className="p-6 bg-white/70 border border-[#11100F]/12 space-y-4">
+                <legend>Franchise & Art Direction</legend>
+                <label className="block">Editorial franchise
+                  <select value={formFranchise} onChange={(e) => setFormFranchise(e.target.value as Franchise | '')} className="block w-full border p-2">
+                    <option value="">Standalone story</option>
+                    {FRANCHISES.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
+                  </select>
+                </label>
+                <label className="block">Story accent (#RRGGBB)
+                  <input aria-label="Story accent" type="color" value={formAccent} onChange={(e) => setFormAccent(e.target.value)} />
+                </label>
+                <label className="block">Background override (#RRGGBB, optional)
+                  <input className="block border p-2" pattern="#[0-9a-fA-F]{6}" value={formBackground} onChange={(e) => setFormBackground(e.target.value)} placeholder="#11100F" />
+                </label>
+                <div className="flex gap-4">
+                  <label>Hero focal X (%) <input type="number" required min="0" max="100" value={formFocalX} onChange={(e) => setFormFocalX(Number(e.target.value))} className="border p-2 w-24" /></label>
+                  <label>Hero focal Y (%) <input type="number" required min="0" max="100" value={formFocalY} onChange={(e) => setFormFocalY(Number(e.target.value))} className="border p-2 w-24" /></label>
+                </div>
+                <p className="text-sm">This prototype keeps changes in this session. All other story blocks are preserved when saving.</p>
+              </fieldset>
               {/* Story Title & Dek */}
               <div className="p-6 bg-white/70 border border-[#11100F]/12 space-y-4">
                 <div>
@@ -725,7 +758,7 @@ export default function AdminPage() {
                   </label>
                   <select
                     value={formType}
-                    onChange={(e) => setFormType(e.target.value as any)}
+                    onChange={(e) => setFormType(e.target.value as Article['type'])}
                     className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
                   >
                     <option value="standard">Standard Article</option>
@@ -814,7 +847,7 @@ export default function AdminPage() {
 
                 <div>
                   <label className="block text-xs uppercase font-mono tracking-wider text-[#11100F]/70 mb-1">
-                    Opening Paragraph (Rendered with Élan Wine Drop-cap)
+                    Opening Paragraph (Story Accent Drop-cap)
                   </label>
                   <textarea
                     rows={4}
