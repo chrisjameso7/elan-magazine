@@ -30,5 +30,6 @@ export function postgresPool(connectionString: string | undefined) {
   if (!uri.hostname.endsWith('.pooler.supabase.com') && !uri.hostname.endsWith('.supabase.co')) return { connectionString };
   // node-postgres URL SSL parameters replace the ssl object; normalize them here.
   for (const key of ['sslmode', 'sslrootcert', 'sslcert', 'sslkey']) uri.searchParams.delete(key);
-  return { connectionString: uri.href, max: 1, ssl: { ca: supabaseCA, rejectUnauthorized: true } };
+  // Payload holds a startup connection; reserve additional slots for queries and transactions.
+  return { connectionString: uri.href, max: 3, connectionTimeoutMillis: 10000, ssl: { ca: supabaseCA, rejectUnauthorized: true } };
 }
