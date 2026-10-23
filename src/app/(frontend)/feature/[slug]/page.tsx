@@ -9,14 +9,6 @@ import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
 import { getArticles } from '@/lib/cmsAdapter';
 
-export async function generateStaticParams() {
-  if (process.env.DATABASE_URI) return [];
-  const articles = await getArticles();
-  return articles.filter((a) => a.type === 'feature' || a.isLead).map((art) => ({
-    slug: art.slug,
-  }));
-}
-
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

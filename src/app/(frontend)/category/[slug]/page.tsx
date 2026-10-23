@@ -8,13 +8,6 @@ import StoryCard from '@/components/editorial/StoryCard';
 import { DESKS as CATEGORIES } from '@/types/editorial';
 import { getArticles } from '@/lib/cmsAdapter';
 
-export async function generateStaticParams() {
-  if (process.env.DATABASE_URI) return [];
-  return CATEGORIES.map((cat) => ({
-    slug: cat.slug,
-  }));
-}
-
 interface PageProps {
   params: Promise<{ slug: string }>;
 }

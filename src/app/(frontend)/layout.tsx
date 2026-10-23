@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import type { Metadata } from 'next';
 import { Playfair_Display, Plus_Jakarta_Sans, Newsreader, JetBrains_Mono } from 'next/font/google';
 import './globals.css';

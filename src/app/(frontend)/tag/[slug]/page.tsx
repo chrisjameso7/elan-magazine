@@ -7,19 +7,6 @@ import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
 import { getArticles } from '@/lib/cmsAdapter';
 
-export async function generateStaticParams() {
-  if (process.env.DATABASE_URI) return [];
-  const articles = await getArticles();
-  const allTags = Array.from(
-    new Set(
-      articles.flatMap((a) =>
-        a.tags.map((t) => t.toLowerCase().replace(/\s+/g, '-'))
-      )
-    )
-  );
-  return allTags.map((tag) => ({ slug: tag }));
-}
-
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
