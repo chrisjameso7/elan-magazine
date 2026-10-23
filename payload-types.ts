@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     authors: Author;
     articles: Article;
+    media: Media;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -153,7 +155,8 @@ export interface Author {
   id: string;
   name: string;
   role: string;
-  avatar: string;
+  avatarUpload?: (number | null) | Media;
+  avatar?: string | null;
   bio?: string | null;
   social?: {
     instagram?: string | null;
@@ -161,6 +164,34 @@ export interface Author {
   };
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * Upload JPG, PNG, WebP, AVIF, or GIF photos (up to 20 MB), then select them in a story.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  /**
+   * Describe the photo for readers who cannot see it.
+   */
+  alt: string;
+  caption?: string | null;
+  credit?: string | null;
+  prefix?: string | null;
+  _objectKey?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -185,7 +216,14 @@ export interface Article {
   dateFormatted?: string | null;
   readTime: string;
   coverImage: {
+    asset?: (number | null) | Media;
+    /**
+     * Optional fallback. A selected upload takes priority.
+     */
     url?: string | null;
+    /**
+     * Optional override for an uploaded photo; required for an external URL.
+     */
     alt?: string | null;
     caption?: string | null;
     credit?: string | null;
@@ -230,7 +268,14 @@ export interface Article {
           }
         | {
             image: {
+              asset?: (number | null) | Media;
+              /**
+               * Optional fallback. A selected upload takes priority.
+               */
               url?: string | null;
+              /**
+               * Optional override for an uploaded photo; required for an external URL.
+               */
               alt?: string | null;
               caption?: string | null;
               credit?: string | null;
@@ -242,8 +287,15 @@ export interface Article {
           }
         | {
             images: {
-              url: string;
-              alt: string;
+              asset?: (number | null) | Media;
+              /**
+               * Optional fallback. A selected upload takes priority.
+               */
+              url?: string | null;
+              /**
+               * Optional override for an uploaded photo; required for an external URL.
+               */
+              alt?: string | null;
               caption?: string | null;
               credit?: string | null;
               aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
@@ -272,14 +324,28 @@ export interface Article {
     subjectTitle?: string | null;
     intro?: string | null;
     portrait?: {
+      asset?: (number | null) | Media;
+      /**
+       * Optional fallback. A selected upload takes priority.
+       */
       url?: string | null;
+      /**
+       * Optional override for an uploaded photo; required for an external URL.
+       */
       alt?: string | null;
       caption?: string | null;
       credit?: string | null;
       aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
     };
     secondaryPortrait?: {
+      asset?: (number | null) | Media;
+      /**
+       * Optional fallback. A selected upload takes priority.
+       */
       url?: string | null;
+      /**
+       * Optional override for an uploaded photo; required for an external URL.
+       */
       alt?: string | null;
       caption?: string | null;
       credit?: string | null;
@@ -339,6 +405,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'articles';
         value: string | Article;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -413,6 +483,7 @@ export interface AuthorsSelect<T extends boolean = true> {
   id?: T;
   name?: T;
   role?: T;
+  avatarUpload?: T;
   avatar?: T;
   bio?: T;
   social?:
@@ -449,6 +520,7 @@ export interface ArticlesSelect<T extends boolean = true> {
   coverImage?:
     | T
     | {
+        asset?: T;
         url?: T;
         alt?: T;
         caption?: T;
@@ -506,6 +578,7 @@ export interface ArticlesSelect<T extends boolean = true> {
               image?:
                 | T
                 | {
+                    asset?: T;
                     url?: T;
                     alt?: T;
                     caption?: T;
@@ -521,6 +594,7 @@ export interface ArticlesSelect<T extends boolean = true> {
               images?:
                 | T
                 | {
+                    asset?: T;
                     url?: T;
                     alt?: T;
                     caption?: T;
@@ -555,6 +629,7 @@ export interface ArticlesSelect<T extends boolean = true> {
         portrait?:
           | T
           | {
+              asset?: T;
               url?: T;
               alt?: T;
               caption?: T;
@@ -564,6 +639,7 @@ export interface ArticlesSelect<T extends boolean = true> {
         secondaryPortrait?:
           | T
           | {
+              asset?: T;
               url?: T;
               alt?: T;
               caption?: T;
@@ -590,6 +666,28 @@ export interface ArticlesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  caption?: T;
+  credit?: T;
+  prefix?: T;
+  _objectKey?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -1,9 +1,16 @@
-import type { Article, Author, ContentBlock, MediaItem, InterviewData } from '../types/editorial';
+import type { Article, Author, ContentBlock, InterviewData } from '../types/editorial';
+import { resolveMedia, type StoredMedia, type UploadedPhoto } from './media';
 import { DESKS } from '../types/editorial';
 
-type StoredBlock<T = ContentBlock> = T extends ContentBlock ? Omit<T, 'type'> & { blockType: T['type']; id?: string; blockName?: string | null } : never;
-export type StoredArticle = Omit<Article, 'author' | 'content' | 'tags' | 'dateFormatted' | 'categoryLabel'> & {
-  author: Author | string | number;
+type StoredBlock<T = ContentBlock> = T extends ContentBlock ? Omit<T, 'type' | 'image' | 'images'> & {
+  blockType: T['type']; id?: string; blockName?: string | null;
+} & (T extends { type: 'image' } ? { image: StoredMedia } : T extends { type: 'image_duo' } ? { images: StoredMedia[] } : object) : never;
+type StoredInterview = Omit<InterviewData, 'portrait' | 'secondaryPortrait'> & { portrait: StoredMedia; secondaryPortrait?: StoredMedia | null };
+type StoredAuthor = Author & { avatarUpload?: UploadedPhoto | string | number | null };
+export type StoredArticle = Omit<Article, 'author' | 'content' | 'tags' | 'dateFormatted' | 'categoryLabel' | 'coverImage' | 'interview'> & {
+  author: StoredAuthor | string | number;
+  coverImage: StoredMedia;
+  interview?: StoredInterview | null;
   content?: StoredBlock[] | null;
   tags?: { tag: string; id?: string }[] | null;
   dateFormatted?: string | null;
@@ -11,18 +18,15 @@ export type StoredArticle = Omit<Article, 'author' | 'content' | 'tags' | 'dateF
 // Pick domain fields explicitly: Payload row IDs, auth/relationship metadata, and
 // nullable optional fields must not leak into the public model or a copied story.
 const compact = <T extends object>(value: T): T => Object.fromEntries(Object.entries(value).filter(([, item]) => item != null)) as T;
-function media(value: MediaItem): MediaItem {
-  if (!value?.url || typeof value.alt !== 'string') throw new Error('Media requires a URL and alt text.');
-  return compact({ url: value.url, alt: value.alt, caption: value.caption, credit: value.credit, aspectRatio: value.aspectRatio });
-}
-function author(value: Author): Author {
-  return compact({ id: String(value.id), name: value.name, role: value.role, avatar: value.avatar, bio: value.bio,
+const media = resolveMedia;
+function author(value: StoredAuthor): Author {
+  return compact({ id: String(value.id), name: value.name, role: value.role, avatar: (typeof value.avatarUpload === 'object' && value.avatarUpload?.url) || value.avatar, bio: value.bio,
     social: value.social ? compact({ instagram: value.social.instagram, twitter: value.social.twitter }) : undefined });
 }
-function interview(value?: InterviewData): InterviewData | undefined {
+function interview(value?: StoredInterview | null): InterviewData | undefined {
   if (!value?.subjectName) return undefined;
   return compact({ subjectName: value.subjectName, subjectTitle: value.subjectTitle, intro: value.intro,
-    portrait: media(value.portrait), secondaryPortrait: value.secondaryPortrait?.url ? media(value.secondaryPortrait) : undefined,
+    portrait: media(value.portrait), secondaryPortrait: (value.secondaryPortrait?.asset || value.secondaryPortrait?.url) ? media(value.secondaryPortrait) : undefined,
     keyQuote: value.keyQuote, qas: (value.qas || []).map((qa) => compact({ question: qa.question, answer: qa.answer, speaker: qa.speaker })),
     socialLinks: value.socialLinks ? compact({ instagram: value.socialLinks.instagram, portfolio: value.socialLinks.portfolio }) : undefined });
 }
@@ -58,10 +62,13 @@ export function toArticle(document: StoredArticle): Article {
     content: (document.content || []).map(block), interview: interview(document.interview), isDevMock: document.isDevMock,
   });
 }
-export function toStoredArticle(article: Article): StoredArticle & { author: string } {
+type DomainStoredBlock<T = ContentBlock> = T extends ContentBlock ? Omit<T, 'type'> & { blockType: T['type'] } : never;
+export function toStoredArticle(article: Article): Omit<Article, 'author' | 'content' | 'tags'> & {
+  author: string; tags: { tag: string }[]; content: DomainStoredBlock[];
+} {
   const document: StoredArticle = { ...article, author: article.author.id, tags: article.tags.map((tag) => ({ tag })),
-    content: article.content.map(({ type, ...block }) => ({ ...block, blockType: type } as StoredBlock)) };
+    content: article.content.map(({ type, ...block }) => ({ ...block, blockType: type } as DomainStoredBlock)) };
   const clean = toArticle({ ...document, author: article.author });
   return { ...clean, author: clean.author.id, tags: clean.tags.map((tag) => ({ tag })),
-    content: clean.content.map(({ type, ...block }) => ({ ...block, blockType: type } as StoredBlock)) };
+    content: clean.content.map(({ type, ...block }) => ({ ...block, blockType: type } as DomainStoredBlock)) };
 }

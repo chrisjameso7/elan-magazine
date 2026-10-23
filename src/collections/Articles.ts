@@ -1,3 +1,4 @@
+import { hasMedia } from '../lib/media';
 import { headAdminOnly, isHeadAdmin } from './access';
 import type { CollectionConfig } from 'payload';
 import { DESKS, FRANCHISES, type InterviewData } from '../types/editorial';
@@ -32,7 +33,7 @@ export const Articles: CollectionConfig = {
       validate: (value: unknown, { siblingData }) => {
         if ((siblingData as { type?: string }).type !== 'interview') return true;
         const interview = value as Partial<InterviewData> | null;
-        return (!!interview?.subjectName?.trim() && !!interview.subjectTitle?.trim() && !!interview.intro?.trim() && !!interview.keyQuote?.trim() && !!interview.portrait?.url && !!interview.portrait?.alt && !!interview.qas?.length) || 'Interviews require a subject, introduction, portrait, key quote, and Q&A.';
+        return (!!interview?.subjectName?.trim() && !!interview.subjectTitle?.trim() && !!interview.intro?.trim() && !!interview.keyQuote?.trim() && hasMedia(interview.portrait) && !!interview.qas?.length) || 'Interviews require a subject, introduction, portrait, key quote, and Q&A.';
       },
       admin: { condition: (_, siblingData) => siblingData.type === 'interview' }, fields: [
       text('subjectName'), text('subjectTitle'), { name: 'intro', type: 'textarea' }, media('portrait'), media('secondaryPortrait'),
