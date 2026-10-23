@@ -1,55 +1,6 @@
-import { Article, CategoryInfo } from '../types/editorial';
+import { Article, CategoryInfo, DESKS } from '../types/editorial';
 
-export const CATEGORIES: CategoryInfo[] = [
-  {
-    slug: 'fashion',
-    label: 'Fashion',
-    description: 'The philosophy of form, silhouette, and tactile expression in contemporary haute couture and street vanguard.',
-    featuredTopic: 'Autumn Silhouettes',
-  },
-  {
-    slug: 'beauty',
-    label: 'Beauty',
-    description: 'Scent, skin, and the sculptural chemistry of self-adornment.',
-    featuredTopic: 'Olfactory Memory',
-  },
-  {
-    slug: 'culture',
-    label: 'Culture',
-    description: 'Critical perspectives at the intersection of modern art, cinema, thought, and societal currents.',
-    featuredTopic: 'The Post-Digital Gaze',
-  },
-  {
-    slug: 'entertainment',
-    label: 'Entertainment',
-    description: 'Performance, soundscapes, and the visionary storytellers reshaping our collective imagination.',
-    featuredTopic: 'Independent Cinema',
-  },
-  {
-    slug: 'people',
-    label: 'People',
-    description: 'Intimate portraits of creative minds shaping the modern landscape.',
-    featuredTopic: 'The Innovators',
-  },
-  {
-    slug: 'life',
-    label: 'Life',
-    description: 'Explorations in relationships, emotional architecture, and the rhythms of modern existence.',
-    featuredTopic: 'Modern Intimacy',
-  },
-  {
-    slug: 'travel',
-    label: 'Travel',
-    description: 'Immersive voyages into landscapes that challenge the senses and elevate the spirit.',
-    featuredTopic: 'Solitary Horizons',
-  },
-  {
-    slug: 'design',
-    label: 'Design',
-    description: 'Object, space, and material discipline in progressive architecture and interior realms.',
-    featuredTopic: 'Raw Materials',
-  },
-];
+export const CATEGORIES: CategoryInfo[] = DESKS.map((desk) => ({ ...desk }));
 
 export const MOCK_AUTHORS = {
   camille: {
@@ -86,11 +37,13 @@ export const MOCK_ARTICLES: Article[] = [
   // 1. THE LEAD STORY (Cover Feature)
   {
     id: 'lead-story',
+    franchise: 'portfolio',
+    artDirection: { accentHex: '#6B2236', heroFocalPoint: { x: 50, y: 35 } },
     slug: 'the-architecture-of-sensation',
     title: 'The Architecture of Sensation',
     dek: 'How an uncompromising cohort of contemporary couturiers is dismantling rigid tailoring in pursuit of emotional weight, fluid silhouette, and tactile transcendence.',
-    category: 'fashion',
-    categoryLabel: 'Fashion & Form',
+    category: 'style',
+    categoryLabel: 'STYLE',
     tags: ['Haute Couture', 'Contemporary Tailoring', 'Materiality', 'Paris'],
     author: MOCK_AUTHORS.camille,
     publishedAt: '2026-09-23T08:00:00Z',
@@ -159,11 +112,13 @@ export const MOCK_ARTICLES: Article[] = [
   // 2. THE PINK COUTURE HOMAGE (Visual identity pillar)
   {
     id: 'pink-couture-story',
+    artDirection: { accentHex: '#6B2236', bgOverrideHex: '#F4E5E8', heroFocalPoint: { x: 50, y: 40 } },
+    franchise: 'portfolio',
     slug: 'a-radical-softness-couture',
     title: 'A Radical Softness: The New High-Fashion Paradigm',
     dek: 'Subverting the myth that strength requires rigid lines. An intimate visual exploration of layered tulle, translucent organza, and the unapologetic power of rose.',
-    category: 'fashion',
-    categoryLabel: 'Haute Couture',
+    category: 'style',
+    categoryLabel: 'STYLE',
     tags: ['Couture', 'Textiles', 'Atelier', 'Femininity'],
     author: MOCK_AUTHORS.camille,
     publishedAt: '2026-09-22T14:30:00Z',
@@ -220,11 +175,13 @@ export const MOCK_ARTICLES: Article[] = [
   // 3. PRESTIGE INTERVIEW (Spotlight interview feature)
   {
     id: 'interview-elena-vance',
+    artDirection: { accentHex: '#B791AD', heroFocalPoint: { x: 50, y: 40 } },
+    franchise: 'elan_conversations',
     slug: 'elena-vance-thunderous-elegance',
     title: 'Elena Vance: "I Don’t Believe in Modesty When the Work Speaks With Thunder"',
     dek: 'The iconoclastic designer talks creative solitude, the tyranny of algorithm-driven luxury, and why true glamour is an act of defiance.',
     category: 'people',
-    categoryLabel: 'ÉLAN Interviews',
+    categoryLabel: 'PEOPLE',
     tags: ['Interview', 'Designers', 'Creatives', 'Conversations'],
     author: MOCK_AUTHORS.marcus,
     publishedAt: '2026-09-21T10:00:00Z',
@@ -290,11 +247,13 @@ export const MOCK_ARTICLES: Article[] = [
   // 4. DRAMATIC DESIGN & TRAVEL FEATURE
   {
     id: 'kyoto-brutalism',
+    artDirection: { accentHex: '#626B3C', heroFocalPoint: { x: 50, y: 40 } },
+    franchise: 'the_edit',
     slug: 'monolithic-whispers-kyoto-brutalism',
     title: 'Monolithic Whispers: Concrete, Shadow, and Silence in Northern Kyoto',
     dek: 'Stepping inside the private pavilion where raw poured concrete meets five-hundred-year-old cedar craft in absolute architectural reverence.',
-    category: 'design',
-    categoryLabel: 'Architecture & Living',
+    category: 'style',
+    categoryLabel: 'STYLE',
     tags: ['Architecture', 'Kyoto', 'Minimalism', 'Interiors'],
     author: MOCK_AUTHORS.sora,
     publishedAt: '2026-09-20T16:00:00Z',
@@ -330,11 +289,13 @@ export const MOCK_ARTICLES: Article[] = [
   // 5. BEAUTY & OLFACTORY ESSAY
   {
     id: 'anatomy-of-fragrance',
+    artDirection: { accentHex: '#F2DEA2', heroFocalPoint: { x: 50, y: 40 } },
+    franchise: 'the_edit',
     slug: 'the-anatomy-of-fragrance-scent-as-armor',
     title: 'The Anatomy of Fragrance: Scent as Invisible Armor',
     dek: 'Moving past sugary floral banalities. The vanguard noses creating fragrances composed of wet stone, crushed peppercorn, warm skin, and dark ambergris.',
-    category: 'beauty',
-    categoryLabel: 'Beauty & Olfaction',
+    category: 'style',
+    categoryLabel: 'STYLE',
     tags: ['Perfumery', 'Beauty', 'Scent', 'Rituals'],
     author: MOCK_AUTHORS.ines,
     publishedAt: '2026-09-23T06:15:00Z',
@@ -367,11 +328,12 @@ export const MOCK_ARTICLES: Article[] = [
   // 6. CULTURE & CRITIQUE
   {
     id: 'cinematic-solitude',
+    artDirection: { accentHex: '#A9C7DB', heroFocalPoint: { x: 50, y: 40 } },
     slug: 'cinematic-solitude-independent-auteurs',
     title: 'Cinematic Solitude: The Resurgence of the Unhurried Frame',
     dek: 'In an attention economy addicted to rapid micro-cuts, three emerging directors are finding thunder in ninety-second static shots.',
     category: 'culture',
-    categoryLabel: 'Culture & Cinema',
+    categoryLabel: 'CULTURE',
     tags: ['Cinema', 'Culture', 'Visual Arts', 'Criticism'],
     author: MOCK_AUTHORS.marcus,
     publishedAt: '2026-09-22T18:45:00Z',
@@ -404,7 +366,7 @@ export const MOCK_ARTICLES: Article[] = [
     title: 'The Sound of Subversion: The Neo-Classical Underground',
     dek: 'How string quartets armed with custom modular synthesizers are reclaiming concert halls from polite acoustic decorum.',
     category: 'entertainment',
-    categoryLabel: 'Entertainment & Music',
+    categoryLabel: 'ENTERTAINMENT',
     tags: ['Music', 'Performance', 'Avant-Garde'],
     author: MOCK_AUTHORS.marcus,
     publishedAt: '2026-09-22T09:20:00Z',
@@ -431,7 +393,7 @@ export const MOCK_ARTICLES: Article[] = [
     title: 'The Cult of Constant Availability: Relearning the Art of Disappearance',
     dek: 'Why true romantic and emotional depth requires intentional absence in a world that confuses surveillance with love.',
     category: 'life',
-    categoryLabel: 'Life & Society',
+    categoryLabel: 'LIFE',
     tags: ['Relationships', 'Modern Life', 'Psychology'],
     author: MOCK_AUTHORS.camille,
     publishedAt: '2026-09-21T16:10:00Z',
@@ -457,8 +419,8 @@ export const MOCK_ARTICLES: Article[] = [
     slug: 'the-wind-at-the-end-of-the-earth',
     title: 'The Wind at the End of the Earth: A Journey Across Southern Fjordlands',
     dek: 'Navigating glacial inlets where time is measured not by clocks, but by the slow calving of ancient ice.',
-    category: 'travel',
-    categoryLabel: 'Travel & Solitude',
+    category: 'places',
+    categoryLabel: 'PLACES',
     tags: ['Travel', 'Patagonia', 'Landscapes'],
     author: MOCK_AUTHORS.sora,
     publishedAt: '2026-09-20T11:00:00Z',
@@ -479,11 +441,13 @@ export const MOCK_ARTICLES: Article[] = [
   // 10. PEOPLE & INFLUENCE
   {
     id: 'the-curators-gaze',
+    artDirection: { accentHex: '#C88FA4', heroFocalPoint: { x: 50, y: 40 } },
+    franchise: 'new_guard',
     slug: 'the-curators-gaze-mariana-sol',
     title: 'Mariana Sol on Why the White Cube Gallery Is Dying',
     dek: 'The insurgent curator staging multi-sensory installations in abandoned industrial salt silos.',
     category: 'people',
-    categoryLabel: 'People & Vanguard',
+    categoryLabel: 'PEOPLE',
     tags: ['Art', 'Curators', 'Vanguard'],
     author: MOCK_AUTHORS.camille,
     publishedAt: '2026-09-19T14:00:00Z',

@@ -1,82 +1,126 @@
 # ÉLAN
 
-> **ÉLAN** is a premium digital editorial publication covering modern culture, fashion, beauty, entertainment, people, relationships, travel, design, luxury, and contemporary life.
+A premium publication about people, culture, and modern life.
 
----
+The six desks are CULTURE, PEOPLE, ENTERTAINMENT, STYLE, LIFE, and PLACES.
+Franchises include The New Guard, Élan Conversations, Portfolio, The Edit,
+After Dark, and The Élan 50. Story accents, backgrounds, and focal points live
+in the CMS alongside all seven block types and structured interview Q&A.
 
-## Creative Direction & Art Direction Triad
+## Preview without PostgreSQL
 
-ÉLAN synthesizes the visual confidence and tactile prestige of international magazines into a digital-first editorial experience:
-
-1. **Pink Couture (Primary Visual Identity)**: Layered composition, soft blush/rose warmth, subtle translucent glassveils, feminine sophistication, and typography interacting across photography boundaries.
-2. **NOVA (Editorial Drama)**: Monumental high-contrast serif typography, dramatic photography, and deliberate negative space.
-3. **Columns & Rows (Structural Discipline)**: Disciplined Swiss 12-column alignment, continuous live cultural feed, and asymmetric editorial pacing.
-
----
-
-## Brand Palette
-
-- **Warm Ivory (`#F5F0E8`)**: Tactile paper base across all daylight pages.
-- **Ink Black (`#11100F`)**: Deep typographic anchor for headlines, rules, and contrast.
-- **Élan Wine (`#751F3D`)**: **Signature Brand Colour**. Applied with strict editorial restraint for category kickers, active navigation indicators, and initial drop caps.
-- **Dusty Rose (`#C98B9D`) & Soft Blush (`#EAD6D8`)**: Subdued secondary accents for quote backdrops and tags.
-- **Champagne (`#C5A46D`)**: Refined metallic accents.
-- **Deep Espresso (`#211B19`)**: Rich shadow tone for dark-mode features and cover stories.
-
----
-
-## Core Features & Experiences
-
-- **Streamlined Iconic Masthead**: High-contrast serif lettering with responsive scale, sticky micro-masthead on scroll, and full mobile drawer navigation.
-- **Art-Directed Homepage**:
-  - **The Lead Cover Story**: Controlled asymmetry (12-column grid) with overlapping serif typography and broken rectangular framing.
-  - **The Continuous Dispatch**: 4-column live cultural ticker with real-time timestamps.
-  - **Pink Couture Spread**: Direct homage to the visual reference with layered tulle photography and the couture doctrine.
-  - **Spotlight Interview**: Dark, high-contrast feature inspired by NOVA.
-  - **Beauty & Culture Duality**: Asymmetric two-story layout.
-  - **Most Read (01–05)**: Numbered typographic ranking.
-- **Long-Form Reading Experiences**:
-  - **Standard Article (`/article/[slug]`)**: Drop caps, pull quotes, inline photo galleries, and author bio dossier.
-  - **Feature Article (`/feature/[slug]`)**: Cinematic full-bleed cover and curatorial dossier.
-  - **Prestige Interview (`/interview/[slug]`)**: Large portraiture, oversized quotes, Q&A speaker formatting (`ÉLAN // QUESTION` vs. subject initials), and social profile links.
-- **Interactive Search (`⌘K`)**: Instant modal search with real-time filtering across titles, topics, and authors.
-- **Editorial Admin CMS (`/admin`)**: Story management desk, interactive article composer with photo preview, homepage curation desk, and contributor directory.
-
----
-
-## Tech Stack
-
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Fonts**: `Playfair Display`, `Newsreader`, `Plus Jakarta Sans`, `JetBrains Mono` via `next/font/google`
-- **Icons**: Lucide React
-
----
-
-## Getting Started
-
-First, install dependencies:
-
-```bash
-npm install
-```
-
-Run the development server:
-
-```bash
+```sh
+npm ci
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser.
+Leave `DATABASE_URI` unset to serve `src/data/mockArticles.ts` without loading
+Payload or opening a database connection. `/admin` redirects to the session-only
+prototype at `/editorial-preview`. Configured database failures are surfaced;
+they do not silently show mock content. An empty live database displays an empty
+editorial state until stories are published.
 
-Access the Editorial Desk at [http://localhost:3000/admin](http://localhost:3000/admin).
+## Persistent local editing
 
----
+1. Start a local PostgreSQL instance. Docker users can run `docker compose up -d`.
+2. Copy `.env.example` to `.env.local`, set `DATABASE_URI`, a random
+   `PAYLOAD_SECRET`, and `NEXT_PUBLIC_SERVER_URL=http://localhost:3000`.
+3. For a disposable local database only, set `PAYLOAD_DB_PUSH=true` and run
+   `npm run seed`. This creates the development schema and seeds four authors
+   and ten stories. Existing records are never overwritten.
+4. Optionally set `ELAN_EDITOR_EMAIL` and `ELAN_EDITOR_PASSWORD` before seeding
+   to bootstrap the first editor. Otherwise create the first account at `/admin`.
+   Seeding never adds another account when any editor already exists.
+5. Run `npm run dev`, then visit `http://localhost:3000/admin`.
 
-## Build & Production
+A workspace-local Postgres instance was also provisioned for this checkout.
+Its startup helper and database files live beside the checkout in
+`../local-postgres`; `node ../local-postgres/start.mjs` starts it again.
+The generated `.env.local` and local access credentials are ignored by Git.
 
-```bash
+Payload's admin and REST API have their own root layout under `(payload)`.
+The magazine has its own `(frontend)` layout. Public pages and search use the
+server-only `cmsAdapter.ts`, query published records with populated authors,
+and adapt native Payload rows to the existing public Article model. Reads are
+request-time when configured, so published edits appear without a rebuild.
+
+The prototype composer preserves all original blocks when editing its opening
+paragraph and first quote. Live Payload editing supports the complete block array.
+
+## Staging and Supabase
+
+Use an existing project with a dedicated server-side PostgreSQL connection.
+Payload stores its tables in an isolated `elan` schema. The initial migration
+creates this schema and revokes direct access for PUBLIC and, when present,
+Supabase's anon/authenticated roles. Keep `elan` out of Supabase's exposed Data
+API schemas; all editorial access goes through Payload's authentication and
+collection access rules. A Supabase publishable key is not a database URI.
+
+Set the following in the staging host's secret/environment settings:
+
+```ini
+DATABASE_URI=<server-side PostgreSQL URI with verified TLS>
+PAYLOAD_SECRET=<unique random staging secret>
+NEXT_PUBLIC_SERVER_URL=https://<staging-host>
+PAYLOAD_DB_PUSH=false
+```
+
+Use a distinct staging database or a dedicated schema approved for this app.
+Before applying migrations, inspect the existing project's schema. Never point
+local push mode at staging or production, and never run the initial migration
+against a database already managed using development schema push.
+
+```sh
+npm run payload -- migrate
+npm run payload -- migrate:status
 npm run build
 npm run start
 ```
+
+Run the migration using the schema owner's database role. The `elan` schema is
+separate from an existing Supabase public/auth/storage schema. An initial
+migration has been tested against a fresh local PostgreSQL database with push
+disabled. Remote staging activation requires project authorization and a
+server-side database connection; neither passwords nor connection URIs belong
+in Git. Do not use the local editor password or secret for staging.
+
+## Adapter contract
+
+`src/lib/payload-adapter.ts` converts native `blockType` to public `type`,
+stringifies IDs, unwraps tags, requires a populated author, preserves two-image
+arrays and Q&A, and removes native nested row IDs and nullable optional values.
+This also prevents duplicate child IDs when copying a story. Canonical category
+labels and missing formatted dates are derived consistently.
+
+## Validation
+
+```sh
+npm test
+npm run typecheck
+npm run lint
+npm run build
+```
+
+The tests cover mixed-block preservation, schema constraints, nested-ID cleanup,
+Payload conversion, story colors/framing, and the missing-DATABASE_URI fallback.
+Live integration checks additionally cover editor login, denied anonymous writes,
+persisted edits, published public pages, draft protection, and search filtering.
+
+## Dependency triage (2026-10-23)
+
+Next.js and eslint-config-next were updated to 16.4.2. Targeted overrides pin
+DOMPurify 3.4.17, Sass 1.106.1, and source-map-js 1.2.2 to resolve the affected
+runtime/editor/build dependencies.
+
+`npm audit --omit=dev` reports zero high/critical findings and five moderate
+findings in the bundled Drizzle migration-tool chain (drizzle-kit, its esbuild
+loader, and esbuild). This app does not start their vulnerable development
+server, and they are not request handlers. The full audit additionally reports
+five high findings in the ESLint glob/braces dependency chain, which runs during
+local linting. These are tracked tooling findings, not public-route or upload
+buffer vulnerabilities. There is no sharp advisory in the audit, and this
+configuration has no upload collection or uploaded-media processing endpoint.
+Review future dependency updates before production rollout.
+
+Next/Payload integration follows the [official installation guide](https://payloadcms.com/docs/getting-started/installation),
+with [explicit PostgreSQL migrations](https://payloadcms.com/docs/database/migrations).
