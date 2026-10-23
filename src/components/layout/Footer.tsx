@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Check } from 'lucide-react';
-import { CATEGORIES } from '@/data/mockArticles';
+import { DESKS as CATEGORIES } from '@/types/editorial';
 
 export default function Footer() {
   const [email, setEmail] = useState('');

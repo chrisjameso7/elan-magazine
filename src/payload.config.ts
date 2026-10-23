@@ -2,6 +2,7 @@ import { buildConfig } from 'payload';
 import { postgresAdapter } from '@payloadcms/db-postgres';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import sharp from 'sharp';
+import { postgresPool } from './lib/postgresPool';
 import { Articles } from './collections/Articles';
 import { Authors } from './collections/Authors';
 import { Users } from './collections/Users';
@@ -11,7 +12,7 @@ export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: { user: 'users', importMap: { baseDir: process.cwd() } },
   secret: process.env.PAYLOAD_SECRET || '',
-  db: postgresAdapter({ schemaName: 'elan', pool: { connectionString: process.env.DATABASE_URI }, push: process.env.PAYLOAD_DB_PUSH === 'true' && process.env.NODE_ENV !== 'production' }),
+  db: postgresAdapter({ schemaName: 'elan', pool: postgresPool(process.env.DATABASE_URI), push: process.env.PAYLOAD_DB_PUSH === 'true' && process.env.NODE_ENV !== 'production' }),
   editor: lexicalEditor(), sharp,
   collections: [Users, Authors, Articles],
 });

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { Search, X, ArrowUpRight, BookOpen } from 'lucide-react';
-import { CATEGORIES } from '@/data/mockArticles';
+import { DESKS as CATEGORIES } from '@/types/editorial';
 import { Article } from '@/types/editorial';
 
 interface SearchModalProps {

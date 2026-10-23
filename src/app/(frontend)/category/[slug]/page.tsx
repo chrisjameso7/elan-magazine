@@ -5,7 +5,7 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
-import { CATEGORIES } from '@/data/mockArticles';
+import { DESKS as CATEGORIES } from '@/types/editorial';
 import { getArticles } from '@/lib/cmsAdapter';
 
 export async function generateStaticParams() {

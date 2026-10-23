@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Search, Menu, X, ChevronRight } from 'lucide-react';
 import SearchModal from '../search/SearchModal';
-import { CATEGORIES } from '@/data/mockArticles';
+import { DESKS as CATEGORIES } from '@/types/editorial';
 
 export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);

@@ -16,7 +16,7 @@ npm run dev
 
 Leave `DATABASE_URI` unset to serve `src/data/mockArticles.ts` without loading
 Payload or opening a database connection. `/admin` redirects to the session-only
-prototype at `/editorial-preview`. Configured database failures are surfaced;
+prototype at `/editorial-preview`; this route returns 404 when a database is configured. The mock dataset is dynamically loaded only on the server fallback path and is not imported by client navigation components. Configured database failures are surfaced;
 they do not silently show mock content. An empty live database displays an empty
 editorial state until stories are published.
 
@@ -124,3 +124,11 @@ Review future dependency updates before production rollout.
 
 Next/Payload integration follows the [official installation guide](https://payloadcms.com/docs/getting-started/installation),
 with [explicit PostgreSQL migrations](https://payloadcms.com/docs/database/migrations).
+
+### Head administrator
+
+Set server-only `ELAN_HEAD_ADMIN_EMAIL` to the owner account email in every deployment. Only that account can enter Payload admin, manage users, or create, update, publish, and delete content. Other accounts cannot make changes; public visitors can still read published stories and contributors. Missing owner configuration denies administrative access. The email is kept in deployment configuration rather than an editable role field. Trusted maintenance scripts using Payload Local API with `overrideAccess: true` retain their normal privileged behavior.
+
+### Vercel environments
+
+Configure both Production and Preview with `DATABASE_URI` (Supabase session pooler port 5432), `PAYLOAD_SECRET`, the environment’s `NEXT_PUBLIC_SERVER_URL`, `ELAN_HEAD_ADMIN_EMAIL`, and `PAYLOAD_DB_PUSH=false`. Use the same Payload secret as the seeded environment. The official Supabase database CA is bundled server-side; remove workstation-specific `sslrootcert` paths when copying a URI. The pool verifies TLS and limits each server instance to one database connection. Do not upload seed passwords as deployment variables.

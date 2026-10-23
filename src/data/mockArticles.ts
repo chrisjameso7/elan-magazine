@@ -1,6 +1,4 @@
-import { Article, CategoryInfo, DESKS } from '../types/editorial';
-
-export const CATEGORIES: CategoryInfo[] = DESKS.map((desk) => ({ ...desk }));
+import type { Article } from '../types/editorial';
 
 export const MOCK_AUTHORS = {
   camille: {

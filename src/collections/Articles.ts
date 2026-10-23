@@ -1,3 +1,4 @@
+import { headAdminOnly, isHeadAdmin } from './access';
 import type { CollectionConfig } from 'payload';
 import { DESKS, FRANCHISES, type InterviewData } from '../types/editorial';
 import { text, media, hex, contentBlocks } from './fields';
@@ -5,8 +6,8 @@ export const Articles: CollectionConfig = {
   slug: 'articles', admin: { useAsTitle: 'title' },
   versions: { drafts: true },
   access: {
-    read: ({ req }) => req.user ? true : { _status: { equals: 'published' } },
-    create: ({ req }) => !!req.user, update: ({ req }) => !!req.user, delete: ({ req }) => !!req.user,
+    read: ({ req }) => isHeadAdmin(req.user) ? true : { _status: { equals: 'published' } },
+    create: headAdminOnly, update: headAdminOnly, delete: headAdminOnly,
   },
   fields: [
     { ...text('id', true), defaultValue: () => crypto.randomUUID(), admin: { readOnly: true } },
