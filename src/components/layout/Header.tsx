@@ -124,6 +124,7 @@ export default function Header() {
                     </Link>
                   );
                 })}
+                <Link href="/about" aria-current={pathname === '/about' ? 'page' : undefined} className={`text-xs uppercase tracking-[0.18em] py-4 transition-colors ${pathname === '/about' ? 'text-[#751F3D] font-semibold' : 'text-[#11100F]/80 hover:text-[#751F3D]'}`}>About</Link>
               </div>
 
               {/* Right Search Action for tablet/mobile */}
@@ -180,6 +181,7 @@ export default function Header() {
                 {cat.label}
               </Link>
             ))}
+            <Link href="/about" aria-current={pathname === '/about' ? 'page' : undefined} className={`text-xs uppercase tracking-[0.18em] py-4 transition-colors ${pathname === '/about' ? 'text-[#751F3D] font-semibold' : 'text-[#11100F]/80 hover:text-[#751F3D]'}`}>About</Link>
           </div>
 
           <button
@@ -257,6 +259,9 @@ export default function Header() {
                     <ChevronRight className="w-4 h-4 text-[#11100F]/30" />
                   </Link>
                 ))}
+                <Link href="/about" onClick={() => setIsMobileMenuOpen(false)} aria-current={pathname === '/about' ? 'page' : undefined} className="flex items-center justify-between py-3 text-sm font-display uppercase tracking-widest text-[#11100F] hover:text-[#751F3D] border-b border-[#11100F]/8">
+                  <span>About</span><ChevronRight className="w-4 h-4 text-[#11100F]/30" />
+                </Link>
               </div>
             </div>
 

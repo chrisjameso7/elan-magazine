@@ -122,11 +122,11 @@ export default function Footer() {
             <ul className="space-y-2 text-xs text-white/60 uppercase tracking-wider">
               <li>
                 <span className="text-white/40">Editorial Inquiries:</span>
-                <span className="block text-white/80 lowercase mt-0.5">editorial@elan-mag.mock</span>
+                <a href="mailto:contact@elanmagazine.com" className="block text-white/80 lowercase mt-0.5 hover:underline">contact@elanmagazine.com</a>
               </li>
               <li>
                 <span className="text-white/40">Press & Syndication:</span>
-                <span className="block text-white/80 lowercase mt-0.5">press@elan-mag.mock</span>
+                <a href="mailto:legal@elanmagazine.com" className="block text-white/80 lowercase mt-0.5 hover:underline">legal@elanmagazine.com</a>
               </li>
               <li className="pt-2">
                 <span className="text-[10px] text-white/40 normal-case block">
@@ -140,9 +140,10 @@ export default function Footer() {
         {/* Bottom Baseline Bar */}
         <div className="mt-14 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-white/40 gap-4">
           <p>© {new Date().getFullYear()} ÉLAN Magazine. All rights reserved.</p>
-          <div className="flex items-center gap-6 text-[11px] uppercase tracking-wider">
-            <Link href="/" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="/" className="hover:text-white transition-colors">Terms of Service</Link>
+          <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-3 text-[11px] uppercase tracking-wider">
+            <Link href="/about" className="hover:text-white transition-colors">About</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
             <Link href="/" className="hover:text-white transition-colors">Accessibility</Link>
             <Link href="/admin" className="hover:text-[#C98B9D] transition-colors font-mono font-medium text-[#C98B9D]">Editorial Desk</Link>
           </div>

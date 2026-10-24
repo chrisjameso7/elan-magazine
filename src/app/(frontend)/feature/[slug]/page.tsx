@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { storyStyle } from '@/lib/editorial';
 import React from 'react';
 import Link from 'next/link';

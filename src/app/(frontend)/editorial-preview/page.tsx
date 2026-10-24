@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { connection } from 'next/server';
 import { notFound } from 'next/navigation';
 import PreviewComposer from '@/components/editorial/PreviewComposer';
