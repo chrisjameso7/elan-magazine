@@ -3,53 +3,55 @@ import PublicationPage from '@/components/layout/PublicationPage';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — ÉLAN',
-  description: 'How ÉLAN collects, uses, and protects information across its digital publication.',
+  description: 'Our approach to reader privacy, personal information, and staying in touch with ÉLAN.',
 };
 
 export default function PrivacyPage() {
   return (
     <PublicationPage title="Privacy Policy" eyebrow="ÉLAN / Publication policies" dated updated>
+      <section aria-label="Publication details" className="border-b border-[#751F3D]/25 pb-8">
+        <p><strong>Publication:</strong> ÉLAN (theelanmagazine.com)</p>
+        <p><strong>Operating Entity:</strong> ÉLAN Entertainment</p>
+      </section>
       <section>
         <h2>1. Overview</h2>
-        <p>ÉLAN (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) respects your privacy. This Privacy Policy outlines how we collect, use, and protect information when you visit or interact with our digital publication at elanmagazine.com (the &quot;Site&quot;).</p>
+        <p>ÉLAN (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is an independent digital publication operated by ÉLAN Entertainment. We respect the privacy of our readers. This policy explains how we handle information when you visit theelanmagazine.com (the &quot;Site&quot;) or get in touch with us.</p>
       </section>
       <section>
         <h2>2. Information We Collect</h2>
+        <p>We keep the information we collect to what is needed to run the publication and respond to our readers.</p>
         <ul>
-          <li><strong>Automated Usage Data:</strong> When you access the Site, our hosting infrastructure (Vercel) automatically logs standard network requests, including IP addresses, browser types, referring URLs, and access timestamps for performance and security purposes.</li>
-          <li><strong>Voluntary Communications:</strong> If you contact us directly (e.g., editorial inquiries, pitches, or press outreach), we collect your name, email address, and the contents of your message.</li>
-          <li><strong>Media &amp; Editorial Assets:</strong> Authorized administrative users who upload imagery or media assets do so via authenticated channels handled by our cloud storage provider.</li>
+          <li><strong>Technical information:</strong> When you visit, our service providers may record information such as your IP address, browser, operating system, referring page, and the time of your visit. These records help keep the Site secure and working reliably.</li>
+          <li><strong>Correspondence:</strong> If you email us with a pitch, press inquiry, or other request, we receive your name, email address, and the information you choose to share.</li>
+          <li><strong>Newsletter subscriptions:</strong> If you choose to subscribe to <em>The ÉLAN Briefing</em>, your email address is used to send the publication and manage your subscription.</li>
         </ul>
       </section>
       <section>
-        <h2>3. How We Use Your Information</h2>
-        <p>We use the minimal data collected strictly to:</p>
+        <h2>3. How We Use Information</h2>
+        <p>We use this information to:</p>
         <ul>
-          <li>Render and serve editorial content fast and securely.</li>
-          <li>Maintain server uptime, assess site performance, and protect against unauthorized write or system access attempts.</li>
-          <li>Respond to editorial, press, or business inquiries.</li>
+          <li>Bring you our stories and keep the Site running smoothly.</li>
+          <li>Understand technical problems and protect the publication from misuse or unauthorized access.</li>
+          <li>Reply to editorial, press, and rights inquiries.</li>
+          <li>Send <em>The ÉLAN Briefing</em> to readers who have subscribed.</li>
         </ul>
       </section>
       <section>
-        <h2>4. Cookies &amp; Trackers</h2>
-        <p>ÉLAN is engineered as a text-first, high-performance publication. We do not sell user data, nor do we run invasive third-party ad network tracking scripts. Essential session storage and cookies are used solely for administrator authentication and core infrastructure operation.</p>
+        <h2>4. Cookies &amp; Tracking</h2>
+        <p>ÉLAN is a place to read, discover, and spend time with ideas. <strong>We do not sell personal information, share it with data brokers, or use invasive cross-site advertising trackers.</strong> Essential cookies and session storage support secure administrator sign-in and the basic operation of the Site.</p>
       </section>
       <section>
-        <h2>5. Data Storage &amp; Security</h2>
-        <p>Persistent publication data is managed via cloud database systems (Supabase) protected by strict access controls and encrypted connections (TLS/SSL). Administrative privileges are restricted strictly to authorized editorial personnel.</p>
+        <h2>5. Keeping Information Secure</h2>
+        <p>We use encrypted connections and access controls to protect publication content and the information entrusted to us. Access to our publishing systems is limited to authorized ÉLAN personnel.</p>
       </section>
       <section>
-        <h2>6. Third-Party Infrastructure</h2>
-        <p>Our architecture relies on trusted third-party providers bound by high security and privacy standards:</p>
-        <ul>
-          <li><strong>Vercel</strong> (Frontend hosting &amp; edge deployment)</li>
-          <li><strong>Supabase</strong> (Database &amp; media storage)</li>
-        </ul>
+        <h2>6. Service Providers</h2>
+        <p>Specialist service providers help us host the Site, store publication content, and support reader communications. They process information as needed to deliver those services.</p>
       </section>
       <section>
-        <h2>7. Contact Us</h2>
-        <p>For any questions regarding this Privacy Policy, please contact:</p>
-        <p><strong>Editorial Operations:</strong> <a href="mailto:contact@theelanmagazine.com">contact@theelanmagazine.com</a></p>
+        <h2>7. Rights &amp; Inquiries</h2>
+        <p>Depending on where you live, you may have the right to ask for access to, correction of, or deletion of personal information you have shared with us. You can also contact us to stop receiving <em>The ÉLAN Briefing</em>.</p>
+        <p>For privacy questions or data requests, write to <a href="mailto:legal@theelanmagazine.com">legal@theelanmagazine.com</a>.</p>
       </section>
     </PublicationPage>
   );

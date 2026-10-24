@@ -11,19 +11,19 @@ export default function TermsPage() {
     <PublicationPage title="Terms of Service" eyebrow="ÉLAN / Publication policies" dated>
       <section>
         <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using elanmagazine.com (the &quot;Site&quot;), you agree to be bound by these Terms of Service. If you do not agree, please discontinue use of the Site.</p>
+        <p>By accessing or using theelanmagazine.com (the &quot;Site&quot;), you agree to be bound by these Terms of Service. If you do not agree, please discontinue use of the Site.</p>
       </section>
       <section>
         <h2>2. Intellectual Property Rights</h2>
         <p>All editorial content, typography, features, original photography, branding, and layout designs published on ÉLAN—including franchises such as <em>The New Guard</em>, <em>The Edit</em>, and <em>ÉLAN Conversations</em>—are the exclusive intellectual property of ÉLAN and its contributing creators.</p>
         <ul>
           <li>You may not copy, reproduce, distribute, or create derivative works from our content without prior written consent.</li>
-          <li>Short text quotes and imagery excerpts shared for criticism, review, or media reporting must clearly attribute <strong>ÉLAN</strong> and link directly to the original article URL on elanmagazine.com.</li>
+          <li>Short text quotes and imagery excerpts shared for criticism, review, or media reporting must clearly attribute <strong>ÉLAN</strong> and link directly to the original article URL on theelanmagazine.com.</li>
         </ul>
       </section>
       <section>
         <h2>3. Administrative Access &amp; Security</h2>
-        <p>Access to /admin and write privileges across our Content Management System are strictly restricted to authorized ÉLAN personnel. Unsanctioned attempts to access administrative dashboards, modify database records, or inject malicious code are strictly prohibited and will result in immediate IP blocking and legal escalation.</p>
+        <p>Our publishing systems are reserved for authorized ÉLAN personnel. Attempts to gain unauthorized access, alter records, or introduce malicious code are prohibited. We may restrict access and take appropriate action to protect the publication.</p>
       </section>
       <section>
         <h2>4. Disclaimers</h2>

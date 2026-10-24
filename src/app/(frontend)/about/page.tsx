@@ -10,22 +10,22 @@ export default function AboutPage() {
   return (
     <PublicationPage title="Independent by design." eyebrow="About ÉLAN">
       <section aria-label="Manifesto">
-        <p className="font-display text-3xl leading-snug text-[#751F3D] sm:text-4xl"><strong>ÉLAN</strong> is an independent digital publication dedicated to modern high fashion, cultural critique, and sartorial architecture.</p>
-        <p>Engineered with a text-first, print-inspired discipline, ÉLAN provides sharp editorial commentary and elevated visual storytelling free from digital clutter.</p>
+        <p className="font-display text-3xl leading-snug text-[#751F3D] sm:text-4xl"><strong>ÉLAN</strong> is an independent digital publication about the people, ideas, and creative work shaping how we live.</p>
+        <p>From fashion and film to art and everyday life, we follow what moves culture forward. Thoughtful writing, distinctive photography, and the care of a print magazine guide everything we publish.</p>
       </section>
       <section>
-        <h2>Editorial Pillars &amp; Franchises</h2>
+        <h2>Our Editorial Series</h2>
         <div className="space-y-8">
-          <div><h3>The New Guard</h3><p>Deep-dive profiles and critical analyses of emergent designers, visionaries, and creative directors reshaping luxury.</p></div>
-          <div><h3>The Edit</h3><p>Curated wardrobe studies, essential acquisitions, and high-contrast sartorial selections.</p></div>
-          <div><h3>ÉLAN Conversations</h3><p>Text-led, uninterrupted dialogues with the figures defining contemporary style, art, and culture.</p></div>
+          <div><h3>The New Guard</h3><p>Meet the emerging designers, artists, and creative voices whose work deserves a closer look.</p></div>
+          <div><h3>The Edit</h3><p>The clothes, objects, books, films, and places we return to—and the stories behind our choices.</p></div>
+          <div><h3>ÉLAN Conversations</h3><p>Conversations with people shaping style, art, and culture, with room for candour and the unexpected.</p></div>
         </div>
       </section>
       <section className="border-y border-[#751F3D]/25 py-10">
         <h2>Submissions &amp; Pitching</h2>
         <div className="space-y-8">
-          <div><h3>Editorial &amp; Feature Pitches</h3><p>We accept long-form essays, cultural critiques, and profile proposals. Send briefs and writer samples to <a href="mailto:pitches@theelanmagazine.com">pitches@theelanmagazine.com</a>.</p></div>
-          <div><h3>Photography &amp; Fashion Stories</h3><p>High-resolution editorial spreads and portrait series should be submitted with full styling and creative direction credits to <a href="mailto:media@theelanmagazine.com">media@theelanmagazine.com</a>.</p></div>
+          <div><h3>Editorial &amp; Feature Pitches</h3><p>We welcome essays, cultural criticism, and profiles with a clear point of view. Send a short outline and samples of your writing to <a href="mailto:pitches@theelanmagazine.com">pitches@theelanmagazine.com</a>.</p></div>
+          <div><h3>Photography &amp; Fashion Stories</h3><p>For photo essays, fashion stories, and portrait series, send your work with full creative and styling credits to <a href="mailto:media@theelanmagazine.com">media@theelanmagazine.com</a>.</p></div>
         </div>
       </section>
       <section>

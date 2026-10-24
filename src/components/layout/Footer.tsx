@@ -26,10 +26,10 @@ export default function Footer() {
               The ÉLAN Briefing
             </span>
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight tracking-tight text-[#F5F0E8]">
-              Critical perspectives on fashion, culture, and the modern intellect.
+              A considered view of culture. A little more to discover.
             </h2>
             <p className="font-reading text-base sm:text-lg text-white/70 max-w-xl leading-relaxed">
-              Delivered weekly. An uncompromising edit of emerging designers, cultural essays, architectural studies, and intimate interviews.
+              New voices, thoughtful stories, and the things catching our eye. The ÉLAN Briefing brings our world to your inbox.
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function Footer() {
                   </button>
                 </div>
                 <p className="text-[10px] text-white/40 tracking-wide">
-                  By subscribing, you agree to our privacy standards. Unsubscribe at any time.
+                  Your inbox, on your terms. Read our <Link href="/privacy" className="underline underline-offset-2 hover:text-white">Privacy Policy</Link>.
                 </p>
               </form>
             )}
@@ -81,11 +81,11 @@ export default function Footer() {
               ÉLAN
             </Link>
             <p className="font-reading text-sm text-white/60 max-w-sm leading-relaxed">
-              A digital-first editorial publication exploring fashion, beauty, culture, entertainment, people, relationships, travel, design, luxury, and contemporary life.
+              An independent publication exploring people, culture, and modern life. Stories to spend time with. Perspectives to carry with you.
             </p>
             <div className="pt-2">
               <span className="inline-block text-[11px] uppercase tracking-widest text-[#C98B9D] border border-[#C98B9D]/30 px-3 py-1">
-                Digital Edition • Continuous Dispatch
+                Independent • Digital Edition
               </span>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function Footer() {
               </li>
               <li className="pt-2">
                 <span className="text-[10px] text-white/40 normal-case block">
-                  ÉLAN is published digitally. Independent editorial perspectives.
+                  Published by ÉLAN Entertainment.
                 </span>
               </li>
             </ul>
