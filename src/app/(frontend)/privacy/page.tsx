@@ -49,7 +49,7 @@ export default function PrivacyPage() {
       <section>
         <h2>7. Contact Us</h2>
         <p>For any questions regarding this Privacy Policy, please contact:</p>
-        <p><strong>Editorial Operations:</strong> <a href="mailto:contact@elanmagazine.com">contact@elanmagazine.com</a></p>
+        <p><strong>Editorial Operations:</strong> <a href="mailto:contact@theelanmagazine.com">contact@theelanmagazine.com</a></p>
       </section>
     </PublicationPage>
   );

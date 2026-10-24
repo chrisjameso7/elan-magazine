@@ -31,7 +31,7 @@ export default function TermsPage() {
       </section>
       <section>
         <h2>5. Contact</h2>
-        <p>For syndication or legal inquiries: <a href="mailto:legal@elanmagazine.com">legal@elanmagazine.com</a></p>
+        <p>For syndication or legal inquiries: <a href="mailto:legal@theelanmagazine.com">legal@theelanmagazine.com</a></p>
       </section>
     </PublicationPage>
   );

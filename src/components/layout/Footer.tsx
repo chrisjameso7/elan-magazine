@@ -122,11 +122,11 @@ export default function Footer() {
             <ul className="space-y-2 text-xs text-white/60 uppercase tracking-wider">
               <li>
                 <span className="text-white/40">Editorial Inquiries:</span>
-                <a href="mailto:contact@elanmagazine.com" className="block text-white/80 lowercase mt-0.5 hover:underline">contact@elanmagazine.com</a>
+                <a href="mailto:contact@theelanmagazine.com" className="block text-white/80 lowercase mt-0.5 hover:underline">contact@theelanmagazine.com</a>
               </li>
               <li>
                 <span className="text-white/40">Press & Syndication:</span>
-                <a href="mailto:legal@elanmagazine.com" className="block text-white/80 lowercase mt-0.5 hover:underline">legal@elanmagazine.com</a>
+                <a href="mailto:legal@theelanmagazine.com" className="block text-white/80 lowercase mt-0.5 hover:underline">legal@theelanmagazine.com</a>
               </li>
               <li className="pt-2">
                 <span className="text-[10px] text-white/40 normal-case block">

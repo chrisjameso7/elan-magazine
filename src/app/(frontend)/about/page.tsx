@@ -24,15 +24,15 @@ export default function AboutPage() {
       <section className="border-y border-[#751F3D]/25 py-10">
         <h2>Submissions &amp; Pitching</h2>
         <div className="space-y-8">
-          <div><h3>Editorial &amp; Feature Pitches</h3><p>We accept long-form essays, cultural critiques, and profile proposals. Send briefs and writer samples to <a href="mailto:pitches@elanmagazine.com">pitches@elanmagazine.com</a>.</p></div>
-          <div><h3>Photography &amp; Fashion Stories</h3><p>High-resolution editorial spreads and portrait series should be submitted with full styling and creative direction credits to <a href="mailto:media@elanmagazine.com">media@elanmagazine.com</a>.</p></div>
+          <div><h3>Editorial &amp; Feature Pitches</h3><p>We accept long-form essays, cultural critiques, and profile proposals. Send briefs and writer samples to <a href="mailto:pitches@theelanmagazine.com">pitches@theelanmagazine.com</a>.</p></div>
+          <div><h3>Photography &amp; Fashion Stories</h3><p>High-resolution editorial spreads and portrait series should be submitted with full styling and creative direction credits to <a href="mailto:media@theelanmagazine.com">media@theelanmagazine.com</a>.</p></div>
         </div>
       </section>
       <section>
         <h2>Masthead</h2>
         <p><strong>Founder &amp; Executive Editor:</strong> Chris James</p>
-        <p><strong>Press &amp; General Inquiries:</strong> <a href="mailto:contact@elanmagazine.com">contact@elanmagazine.com</a></p>
-        <p><strong>Syndication &amp; Rights:</strong> <a href="mailto:legal@elanmagazine.com">legal@elanmagazine.com</a></p>
+        <p><strong>Press &amp; General Inquiries:</strong> <a href="mailto:contact@theelanmagazine.com">contact@theelanmagazine.com</a></p>
+        <p><strong>Syndication &amp; Rights:</strong> <a href="mailto:legal@theelanmagazine.com">legal@theelanmagazine.com</a></p>
       </section>
     </PublicationPage>
   );
