@@ -11,11 +11,12 @@ export default function PrivacyPage() {
     <PublicationPage title="Privacy Policy" eyebrow="ÉLAN / Publication policies" dated updated>
       <section aria-label="Publication details" className="border-b border-[#751F3D]/25 pb-8">
         <p><strong>Publication:</strong> ÉLAN (theelanmagazine.com)</p>
-        <p><strong>Operating Entity:</strong> ÉLAN Entertainment</p>
+        <p><strong>Operating Division:</strong> ÉLAN Entertainment</p>
+        <p><strong>Parent Entity:</strong> Lumière Media &amp; Entertainment</p>
       </section>
       <section>
         <h2>1. Overview</h2>
-        <p>ÉLAN (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is an independent digital publication operated by ÉLAN Entertainment. We respect the privacy of our readers. This policy explains how we handle information when you visit theelanmagazine.com (the &quot;Site&quot;) or get in touch with us.</p>
+        <p>ÉLAN (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is an independent digital publication produced by ÉLAN Entertainment, a division of Lumière Media &amp; Entertainment. ÉLAN Entertainment and its parent company, Lumière Media &amp; Entertainment, are the operating controllers of the Site and its platform data. We respect the privacy of our readers. This policy explains how we handle information when you visit theelanmagazine.com (the &quot;Site&quot;) or get in touch with us.</p>
       </section>
       <section>
         <h2>2. Information We Collect</h2>

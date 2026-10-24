@@ -11,6 +11,7 @@ export default function TermsPage() {
     <PublicationPage title="Terms of Service" eyebrow="ÉLAN / Publication policies" dated>
       <section>
         <h2>1. Acceptance of Terms</h2>
+        <p>ÉLAN Entertainment and its parent company, Lumière Media &amp; Entertainment, are the operating controllers of the Site and its platform data. ÉLAN Entertainment is a division of Lumière Media &amp; Entertainment.</p>
         <p>By accessing or using theelanmagazine.com (the &quot;Site&quot;), you agree to be bound by these Terms of Service. If you do not agree, please discontinue use of the Site.</p>
       </section>
       <section>

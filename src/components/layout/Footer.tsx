@@ -130,7 +130,7 @@ export default function Footer() {
               </li>
               <li className="pt-2">
                 <span className="text-[10px] text-white/40 normal-case block">
-                  Published by ÉLAN Entertainment.
+                  ÉLAN is an independent digital publication produced by ÉLAN Entertainment, a division of Lumière Media &amp; Entertainment.
                 </span>
               </li>
             </ul>

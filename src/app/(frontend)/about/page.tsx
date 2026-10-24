@@ -10,7 +10,8 @@ export default function AboutPage() {
   return (
     <PublicationPage title="Independent by design." eyebrow="About ÉLAN">
       <section aria-label="Manifesto">
-        <p className="font-display text-3xl leading-snug text-[#751F3D] sm:text-4xl"><strong>ÉLAN</strong> is an independent digital publication about the people, ideas, and creative work shaping how we live.</p>
+        <p>ÉLAN is an independent digital publication produced by ÉLAN Entertainment, a division of Lumière Media &amp; Entertainment.</p>
+        <p className="font-display text-3xl leading-snug text-[#751F3D] sm:text-4xl">The people, ideas, and creative work shaping how we live.</p>
         <p>From fashion and film to art and everyday life, we follow what moves culture forward. Thoughtful writing, distinctive photography, and the care of a print magazine guide everything we publish.</p>
       </section>
       <section>
@@ -31,6 +32,8 @@ export default function AboutPage() {
       <section>
         <h2>Masthead</h2>
         <p><strong>Founder &amp; Executive Editor:</strong> Chris James</p>
+        <p><strong>Operating Division:</strong> ÉLAN Entertainment</p>
+        <p><strong>Parent Entity:</strong> Lumière Media &amp; Entertainment</p>
         <p><strong>Press &amp; General Inquiries:</strong> <a href="mailto:contact@theelanmagazine.com">contact@theelanmagazine.com</a></p>
         <p><strong>Syndication &amp; Rights:</strong> <a href="mailto:legal@theelanmagazine.com">legal@theelanmagazine.com</a></p>
       </section>
