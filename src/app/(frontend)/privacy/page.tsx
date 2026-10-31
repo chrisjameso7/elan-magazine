@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <PublicationPage title="Privacy Policy" eyebrow="ÉLAN / Publication policies" dated updated>
-      <section aria-label="Publication details" className="border-b border-[#751F3D]/25 pb-8">
+      <section aria-label="Publication details" className="border-b border-[#762F43]/25 pb-8">
         <p><strong>Publication:</strong> ÉLAN (theelanmagazine.com)</p>
         <p><strong>Operating Division:</strong> ÉLAN Entertainment</p>
         <p><strong>Parent Entity:</strong> Lumière Media &amp; Entertainment</p>

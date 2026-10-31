@@ -9,7 +9,7 @@ export const DESKS = [
 export type CategorySlug = (typeof DESKS)[number]['slug'];
 
 export const FRANCHISES = [
-  { value: 'new_guard', label: 'The New Guard' },
+  { value: 'new_guard', label: 'The Next Wave' },
   { value: 'elan_conversations', label: 'Élan Conversations' },
   { value: 'portfolio', label: 'Portfolio' },
   { value: 'the_edit', label: 'The Edit' },

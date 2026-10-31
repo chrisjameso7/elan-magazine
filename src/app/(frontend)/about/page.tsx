@@ -11,18 +11,18 @@ export default function AboutPage() {
     <PublicationPage title="Independent by design." eyebrow="About ÉLAN">
       <section aria-label="Manifesto">
         <p>ÉLAN is an independent digital publication produced by ÉLAN Entertainment, a division of Lumière Media &amp; Entertainment.</p>
-        <p className="font-display text-3xl leading-snug text-[#751F3D] sm:text-4xl">The people, ideas, and creative work shaping how we live.</p>
-        <p>From fashion and film to art and everyday life, we follow what moves culture forward. Thoughtful writing, distinctive photography, and the care of a print magazine guide everything we publish.</p>
+        <p className="font-display text-3xl leading-snug text-[#762F43] sm:text-4xl">The people, ideas, and creative work shaping how we live.</p>
+        <p>The Élan exists to discover, introduce, and explore people worth knowing. We give emerging voices meaningful visibility while following the wider world of culture, entertainment, style, and modern life. Thoughtful writing, distinctive photography, and the care of a print magazine guide everything we publish.</p>
       </section>
       <section>
         <h2>Our Editorial Series</h2>
         <div className="space-y-8">
-          <div><h3>The New Guard</h3><p>Meet the emerging designers, artists, and creative voices whose work deserves a closer look.</p></div>
+          <div><h3>The Next Wave</h3><p>Meet the emerging designers, artists, and creative voices whose work deserves a closer look.</p></div>
           <div><h3>The Edit</h3><p>The clothes, objects, books, films, and places we return to—and the stories behind our choices.</p></div>
           <div><h3>ÉLAN Conversations</h3><p>Conversations with people shaping style, art, and culture, with room for candour and the unexpected.</p></div>
         </div>
       </section>
-      <section className="border-y border-[#751F3D]/25 py-10">
+      <section id="submissions" className="border-y border-[#762F43]/25 py-10">
         <h2>Submissions &amp; Pitching</h2>
         <div className="space-y-8">
           <div><h3>Editorial &amp; Feature Pitches</h3><p>We welcome essays, cultural criticism, and profiles with a clear point of view. Send a short outline and samples of your writing to <a href="mailto:pitches@theelanmagazine.com">pitches@theelanmagazine.com</a>.</p></div>

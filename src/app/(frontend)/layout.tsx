@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Plus_Jakarta_Sans, Newsreader, JetBrains_Mono } from 'next/font/google';
+import { Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -17,24 +17,11 @@ const jakarta = Plus_Jakarta_Sans({
   display: 'swap',
 });
 
-const newsreader = Newsreader({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-newsreader',
-  display: 'swap',
-});
-
-const mono = JetBrains_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  variable: '--font-mono',
-  display: 'swap',
-});
-
 export const metadata: Metadata = {
-  title: 'ÉLAN — Modern Culture, Fashion & Lifestyle',
-  description: 'A digital-first culture and lifestyle publication covering fashion, beauty, culture, entertainment, people, relationships, travel, design, luxury, and contemporary life.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://elan-magazine.vercel.app'),
+  title: 'The Élan — People • Culture • Modern Life',
+  description: 'An independent publication discovering people worth knowing. Emerging voices, thoughtful perspectives, and stories from culture and modern life.',
+  openGraph: { siteName: 'The Élan', type: 'website', title: 'The Élan — People • Culture • Modern Life', description: 'Discover people worth knowing and stories worth your time.' },
   icons: {
     icon: '/favicon.ico',
   },
@@ -48,9 +35,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${jakarta.variable} ${newsreader.variable} ${mono.variable} h-full`}
+      className={`${playfair.variable} ${jakarta.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col bg-[#F5F0E8] text-[#11100F] font-sans antialiased selection:bg-[#751F3D] selection:text-white">
+      <body className="min-h-full flex flex-col antialiased">
         {children}
       </body>
     </html>
