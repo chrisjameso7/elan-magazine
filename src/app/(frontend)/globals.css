@@ -92,7 +92,7 @@ body {
 
 /* Respect reduced motion */
 /* Shared editorial system. Layouts recompose at reading widths, without masking overflow. */
-html { scroll-padding-top: 1.5rem; }
+html { scroll-padding-top: 88px; }
 button, a, input { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
 a { text-underline-offset: .22em; }
@@ -106,6 +106,27 @@ h1, h2, h3, p { overflow-wrap: break-word; }
 .skip-link { position: fixed; top: 8px; left: 8px; transform: translateY(-150%); padding: 12px; background: white; z-index: 100; }
 .skip-link:focus { transform: none; }
 .site-header { background: var(--background); border-bottom: 1px solid var(--foreground); }
+.scroll-header { position: fixed; inset: 0 0 auto; z-index: 40; background: rgb(246 243 237 / .84); border-bottom: 1px solid rgb(116 106 91 / .22); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); animation: header-reveal .2s ease-out; }
+.scroll-header-inner { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; min-height: 68px; }
+.scroll-wordmark { font-family: var(--font-serif-display); font-size: 2rem; font-weight: 600; letter-spacing: -.05em; line-height: 1.3; }
+.scroll-nav { display: flex; justify-content: center; gap: clamp(16px,2.3vw,36px); }
+.scroll-nav a { padding-block: 23px; font-size: .6rem; font-weight: 600; text-transform: uppercase; letter-spacing: .1em; white-space: nowrap; }
+.scroll-nav a:hover, .scroll-nav a[aria-current] { color: var(--accent); }
+.scroll-nav a[aria-current] { box-shadow: inset 0 -2px var(--accent); }
+.scroll-actions { display: flex; gap: 4px; }
+.scroll-actions button { display: grid; place-items: center; width: 44px; height: 44px; }
+.scroll-actions .scroll-menu { display: none; }
+@keyframes header-reveal { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .scroll-header { background: #F6F3ED; } }
+@media(max-width:900px) {
+  html { scroll-padding-top: 124px; }
+  .scroll-header-inner { grid-template-columns: 1fr auto; gap: 0 16px; }
+  .scroll-wordmark { padding-block: 10px; }
+  .scroll-actions { grid-column: 2; grid-row: 1; }
+  .scroll-actions .scroll-menu { display: grid; }
+  .scroll-nav { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; gap: 24px; overflow-x: auto; scrollbar-width: none; border-top: 1px solid var(--divider); }
+  .scroll-nav a { padding-block: 13px; font-size: .57rem; }
+}
 .masthead-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 142px; gap: 24px; }
 .masthead { font-family: var(--font-serif-display); font-size: clamp(4rem,7vw,6.6rem); line-height: 1.15; letter-spacing: -.055em; font-weight: 600; padding-right: .04em; }
 .masthead-note { display: flex; flex-direction: column; gap: .65rem; font-size: .66rem; }
