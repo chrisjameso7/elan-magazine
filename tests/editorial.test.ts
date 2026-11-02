@@ -33,10 +33,10 @@ test('missing opening blocks are added only when populated', () => {
   assert.deepEqual(updateOpeningBlocks([], '', '', ''), []);
   assert.deepEqual(updateOpeningBlocks([], 'Opening', 'Quote', 'A'), [{ type: 'paragraph', text: 'Opening', dropCap: true }, { type: 'quote', quote: 'Quote', attribution: 'A' }]);
 });
-test('six desks and six franchises remain canonical', () => {
-  assert.deepEqual(DESKS.map((d) => d.slug), ['culture', 'people', 'entertainment', 'style', 'life', 'places']);
-  assert.equal(FRANCHISES.length, 6);
-  for (const article of MOCK_ARTICLES) assert.ok(DESKS.some((desk) => desk.slug === article.category));
+test('five desks and nine franchises remain canonical', () => {
+  assert.deepEqual(DESKS.map((d) => d.slug), ['people', 'entertainment', 'music', 'style', 'culture']);
+  assert.equal(FRANCHISES.length, 9);
+  for (const article of MOCK_ARTICLES) assert.ok([...DESKS.map(d => d.slug), 'life', 'places'].includes(article.category));
 });
 test('Payload conversion roundtrips every block and populated author', () => {
   const article = { ...MOCK_ARTICLES[0], content };
@@ -76,8 +76,11 @@ test('interview validation applies only to interview stories', async () => {
 test('unset DATABASE_URI serves mocks without initializing Payload', async () => {
   const { readArticles } = await import('../src/lib/cmsReader');
   const fail = async () => { throw new Error('Database should not be touched'); };
+  process.env.ELAN_DEMO_PREVIEW = 'true';
   assert.equal(await readArticles(undefined, fail), MOCK_ARTICLES);
   assert.equal(await readArticles('  ', fail), MOCK_ARTICLES);
+  delete process.env.ELAN_DEMO_PREVIEW;
+  assert.deepEqual(await readArticles(undefined, fail), []);
   assert.deepEqual(await readArticles('postgres://configured', async () => []), []);
   await assert.rejects(readArticles('postgres://configured', fail), /Database should not be touched/);
 });

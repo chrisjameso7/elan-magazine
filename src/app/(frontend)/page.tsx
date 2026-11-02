@@ -1,41 +1,286 @@
-export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
 import EditorialImage from '@/components/editorial/EditorialImage';
 import { getArticles } from '@/lib/cmsAdapter';
-import { homepageStories, storyHref } from '@/lib/presentation';
-
+import { getWorld } from '@/lib/world';
+import { curateWorld } from '@/lib/curation';
+import { storyHref } from '@/lib/presentation';
+export const dynamic = 'force-dynamic';
 export const metadata = { alternates: { canonical: '/' } };
 
 export default async function HomePage() {
-  const articles = await getArticles();
-  const { lead, wave, feature, edit, latest } = homepageStories(articles);
-  return <><Header /><main id="main-content" className="publication-shell homepage">
-    <div className="edition-line"><span>An independent eye on culture</span><Link href="/about">People worth knowing. Stories worth your time. <span aria-hidden="true">↗</span></Link></div>
-    {lead ? <section aria-label="The lead story" className="home-lead">
-      <div className="home-lead-photo"><Link href={storyHref(lead)} tabIndex={-1} aria-hidden="true"><EditorialImage image={lead.coverImage} direction={lead.artDirection} priority sizes="(min-width: 900px) 60vw, 100vw" /></Link></div>
-      <div className="home-lead-copy"><span className="eyebrow">{lead.franchise === 'new_guard' ? 'The Next Wave' : 'In focus'} / <Link href={`/category/${lead.category}`}>{lead.categoryLabel}</Link></span>
-        <h1><Link href={storyHref(lead)}>{lead.title}</Link></h1><p className="story-dek">{lead.dek}</p>
-        <p className="story-meta">By {lead.author.name}{lead.dateFormatted && <time dateTime={lead.publishedAt}>{lead.dateFormatted}</time>}</p>
-        <Link href={storyHref(lead)} className="text-link">Read the story <span aria-hidden="true">↗</span></Link>
-      </div>
-    </section> : <section className="empty-editorial"><span className="eyebrow">The Élan</span><h1>There is more to discover.</h1><p>Our editors are preparing the next stories. Explore the publication in the meantime.</p><Link href="/about" className="text-link">About The Élan ↗</Link></section>}
-
-    {wave.length > 0 && <section className="next-wave" aria-labelledby="wave-title">
-      <div className="wave-intro"><span className="eyebrow">The discovery series</span><h2 id="wave-title">The Next{' '}<br /><em>Wave</em><span aria-hidden="true">↗</span></h2><p>Meet the people shaping what comes next.</p><Link href="/category/people" className="text-link">Explore People <span aria-hidden="true">↗</span></Link></div>
-      <div className={`wave-stories wave-stories--${wave.length}`}>{wave.map((article, index) => <div key={article.id}><span className="wave-index">{String(index + 1).padStart(2, '0')} / THE NEXT WAVE</span><StoryCard article={article} /></div>)}</div>
-    </section>}
-
-    {latest.length > 0 && <section className="editorial-section" aria-labelledby="latest-title"><div className="section-heading"><h2 id="latest-title">The latest</h2><span className="eyebrow">Across our world</span></div>
-      <div className="latest-layout"><StoryCard article={latest[0]} />{latest.length > 1 && <div className="latest-list">{latest.slice(1).map(article => <StoryCard key={article.id} article={article} variant="horizontal_split" />)}</div>}</div>
-    </section>}
-
-    {feature && <section className="conversation-feature" aria-labelledby="feature-title"><div className="conversation-photo"><EditorialImage image={feature.interview?.portrait ?? feature.coverImage} direction={feature.artDirection} sizes="(min-width: 900px) 45vw, 100vw" /></div>
-      <div className="conversation-copy"><span className="eyebrow">{feature.type === 'interview' ? 'ÉLAN Conversations' : 'The long read'}</span><h2 id="feature-title"><Link href={storyHref(feature)}>{feature.title}</Link></h2><p>{feature.dek}</p><p className="story-meta">By {feature.author.name} <span>{feature.readTime}</span></p><Link className="text-link" href={storyHref(feature)}>{feature.type === 'interview' ? 'Read the conversation' : 'Read the feature'} <span aria-hidden="true">↗</span></Link></div>
-    </section>}
-
-    {edit.length > 0 && <section className="editorial-section" aria-labelledby="edit-title"><div className="section-heading"><h2 id="edit-title">The Élan <em>Edit</em></h2><span className="eyebrow">A considered selection</span></div><div className="edit-grid">{edit.map(article => <StoryCard key={article.id} article={article} variant="horizontal_split" />)}</div></section>}
-  </main><Footer /></>;
+  const [articles, world] = await Promise.all([getArticles(), getWorld()]);
+  const { cover, lead, next, latest, entertainment, originals, culture, edit } =
+    curateWorld(articles, world.covers);
+  return (
+    <>
+      <Header />
+      <main id="main-content" className="brand-home">
+        {cover ? (
+          <section className="campaign-lead" aria-label="The current cover">
+            <EditorialImage image={cover.artwork} priority />
+            <div className="campaign-lead-shade" />
+            <div className="publication-shell campaign-lead-copy">
+              <span className="eyebrow">
+                THE ÉLAN COVER / {cover.issueIdentifier}
+              </span>
+              <p className="campaign-names">
+                {cover.personalities.map((p) => p.name).join(' / ')}
+              </p>
+              <h1>
+                <Link href={`/covers/${cover.slug}`}>{cover.title}</Link>
+              </h1>
+              <p>{cover.intro}</p>
+              <Link className="text-link" href={`/covers/${cover.slug}`}>
+                Enter the issue <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+          </section>
+        ) : lead ? (
+          <section className="publication-shell feature-lead">
+            <div className="feature-lead-image">
+              <EditorialImage
+                image={lead.coverImage}
+                direction={lead.artDirection}
+                priority
+                sizes="(min-width:900px) 60vw,100vw"
+              />
+            </div>
+            <div className="feature-lead-copy">
+              <span className="eyebrow">IN FOCUS / {lead.categoryLabel}</span>
+              <h1>
+                <Link href={storyHref(lead)}>{lead.title}</Link>
+              </h1>
+              <p>{lead.dek}</p>
+              <Link className="text-link" href={storyHref(lead)}>
+                Enter the story <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+          </section>
+        ) : (
+          <section className="brand-manifesto publication-shell">
+            <div className="manifesto-topline">
+              <span>ENTERTAINMENT / CULTURE / ORIGINAL EXPRESSION</span>
+              <span>A GLOBAL POINT OF VIEW</span>
+            </div>
+            <h1>
+              Culture,
+              <br />
+              in its <em>element.</em>
+              <span aria-hidden="true">↗</span>
+            </h1>
+            <div className="manifesto-bottom">
+              <p>
+                The personalities. The creative work.
+                <br />
+                The conversations that move culture.
+              </p>
+              <Link className="text-link" href="/covers">
+                Discover ÉLAN Covers <span aria-hidden="true">↗</span>
+              </Link>
+            </div>
+            <div className="manifesto-index">
+              <span>ÉLAN / A NEW PERSPECTIVE</span>
+              <Link href="/about">Enter our world ↗</Link>
+            </div>
+          </section>
+        )}
+        <div className="publication-shell">
+          {latest.length > 0 && (
+            <section
+              className="editorial-section"
+              aria-labelledby="latest-title"
+            >
+              <div className="section-heading">
+                <h2 id="latest-title">
+                  The <em>latest.</em>
+                </h2>
+                <span className="eyebrow">THE CULTURAL CONVERSATION</span>
+              </div>
+              <div className="latest-layout">
+                <StoryCard article={latest[0]} />
+                <div className="latest-list">
+                  {latest.slice(1).map((a) => (
+                    <StoryCard
+                      key={a.id}
+                      article={a}
+                      variant="horizontal_split"
+                    />
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+          {next.length > 0 && (
+            <section className="the-next-section" aria-labelledby="next-title">
+              <div className="the-next-intro">
+                <span className="eyebrow">THE DISCOVERY FRANCHISE</span>
+                <h2 id="next-title">
+                  THE
+                  <br />
+                  <em>NEXT</em>
+                  <span aria-hidden="true">↗</span>
+                </h2>
+                <p>
+                  New voices. Breakout talent.
+                  <br />
+                  Their moment, in focus.
+                </p>
+                <Link className="text-link" href="/series/new_guard">
+                  Meet THE NEXT ↗
+                </Link>
+              </div>
+              <div className="next-portraits">
+                {next.map((a) => (
+                  <StoryCard key={a.id} article={a} />
+                ))}
+              </div>
+            </section>
+          )}
+          {entertainment.length > 0 && (
+            <section
+              className="editorial-section"
+              aria-labelledby="sound-title"
+            >
+              <div className="section-heading">
+                <h2 id="sound-title">
+                  On screen.
+                  <br />
+                  <em>In rotation.</em>
+                </h2>
+                <div className="section-destinations">
+                  <Link href="/category/entertainment">ENTERTAINMENT ↗</Link>
+                  <Link href="/category/music">MUSIC ↗</Link>
+                </div>
+              </div>
+              <div className="sound-layout">
+                {entertainment.map((a, i) => (
+                  <StoryCard
+                    key={a.id}
+                    article={a}
+                    variant={i === 0 ? 'portrait_feature' : 'horizontal_split'}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+        {originals.length > 0 && (
+          <section className="originals-home" aria-labelledby="originals-title">
+            <div className="publication-shell">
+              <div className="section-heading">
+                <h2 id="originals-title">
+                  ÉLAN
+                  <br />
+                  <em>ORIGINALS</em>
+                </h2>
+                <Link className="text-link" href="/originals">
+                  All productions ↗
+                </Link>
+              </div>
+              <div className="originals-home-grid">
+                {originals.map((a) => (
+                  <article key={a.id}>
+                    <Link className="original-thumbnail" href={storyHref(a)}>
+                      <EditorialImage
+                        image={a.coverImage}
+                        direction={a.artDirection}
+                        sizes="(min-width:900px) 60vw,100vw"
+                      />
+                      <span className="play-label">
+                        PLAY FILM <span aria-hidden="true">↗</span>
+                      </span>
+                    </Link>
+                    <span className="eyebrow">
+                      ÉLAN ORIGINALS{' '}
+                      {a.production?.duration && ` / ${a.production.duration}`}
+                    </span>
+                    <h3>
+                      <Link href={storyHref(a)}>{a.title}</Link>
+                    </h3>
+                    <p>{a.dek}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+        <div className="publication-shell">
+          {culture.length > 0 && (
+            <section
+              className="editorial-section"
+              aria-labelledby="culture-title"
+            >
+              <div className="section-heading">
+                <h2 id="culture-title">
+                  Style is a<br />
+                  <em>cultural language.</em>
+                </h2>
+                <div className="section-destinations">
+                  <Link href="/category/style">STYLE ↗</Link>
+                  <Link href="/category/culture">CULTURE ↗</Link>
+                </div>
+              </div>
+              <div className="culture-composition">
+                {culture.map((a, i) => (
+                  <StoryCard
+                    key={a.id}
+                    article={a}
+                    variant={i === 0 ? 'portrait_feature' : 'horizontal_split'}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+          {edit.length > 0 && (
+            <section className="edit-section" aria-labelledby="edit-title">
+              <div className="section-heading">
+                <h2 id="edit-title">
+                  The ÉLAN <em>Edit.</em>
+                </h2>
+                <Link className="eyebrow" href="/series/the_edit">
+                  A CONSIDERED SELECTION ↗
+                </Link>
+              </div>
+              <div className="edit-grid">
+                {edit.map((a) => (
+                  <StoryCard
+                    key={a.id}
+                    article={a}
+                    variant="horizontal_split"
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+          {!articles.length && (
+            <section className="world-paths" aria-label="Explore ÉLAN">
+              <Link href="/covers">
+                <span className="eyebrow">01 / THE SIGNATURE</span>
+                <h2>
+                  The <em>Covers.</em>
+                </h2>
+                <p>
+                  Personalities, original photography, and complete cover
+                  experiences.
+                </p>
+                <span aria-hidden="true">↗</span>
+              </Link>
+              <Link href="/originals">
+                <span className="eyebrow">02 / THE CREATIVE WORLD</span>
+                <h2>
+                  ÉLAN <em>Originals.</em>
+                </h2>
+                <p>Video, conversations, and creative work beyond the page.</p>
+                <span aria-hidden="true">↗</span>
+              </Link>
+            </section>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
 }

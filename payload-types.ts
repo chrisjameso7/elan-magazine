@@ -71,6 +71,10 @@ export interface Config {
     authors: Author;
     articles: Article;
     media: Media;
+    personalities: Personality;
+    covers: Cover;
+    subscribers: Subscriber;
+    'newsletter-rate-limits': NewsletterRateLimit;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +86,10 @@ export interface Config {
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    personalities: PersonalitiesSelect<false> | PersonalitiesSelect<true>;
+    covers: CoversSelect<false> | CoversSelect<true>;
+    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
+    'newsletter-rate-limits': NewsletterRateLimitsSelect<false> | NewsletterRateLimitsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -202,9 +210,21 @@ export interface Article {
   slug: string;
   title: string;
   dek: string;
-  category: 'culture' | 'people' | 'entertainment' | 'style' | 'life' | 'places';
+  category: 'people' | 'entertainment' | 'music' | 'style' | 'culture' | 'life' | 'places';
   categoryLabel?: string | null;
-  franchise?: ('new_guard' | 'elan_conversations' | 'portfolio' | 'the_edit' | 'after_dark' | 'elan_50') | null;
+  franchise?:
+    | (
+        | 'new_guard'
+        | 'elan_conversations'
+        | 'off_camera'
+        | 'originals'
+        | 'culture_edit'
+        | 'portfolio'
+        | 'the_edit'
+        | 'after_dark'
+        | 'elan_50'
+      )
+    | null;
   tags?:
     | {
         tag: string;
@@ -212,6 +232,9 @@ export interface Article {
       }[]
     | null;
   author: string | Author;
+  /**
+   * Publish with a future date to schedule public visibility. Drafts remain private.
+   */
   publishedAt: string;
   dateFormatted?: string | null;
   readTime: string;
@@ -229,7 +252,39 @@ export interface Article {
     credit?: string | null;
     aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
   };
-  type: 'standard' | 'feature' | 'interview';
+  type: 'standard' | 'feature' | 'interview' | 'original';
+  personalities?: (number | Personality)[] | null;
+  gallery?:
+    | {
+        asset?: (number | null) | Media;
+        /**
+         * Optional fallback. A selected upload takes priority.
+         */
+        url?: string | null;
+        /**
+         * Optional override for an uploaded photo; required for an external URL.
+         */
+        alt?: string | null;
+        caption?: string | null;
+        credit?: string | null;
+        aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
+        id?: string | null;
+      }[]
+    | null;
+  production?: {
+    /**
+     * HTTPS MP4/WebM, YouTube, or Vimeo. No autoplay.
+     */
+    videoUrl?: string | null;
+    description?: string | null;
+    credits?: string | null;
+    duration?: string | null;
+  };
+  sponsorship?: {
+    sponsored?: boolean | null;
+    partner?: string | null;
+    disclosure?: string | null;
+  };
   isLead?: boolean | null;
   isEditorPick?: boolean | null;
   isTrending?: boolean | null;
@@ -372,6 +427,166 @@ export interface Article {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "personalities".
+ */
+export interface Personality {
+  id: number;
+  name: string;
+  slug: string;
+  profession: string;
+  bio: string;
+  portrait: {
+    asset?: (number | null) | Media;
+    /**
+     * Optional fallback. A selected upload takes priority.
+     */
+    url?: string | null;
+    /**
+     * Optional override for an uploaded photo; required for an external URL.
+     */
+    alt?: string | null;
+    caption?: string | null;
+    credit?: string | null;
+    aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
+  };
+  social?: {
+    instagram?: string | null;
+    website?: string | null;
+  };
+  /**
+   * Set a future date and Publish to schedule public visibility. Drafts remain private. Dates are stored in UTC.
+   */
+  publishedAt: string;
+  isDevMock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "covers".
+ */
+export interface Cover {
+  id: number;
+  title: string;
+  slug: string;
+  issueIdentifier: string;
+  intro: string;
+  artwork: {
+    asset?: (number | null) | Media;
+    /**
+     * Optional fallback. A selected upload takes priority.
+     */
+    url?: string | null;
+    /**
+     * Optional override for an uploaded photo; required for an external URL.
+     */
+    alt?: string | null;
+    caption?: string | null;
+    credit?: string | null;
+    aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
+  };
+  personalities: (number | Personality)[];
+  /**
+   * The published main profile or interview. Reuse editorial content rather than copying it.
+   */
+  story: string | Article;
+  variants?:
+    | {
+        label: string;
+        artwork: {
+          asset?: (number | null) | Media;
+          /**
+           * Optional fallback. A selected upload takes priority.
+           */
+          url?: string | null;
+          /**
+           * Optional override for an uploaded photo; required for an external URL.
+           */
+          alt?: string | null;
+          caption?: string | null;
+          credit?: string | null;
+          aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
+        };
+        personalities?: (number | Personality)[] | null;
+        id?: string | null;
+      }[]
+    | null;
+  gallery?:
+    | {
+        asset?: (number | null) | Media;
+        /**
+         * Optional fallback. A selected upload takes priority.
+         */
+        url?: string | null;
+        /**
+         * Optional override for an uploaded photo; required for an external URL.
+         */
+        alt?: string | null;
+        caption?: string | null;
+        credit?: string | null;
+        aspectRatio?: ('landscape' | 'portrait' | 'square' | 'wide') | null;
+        id?: string | null;
+      }[]
+    | null;
+  production?: {
+    /**
+     * HTTPS MP4/WebM, YouTube, or Vimeo. No autoplay.
+     */
+    videoUrl?: string | null;
+    description?: string | null;
+    credits?: string | null;
+    duration?: string | null;
+  };
+  behindTheScenes?: string | null;
+  relatedStories?: (string | Article)[] | null;
+  /**
+   * If multiple campaigns are selected, the newest release leads.
+   */
+  isHomepage?: boolean | null;
+  sponsorship?: {
+    sponsored?: boolean | null;
+    partner?: string | null;
+    disclosure?: string | null;
+  };
+  /**
+   * Set a future date and Publish to schedule public visibility. Drafts remain private. Dates are stored in UTC.
+   */
+  publishedAt: string;
+  isDevMock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: number;
+  email: string;
+  status: 'active' | 'unsubscribed';
+  subscriptionId: string;
+  subscribedAt: string;
+  unsubscribedAt?: string | null;
+  welcomeStatus: 'pending' | 'sent' | 'failed';
+  welcomeAttemptedAt?: string | null;
+  welcomeMessageId?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-rate-limits".
+ */
+export interface NewsletterRateLimit {
+  id: number;
+  key: string;
+  windowStart: string;
+  attempts: number;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -409,6 +624,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'personalities';
+        value: number | Personality;
+      } | null)
+    | ({
+        relationTo: 'covers';
+        value: number | Cover;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: number | Subscriber;
+      } | null)
+    | ({
+        relationTo: 'newsletter-rate-limits';
+        value: number | NewsletterRateLimit;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -528,6 +759,33 @@ export interface ArticlesSelect<T extends boolean = true> {
         aspectRatio?: T;
       };
   type?: T;
+  personalities?: T;
+  gallery?:
+    | T
+    | {
+        asset?: T;
+        url?: T;
+        alt?: T;
+        caption?: T;
+        credit?: T;
+        aspectRatio?: T;
+        id?: T;
+      };
+  production?:
+    | T
+    | {
+        videoUrl?: T;
+        description?: T;
+        credits?: T;
+        duration?: T;
+      };
+  sponsorship?:
+    | T
+    | {
+        sponsored?: T;
+        partner?: T;
+        disclosure?: T;
+      };
   isLead?: T;
   isEditorPick?: T;
   isTrending?: T;
@@ -688,6 +946,135 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "personalities_select".
+ */
+export interface PersonalitiesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  profession?: T;
+  bio?: T;
+  portrait?:
+    | T
+    | {
+        asset?: T;
+        url?: T;
+        alt?: T;
+        caption?: T;
+        credit?: T;
+        aspectRatio?: T;
+      };
+  social?:
+    | T
+    | {
+        instagram?: T;
+        website?: T;
+      };
+  publishedAt?: T;
+  isDevMock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "covers_select".
+ */
+export interface CoversSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  issueIdentifier?: T;
+  intro?: T;
+  artwork?:
+    | T
+    | {
+        asset?: T;
+        url?: T;
+        alt?: T;
+        caption?: T;
+        credit?: T;
+        aspectRatio?: T;
+      };
+  personalities?: T;
+  story?: T;
+  variants?:
+    | T
+    | {
+        label?: T;
+        artwork?:
+          | T
+          | {
+              asset?: T;
+              url?: T;
+              alt?: T;
+              caption?: T;
+              credit?: T;
+              aspectRatio?: T;
+            };
+        personalities?: T;
+        id?: T;
+      };
+  gallery?:
+    | T
+    | {
+        asset?: T;
+        url?: T;
+        alt?: T;
+        caption?: T;
+        credit?: T;
+        aspectRatio?: T;
+        id?: T;
+      };
+  production?:
+    | T
+    | {
+        videoUrl?: T;
+        description?: T;
+        credits?: T;
+        duration?: T;
+      };
+  behindTheScenes?: T;
+  relatedStories?: T;
+  isHomepage?: T;
+  sponsorship?:
+    | T
+    | {
+        sponsored?: T;
+        partner?: T;
+        disclosure?: T;
+      };
+  publishedAt?: T;
+  isDevMock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers_select".
+ */
+export interface SubscribersSelect<T extends boolean = true> {
+  email?: T;
+  status?: T;
+  subscriptionId?: T;
+  subscribedAt?: T;
+  unsubscribedAt?: T;
+  welcomeStatus?: T;
+  welcomeAttemptedAt?: T;
+  welcomeMessageId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletter-rate-limits_select".
+ */
+export interface NewsletterRateLimitsSelect<T extends boolean = true> {
+  key?: T;
+  windowStart?: T;
+  attempts?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -3,6 +3,7 @@ import config from '../src/payload.config';
 import { MOCK_ARTICLES, MOCK_AUTHORS } from '../src/data/mockArticles';
 import { toStoredArticle } from '../src/lib/payload-adapter';
 if (!process.env.DATABASE_URI) throw new Error('DATABASE_URI is required for seeding.');
+if (process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production') throw new Error('Demonstration seeding is not allowed in production.');
 const cms = await getPayload({ config });
 try {
   if (process.env.ELAN_EDITOR_EMAIL && process.env.ELAN_EDITOR_PASSWORD) {
@@ -15,7 +16,7 @@ try {
   }
   for (const article of MOCK_ARTICLES) {
     const existing = await cms.find({ collection: 'articles', where: { slug: { equals: article.slug } }, limit: 1, overrideAccess: true });
-    if (!existing.totalDocs) await cms.create({ collection: 'articles', data: { ...toStoredArticle(article), artDirection: article.artDirection ?? { accentHex: '#6B2236', heroFocalPoint: { x: 50, y: 50 } }, _status: 'published', isDevMock: false }, overrideAccess: true });
+    if (!existing.totalDocs) await cms.create({ collection: 'articles', data: { ...toStoredArticle(article), artDirection: article.artDirection ?? { accentHex: '#6B2236', heroFocalPoint: { x: 50, y: 50 } }, _status: 'published', isDevMock: true }, overrideAccess: true });
   }
   console.log('Seed complete: 4 contributors and 10 stories; existing records were preserved. The six desks and six franchises are built into the schema.');
 } finally { await cms.destroy(); }

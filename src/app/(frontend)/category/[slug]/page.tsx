@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import StoryCard from '@/components/editorial/StoryCard';
@@ -11,10 +11,11 @@ interface Props { params: Promise<{ slug: string }> }
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const desk = DESKS.find(d => d.slug === slug);
-  return desk ? { title: `${desk.label} — The Élan`, description: desk.description, alternates: { canonical: `/category/${slug}` } } : { title: 'Section not found — The Élan' };
+  return desk ? { title: `${desk.label} — The Élan`, description: desk.description, alternates: { canonical: `/category/${desk.slug}` } } : { title: 'Section not found — The Élan' };
 }
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
+  if (['life', 'places'].includes(slug)) permanentRedirect('/category/culture');
   const desk = DESKS.find(d => d.slug === slug);
   if (!desk) notFound();
   const articles = await getArticles();

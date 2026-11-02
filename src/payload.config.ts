@@ -10,6 +10,9 @@ import { postgresPool } from './lib/postgresPool';
 import { Articles } from './collections/Articles';
 import { Authors } from './collections/Authors';
 import { Users } from './collections/Users';
+import { Personalities } from './collections/Personalities';
+import { Covers } from './collections/Covers';
+import { Subscribers, NewsletterRateLimits } from './collections/Subscribers';
 
 // DATABASE_URI enables live publishing; leave it unset for the mock preview.
 export default buildConfig({
@@ -20,7 +23,7 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   db: postgresAdapter({ schemaName: 'elan', pool: postgresPool(process.env.DATABASE_URI), push: process.env.PAYLOAD_DB_PUSH === 'true' && process.env.NODE_ENV !== 'production' }),
   editor: lexicalEditor(), sharp,
-  collections: [Users, Authors, Articles, Media],
+  collections: [Users, Authors, Articles, Media, Personalities, Covers, Subscribers, NewsletterRateLimits],
   upload: { limits: { fileSize: MAX_PHOTO_BYTES } },
   plugins: [s3Storage({
     enabled: storageConfigured(), alwaysInsertFields: true,

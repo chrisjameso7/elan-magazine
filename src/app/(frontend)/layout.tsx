@@ -1,27 +1,19 @@
 import type { Metadata } from 'next';
-import { Playfair_Display, Plus_Jakarta_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
+import { demoPreviewEnabled } from '@/lib/visibility';
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
-  style: ['normal', 'italic'],
-  variable: '--font-playfair',
-  display: 'swap',
-});
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-jakarta',
-  display: 'swap',
-});
+const playfair = localFont({ src: [
+  { path: '../fonts/playfair.woff2', weight: '400 900', style: 'normal' },
+  { path: '../fonts/playfair-italic.woff2', weight: '400 900', style: 'italic' },
+], variable: '--font-playfair', display: 'swap' });
+const jakarta = localFont({ src: '../fonts/jakarta.woff2', weight: '300 700', variable: '--font-jakarta', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'https://elan-magazine.vercel.app'),
-  title: 'The Élan — People • Culture • Modern Life',
-  description: 'An independent publication discovering people worth knowing. Emerging voices, thoughtful perspectives, and stories from culture and modern life.',
-  openGraph: { siteName: 'The Élan', type: 'website', title: 'The Élan — People • Culture • Modern Life', description: 'Discover people worth knowing and stories worth your time.' },
+  title: 'ÉLAN — CULTURE, IN ITS ELEMENT.',
+  description: 'A global entertainment and culture publication. Personalities, music, film, style, and original creative work.',
+  openGraph: { siteName: 'ÉLAN', type: 'website', title: 'ÉLAN — CULTURE, IN ITS ELEMENT.', description: 'Entertainment and culture, in their element.' },
   icons: {
     icon: '/favicon.ico',
   },
@@ -38,6 +30,7 @@ export default function RootLayout({
       className={`${playfair.variable} ${jakarta.variable} h-full`}
     >
       <body className="min-h-full flex flex-col antialiased">
+        {demoPreviewEnabled() && <div className="demo-notice" role="note">DEMONSTRATION PREVIEW — sample editorial content, never production reporting.</div>}
         {children}
       </body>
     </html>
