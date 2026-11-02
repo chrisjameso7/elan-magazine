@@ -24,14 +24,14 @@ export default async function AuthorPage({ params }: PageProps) {
   const authorArticles = articles.filter((a) => a.author.id === author.id);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F3ED] text-[#171717]">
+    <div className="min-h-screen flex flex-col bg-[#F3F0E9] text-[#171717]">
       <Header />
 
       <main id="main-content" className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
         <div className="pt-2">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#171717]/60 hover:text-[#762F43] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#171717]/60 hover:text-[#171717] transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Home</span>
@@ -43,10 +43,10 @@ export default async function AuthorPage({ params }: PageProps) {
           <img
             src={author.avatar}
             alt={author.name}
-            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shrink-0 border-2 border-[#762F43]/20"
+            className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shrink-0 border-2 border-[#171717]/20"
           />
           <div className="space-y-3 text-center sm:text-left">
-            <span className="text-xs uppercase tracking-[0.25em] text-[#762F43] font-semibold block">
+            <span className="text-xs uppercase tracking-[0.25em] text-[#171717] font-semibold block">
               Contributing Voice
             </span>
             <h1 className="font-display text-4xl sm:text-5xl font-bold text-[#171717]">

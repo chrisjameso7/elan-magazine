@@ -6,12 +6,12 @@ import Footer from '@/components/layout/Footer';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F3ED] text-[#171717]">
+    <div className="min-h-screen flex flex-col bg-[#F3F0E9] text-[#171717]">
       <Header />
 
       <main id="main-content" className="flex-1 flex items-center justify-center py-20 px-4 sm:px-6">
         <div className="max-w-xl mx-auto text-center space-y-6">
-          <span className="text-xs uppercase font-mono tracking-[0.28em] text-[#762F43] font-bold block">
+          <span className="text-xs uppercase font-mono tracking-[0.28em] text-[#171717] font-bold block">
             404 // DISPATCH NOT FOUND
           </span>
 
@@ -26,7 +26,7 @@ export default function NotFound() {
           <div className="pt-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#762F43] hover:bg-[#8C2549] text-white text-xs uppercase tracking-widest font-semibold transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#171717] hover:bg-[#8C2549] text-white text-xs uppercase tracking-widest font-semibold transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Return to Front Page</span>

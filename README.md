@@ -1,24 +1,17 @@
 # ÉLAN
 
-A premium publication about people, culture, and modern life.
+CULTURE, IN ITS ELEMENT. A global entertainment and culture publication for a new generation.
 
-The six desks are CULTURE, PEOPLE, ENTERTAINMENT, STYLE, LIFE, and PLACES.
-Franchises include The New Guard, Élan Conversations, Portfolio, The Edit,
-After Dark, and The Élan 50. Story accents, backgrounds, and focal points live
-in the CMS alongside all seven block types and structured interview Q&A.
+Primary navigation: COVERS, PEOPLE, ENTERTAINMENT, MUSIC, STYLE, CULTURE. Legacy Life and Places URLs redirect to Culture; stored taxonomy values remain editable. Editorial franchises reuse the article model and a shared series archive.
 
-## Preview without PostgreSQL
+## Local preview
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Leave `DATABASE_URI` unset to serve `src/data/mockArticles.ts` without loading
-Payload or opening a database connection. `/admin` redirects to the session-only
-prototype at `/editorial-preview`; this route returns 404 when a database is configured. The mock dataset is dynamically loaded only on the server fallback path and is not imported by client navigation components. Configured database failures are surfaced;
-they do not silently show mock content. An empty live database displays an empty
-editorial state until stories are published.
+With no `DATABASE_URI`, development serves clearly labelled sample articles. Explicit non-production previews can set `ELAN_DEMO_PREVIEW=true`. Production never falls back to mock reporting. Configured database failures are surfaced, and configured databases exclude demonstration records from public pages, search, and sitemap.
 
 ## Persistent local editing
 
@@ -26,8 +19,8 @@ editorial state until stories are published.
 2. Copy `.env.example` to `.env.local`, set `DATABASE_URI`, a random
    `PAYLOAD_SECRET`, and `NEXT_PUBLIC_SERVER_URL=http://localhost:3000`.
 3. For a disposable local database only, set `PAYLOAD_DB_PUSH=true` and run
-   `npm run seed`. This creates the development schema and seeds four authors
-   and ten stories. Existing records are never overwritten.
+   `npm run seed`. This creates the development schema and seeds four demonstration authors
+   and ten demonstration stories, retained for admin testing and excluded from public database reads. Existing records are never overwritten.
 4. Optionally set `ELAN_EDITOR_EMAIL` and `ELAN_EDITOR_PASSWORD` before seeding
    to bootstrap the first editor. Otherwise create the first account at `/admin`.
    Seeding never adds another account when any editor already exists.
@@ -138,3 +131,19 @@ Vercel previews use their own `VERCEL_URL` for Payload admin requests so preview
 ### Photo library
 
 See [photo upload setup](docs/media-storage.md) for Supabase Storage / R2 S3 settings, the media collection, migrations, supported formats, and direct uploads from `/admin`.
+
+## Covers, personalities, and originals
+
+Manage Covers and Personalities in the existing Payload admin. A cover links to an existing main article/interview and one or more personalities; add artwork, optional variations, gallery, film, related stories, behind-the-scenes copy, and homepage placement there. The newest released cover selected for the homepage leads. Without one, the strongest feature leads; an empty publication displays the brand opening.
+
+Publish with a future `publishedAt` to schedule public visibility. Drafts and demonstration records remain private. A personality page requires released article or cover coverage. Originals are Articles with type `original`, a supported HTTPS video URL, and optional production credits/gallery. Existing article/feature/interview URLs remain available.
+
+Use `npm run payload -- migrate` for tracked schema changes; never enable schema push in production. The culture-brand migration preserves historical content and marks explicitly credited development samples as demonstrations. See [the architecture audit](docs/culture-brand-audit.md).
+
+## Newsletter
+
+Requests are stored in the existing private subscriber tables. The form requires consent, checks origin, rate limits requests, and reports delivery pending honestly. Anonymous REST access to subscriber records is denied. Signed unsubscribe links support the confirmation page and one-click POST.
+
+Delivery is disabled unless `ELAN_NEWSLETTER_DELIVERY_ENABLED=true`. Enable it only after a real sender is verified and `RESEND_API_KEY`, `RESEND_SENDER_EMAIL`, and the canonical `NEXT_PUBLIC_SERVER_URL` are configured. No newsletter edition scheduler or bulk-send system is included.
+
+Fonts are self-hosted Playfair Display and Plus Jakarta Sans; their OFL licenses are included in `src/app/fonts`.

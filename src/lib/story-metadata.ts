@@ -3,9 +3,9 @@ import type { Article } from '@/types/editorial';
 import { storyHref } from './presentation';
 
 export function storyMetadata(article: Article | undefined, path: string): Metadata {
-  if (!article) return { title: 'Story not found — The Élan' };
+  if (!article) return { title: 'Story not found — ÉLAN' };
   return {
-    title: `${article.title} — The Élan`, description: article.dek,
+    title: `${article.title} — ÉLAN`, description: article.dek,
     alternates: { canonical: storyHref(article) },
     openGraph: { type: 'article', title: article.title, description: article.dek, url: path,
       publishedTime: article.publishedAt, authors: [article.author.name],

@@ -1,7 +1,7 @@
 import type { Article } from '@/types/editorial';
 
 export function storyHref(article: Pick<Article, 'type' | 'slug'>) {
-  return `/${article.type === 'standard' ? 'article' : article.type}/${article.slug}`;
+  return `/${article.type === 'standard' ? 'article' : article.type === 'original' ? 'originals' : article.type}/${article.slug}`;
 }
 
 export function profileHref(value: string | undefined, platform?: 'instagram') {

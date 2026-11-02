@@ -48,7 +48,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
   const [formTitle, setFormTitle] = useState('');
   const [formDek, setFormDek] = useState('');
   const [formCategory, setFormCategory] = useState<CategorySlug>('style');
-  const [formType, setFormType] = useState<'standard' | 'feature' | 'interview'>('standard');
+  const [formType, setFormType] = useState<'standard' | 'feature' | 'interview' | 'original'>('standard');
   const [formAuthorId, setFormAuthorId] = useState('camille-laurent');
   const [formCoverUrl, setFormCoverUrl] = useState('');
   const [formCoverCaption, setFormCoverCaption] = useState('');
@@ -359,7 +359,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
             <div className="h-4 w-[1px] bg-white/20" />
 
             <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-full bg-[#751F3D] flex items-center justify-center text-xs font-bold text-white font-mono">
+              <div className="w-7 h-7 rounded-full bg-[#171717] flex items-center justify-center text-xs font-bold text-white font-mono">
                 É
               </div>
               <span className="text-xs text-white/90 hidden sm:inline font-medium">
@@ -375,7 +375,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
             onClick={() => setActiveTab('articles')}
             className={`py-3.5 font-medium transition-colors border-b-2 ${
               activeTab === 'articles'
-                ? 'border-[#751F3D] text-white font-semibold'
+                ? 'border-[#171717] text-white font-semibold'
                 : 'border-transparent text-white/60 hover:text-white'
             }`}
           >
@@ -387,7 +387,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
             }}
             className={`py-3.5 font-medium transition-colors border-b-2 ${
               activeTab === 'composer'
-                ? 'border-[#751F3D] text-white font-semibold'
+                ? 'border-[#171717] text-white font-semibold'
                 : 'border-transparent text-white/60 hover:text-white'
             }`}
           >
@@ -397,7 +397,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
             onClick={() => setActiveTab('curation')}
             className={`py-3.5 font-medium transition-colors border-b-2 ${
               activeTab === 'curation'
-                ? 'border-[#751F3D] text-white font-semibold'
+                ? 'border-[#171717] text-white font-semibold'
                 : 'border-transparent text-white/60 hover:text-white'
             }`}
           >
@@ -407,7 +407,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
             onClick={() => setActiveTab('authors')}
             className={`py-3.5 font-medium transition-colors border-b-2 ${
               activeTab === 'authors'
-                ? 'border-[#751F3D] text-white font-semibold'
+                ? 'border-[#171717] text-white font-semibold'
                 : 'border-transparent text-white/60 hover:text-white'
             }`}
           >
@@ -420,7 +420,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Toast Alert */}
         {toastMessage && (
-          <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#11100F] text-[#F5F0E8] border border-[#751F3D] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-3 duration-200">
+          <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#11100F] text-[#F5F0E8] border border-[#171717] shadow-2xl flex items-center gap-3 animate-in fade-in slide-in-from-bottom-3 duration-200">
             <Check className="w-4 h-4 text-[#C98B9D]" />
             <span className="text-xs uppercase tracking-wider font-medium">{toastMessage}</span>
           </div>
@@ -444,7 +444,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
 
               <button
                 onClick={handleOpenNewStory}
-                className="px-5 py-2.5 bg-[#751F3D] hover:bg-[#8C2549] text-white text-xs uppercase tracking-widest font-semibold flex items-center gap-2 transition-colors shrink-0"
+                className="px-5 py-2.5 bg-[#171717] hover:bg-[#8C2549] text-white text-xs uppercase tracking-widest font-semibold flex items-center gap-2 transition-colors shrink-0"
               >
                 <Plus className="w-4 h-4" />
                 <span>New Dispatch</span>
@@ -454,7 +454,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
             {/* Metrics Overview Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="p-4 bg-white/60 border border-[#11100F]/10">
-                <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-mono font-bold block">
+                <span className="text-[10px] uppercase tracking-widest text-[#171717] font-mono font-bold block">
                   TOTAL DISPATCHES
                 </span>
                 <span className="font-display text-3xl font-bold text-[#11100F] mt-1 block">
@@ -462,7 +462,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                 </span>
               </div>
               <div className="p-4 bg-white/60 border border-[#11100F]/10">
-                <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-mono font-bold block">
+                <span className="text-[10px] uppercase tracking-widest text-[#171717] font-mono font-bold block">
                   LEAD COVER STORY
                 </span>
                 <span className="font-display text-base font-bold text-[#11100F] mt-1 block line-clamp-1">
@@ -470,7 +470,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                 </span>
               </div>
               <div className="p-4 bg-white/60 border border-[#11100F]/10">
-                <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-mono font-bold block">
+                <span className="text-[10px] uppercase tracking-widest text-[#171717] font-mono font-bold block">
                   INTERVIEW SPOTLIGHTS
                 </span>
                 <span className="font-display text-3xl font-bold text-[#11100F] mt-1 block">
@@ -478,7 +478,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                 </span>
               </div>
               <div className="p-4 bg-white/60 border border-[#11100F]/10">
-                <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-mono font-bold block">
+                <span className="text-[10px] uppercase tracking-widest text-[#171717] font-mono font-bold block">
                   CATEGORIES ACTIVE
                 </span>
                 <span className="font-display text-3xl font-bold text-[#11100F] mt-1 block">
@@ -496,7 +496,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Filter by title, author, or keyword..."
-                  className="w-full pl-9 pr-4 py-2 bg-transparent text-sm text-[#11100F] placeholder-[#11100F]/40 border border-[#11100F]/15 focus:outline-none focus:border-[#751F3D]"
+                  className="w-full pl-9 pr-4 py-2 bg-transparent text-sm text-[#11100F] placeholder-[#11100F]/40 border border-[#11100F]/15 focus:outline-none focus:border-[#171717]"
                 />
               </div>
 
@@ -508,7 +508,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="px-3 py-1.5 bg-white border border-[#11100F]/15 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="px-3 py-1.5 bg-white border border-[#11100F]/15 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   >
                     <option value="all">All Categories</option>
                     {CATEGORIES.map((c) => (
@@ -526,7 +526,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="px-3 py-1.5 bg-white border border-[#11100F]/15 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="px-3 py-1.5 bg-white border border-[#11100F]/15 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   >
                     <option value="all">All Formats</option>
                     <option value="standard">Standard</option>
@@ -573,7 +573,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                         </td>
 
                         <td className="py-3.5 px-4">
-                          <span className="text-[10px] uppercase tracking-wider font-semibold text-[#751F3D]">
+                          <span className="text-[10px] uppercase tracking-wider font-semibold text-[#171717]">
                             {art.categoryLabel}
                           </span>
                         </td>
@@ -589,12 +589,12 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                         <td className="py-3.5 px-4">
                           <div className="flex flex-wrap gap-1.5">
                             {art.isLead && (
-                              <span className="px-2 py-0.5 bg-[#751F3D] text-white text-[9px] uppercase font-mono font-bold tracking-wider">
+                              <span className="px-2 py-0.5 bg-[#171717] text-white text-[9px] uppercase font-mono font-bold tracking-wider">
                                 Lead Cover
                               </span>
                             )}
                             {art.isTrending && (
-                              <span className="px-2 py-0.5 bg-[#C5A46D]/20 text-[#751F3D] border border-[#C5A46D]/40 text-[9px] uppercase font-mono font-bold tracking-wider">
+                              <span className="px-2 py-0.5 bg-[#C5A46D]/20 text-[#171717] border border-[#C5A46D]/40 text-[9px] uppercase font-mono font-bold tracking-wider">
                                 Trending
                               </span>
                             )}
@@ -617,7 +617,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                                   : `/article/${art.slug}`
                               }
                               target="_blank"
-                              className="p-1.5 text-[#11100F]/60 hover:text-[#751F3D] transition-colors"
+                              className="p-1.5 text-[#11100F]/60 hover:text-[#171717] transition-colors"
                               title="Preview on site"
                             >
                               <Eye className="w-4 h-4" />
@@ -626,8 +626,8 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                               onClick={() => handleSetLead(art.id)}
                               className={`p-1.5 transition-colors ${
                                 art.isLead
-                                  ? 'text-[#751F3D]'
-                                  : 'text-[#11100F]/40 hover:text-[#751F3D]'
+                                  ? 'text-[#171717]'
+                                  : 'text-[#11100F]/40 hover:text-[#171717]'
                               }`}
                               title={art.isLead ? 'Current Lead Cover' : 'Make Lead Cover Story'}
                             >
@@ -635,7 +635,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                             </button>
                             <button
                               onClick={() => handleEditStory(art)}
-                              className="p-1.5 text-[#11100F]/60 hover:text-[#751F3D] transition-colors"
+                              className="p-1.5 text-[#11100F]/60 hover:text-[#171717] transition-colors"
                               title="Edit Story"
                             >
                               <Edit3 className="w-4 h-4" />
@@ -665,7 +665,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="flex items-center justify-between pb-4 border-b border-[#11100F]/12">
               <div>
-                <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-mono font-bold block">
+                <span className="text-[10px] uppercase tracking-widest text-[#171717] font-mono font-bold block">
                   {editingArticleId ? 'EDITING DISPATCH' : 'NEW EDITORIAL DRAFT'}
                 </span>
                 <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#11100F]">
@@ -675,7 +675,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
 
               <button
                 onClick={() => setActiveTab('articles')}
-                className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-[#11100F]/60 hover:text-[#751F3D] transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs uppercase tracking-wider text-[#11100F]/60 hover:text-[#171717] transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Cancel & Return</span>
@@ -715,7 +715,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
                     placeholder="e.g. Meet the New Guard"
-                    className="w-full px-4 py-2.5 bg-white border border-[#11100F]/20 font-display text-xl text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-4 py-2.5 bg-white border border-[#11100F]/20 font-display text-xl text-[#11100F] focus:outline-none focus:border-[#171717]"
                   />
                 </div>
 
@@ -728,7 +728,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                     value={formDek}
                     onChange={(e) => setFormDek(e.target.value)}
                     placeholder="A poetic, compelling summary that hooks the reader..."
-                    className="w-full px-4 py-2 bg-white border border-[#11100F]/20 font-reading text-sm text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-4 py-2 bg-white border border-[#11100F]/20 font-reading text-sm text-[#11100F] focus:outline-none focus:border-[#171717]"
                   />
                 </div>
               </div>
@@ -742,7 +742,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                   <select
                     value={formCategory}
                     onChange={(e) => setFormCategory(e.target.value as CategorySlug)}
-                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   >
                     {CATEGORIES.map((c) => (
                       <option key={c.slug} value={c.slug}>
@@ -759,7 +759,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                   <select
                     value={formType}
                     onChange={(e) => setFormType(e.target.value as Article['type'])}
-                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   >
                     <option value="standard">Standard Article</option>
                     <option value="feature">Feature Essay</option>
@@ -774,7 +774,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                   <select
                     value={formAuthorId}
                     onChange={(e) => setFormAuthorId(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   >
                     {Object.values(authors).map((a) => (
                       <option key={a.id} value={a.id}>
@@ -788,7 +788,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
               {/* Cover Photography */}
               <div className="p-6 bg-white/70 border border-[#11100F]/12 space-y-4">
                 <div className="flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4 text-[#751F3D]" />
+                  <ImageIcon className="w-4 h-4 text-[#171717]" />
                   <span className="text-xs uppercase font-mono font-bold tracking-wider text-[#11100F]">
                     Cover Photography & Art Direction
                   </span>
@@ -804,7 +804,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                       value={formCoverUrl}
                       onChange={(e) => setFormCoverUrl(e.target.value)}
                       placeholder="https://images.unsplash.com/..."
-                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
 
@@ -817,7 +817,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                       value={formCoverCaption}
                       onChange={(e) => setFormCoverCaption(e.target.value)}
                       placeholder="e.g. Sculptural silk gazar in natural dawn light."
-                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
                 </div>
@@ -839,7 +839,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
               {/* Content Body / Pull Quote */}
               <div className="p-6 bg-white/70 border border-[#11100F]/12 space-y-4">
                 <div className="flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-[#751F3D]" />
+                  <FileText className="w-4 h-4 text-[#171717]" />
                   <span className="text-xs uppercase font-mono font-bold tracking-wider text-[#11100F]">
                     Article Narrative & Pull Quotes
                   </span>
@@ -854,7 +854,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                     value={formParagraph1}
                     onChange={(e) => setFormParagraph1(e.target.value)}
                     placeholder="Opening text that establishes the editorial voice..."
-                    className="w-full px-4 py-2.5 bg-white border border-[#11100F]/20 font-reading text-base text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-4 py-2.5 bg-white border border-[#11100F]/20 font-reading text-base text-[#11100F] focus:outline-none focus:border-[#171717]"
                   />
                 </div>
 
@@ -868,7 +868,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                       value={formQuote}
                       onChange={(e) => setFormQuote(e.target.value)}
                       placeholder="&quot;True luxury is standing completely alone...&quot;"
-                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 font-reading italic text-sm text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 font-reading italic text-sm text-[#11100F] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
                   <div>
@@ -880,7 +880,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                       value={formQuoteAttribution}
                       onChange={(e) => setFormQuoteAttribution(e.target.value)}
                       placeholder="e.g. Elena Vance / Couture Manifesto"
-                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                      className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                     />
                   </div>
                 </div>
@@ -888,7 +888,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                 {/* If format is Interview, show interview-specific inputs */}
                 {formType === 'interview' && (
                   <div className="mt-4 pt-4 border-t border-[#11100F]/10 space-y-4">
-                    <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-[#751F3D] block">
+                    <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-[#171717] block">
                       PRESTIGE INTERVIEW (Q&A) DETAILS
                     </span>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -901,7 +901,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                           value={formSubjectName}
                           onChange={(e) => setFormSubjectName(e.target.value)}
                           placeholder="e.g. Elena Vance"
-                          className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                          className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                         />
                       </div>
                       <div>
@@ -913,7 +913,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                           value={formSubjectTitle}
                           onChange={(e) => setFormSubjectTitle(e.target.value)}
                           placeholder="e.g. Founder & Artistic Director"
-                          className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                          className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                         />
                       </div>
                     </div>
@@ -932,7 +932,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                     value={formTags}
                     onChange={(e) => setFormTags(e.target.value)}
                     placeholder="Couture, Architecture, Paris"
-                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   />
                 </div>
 
@@ -945,7 +945,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                     value={formReadTime}
                     onChange={(e) => setFormReadTime(e.target.value)}
                     placeholder="6 min read"
-                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   />
                 </div>
               </div>
@@ -961,7 +961,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-[#751F3D] hover:bg-[#8C2549] text-white text-xs uppercase tracking-widest font-semibold flex items-center gap-2 transition-colors"
+                  className="px-6 py-2.5 bg-[#171717] hover:bg-[#8C2549] text-white text-xs uppercase tracking-widest font-semibold flex items-center gap-2 transition-colors"
                 >
                   <Check className="w-4 h-4" />
                   <span>{editingArticleId ? 'Save Changes' : 'Publish Dispatch'}</span>
@@ -977,7 +977,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
         {activeTab === 'curation' && (
           <div className="space-y-8">
             <div className="pb-4 border-b border-[#11100F]/12">
-              <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-mono font-bold block">
+              <span className="text-[10px] uppercase tracking-widest text-[#171717] font-mono font-bold block">
                 HOMEPAGE ART DIRECTION & PACING
               </span>
               <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#11100F]">
@@ -992,7 +992,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
               {/* Lead Story Curator */}
               <div className="lg:col-span-6 p-6 bg-white/70 border border-[#11100F]/12 space-y-4">
                 <div className="flex items-center justify-between pb-2 border-b border-[#11100F]/10">
-                  <span className="text-xs uppercase font-mono font-bold tracking-wider text-[#751F3D]">
+                  <span className="text-xs uppercase font-mono font-bold tracking-wider text-[#171717]">
                     1. Active Lead Cover Story
                   </span>
                   <span className="text-[10px] font-mono text-[#11100F]/50">
@@ -1007,7 +1007,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                     className="w-full aspect-[16/9] object-cover border border-[#11100F]/15"
                   />
                   <div className="space-y-1">
-                    <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-semibold">
+                    <span className="text-[10px] uppercase tracking-widest text-[#171717] font-semibold">
                       {leadStory.categoryLabel}
                     </span>
                     <h3 className="font-display text-xl font-bold text-[#11100F]">
@@ -1026,7 +1026,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                   <select
                     value={leadStory.id}
                     onChange={(e) => handleSetLead(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#751F3D]"
+                    className="w-full px-3 py-2 bg-white border border-[#11100F]/20 text-xs text-[#11100F] focus:outline-none focus:border-[#171717]"
                   >
                     {articles.map((art) => (
                       <option key={art.id} value={art.id}>
@@ -1087,7 +1087,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
         {activeTab === 'authors' && (
           <div className="space-y-8">
             <div className="pb-4 border-b border-[#11100F]/12">
-              <span className="text-[10px] uppercase tracking-widest text-[#751F3D] font-mono font-bold block">
+              <span className="text-[10px] uppercase tracking-widest text-[#171717] font-mono font-bold block">
                 EDITORIAL MASTHEAD
               </span>
               <h1 className="font-display text-3xl sm:text-4xl font-bold text-[#11100F]">
@@ -1112,10 +1112,10 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                     <img
                       src={author.avatar}
                       alt={author.name}
-                      className="w-16 h-16 rounded-full object-cover shrink-0 border border-[#751F3D]/20"
+                      className="w-16 h-16 rounded-full object-cover shrink-0 border border-[#171717]/20"
                     />
                     <div className="space-y-1 flex-1">
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#751F3D] font-semibold block">
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#171717] font-semibold block">
                         {author.role}
                       </span>
                       <h3 className="font-display text-xl font-bold text-[#11100F]">
@@ -1131,7 +1131,7 @@ export default function PreviewComposer({ initialArticles, authors }: { initialA
                         <Link
                           href={`/author/${author.id}`}
                           target="_blank"
-                          className="text-[#751F3D] hover:underline flex items-center gap-1 font-medium"
+                          className="text-[#171717] hover:underline flex items-center gap-1 font-medium"
                         >
                           View Profile <ArrowUpRight className="w-3 h-3" />
                         </Link>
