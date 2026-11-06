@@ -39,3 +39,12 @@ The local migration's UP path is verified. No production database backup/restore
 ## Specification provenance
 
 The available new chat supplies the reset/engineering instructions and Phase 1 scope. An attachment search located only an older Lumière Index ranking-product brief, which was explicitly excluded. The unseen sections 1–15 of a newsroom master brief are not represented as read; no later-phase features were invented from that missing text.
+
+
+## Reference-led visual revision
+
+The founder supplied a cinematic entertainment-layout reference after rejecting the initial sparse foundation. Home and About now use a compact masthead, photographic lead, overlapping inset, denser white editorial canvas, small blue section labels, sidebar context, image mosaic and distinct visual compositions. The UI remains a labelled design study, not a published edition; sample photos are from Unsplash and are not represented as reporting or events.
+
+The previous visual-testing limitation above is superseded by this revision: automated headless Edge checks passed at 320, 390, 768 and 1440 pixels for Home and About. Every displayed image decoded, both pages fit the viewport, the skip link was the first keyboard target and reached main content, and the Screen anchor cleared the sticky header. Desktop and mobile screenshots were visually inspected; image alt descriptions were corrected against the actual photos. Mobile links have enlarged touch areas. Section-anchor spacing was corrected after testing exposed excessive offset.
+
+The current automated suite, lint, strict types and production build pass. No database model, migration, production data, DNS or application dependency changed in this visual revision. Founder approval of the new visual direction remains pending. Individual story pages, standalone section pages and admin screens remain incomplete; Phase 2 has not started.

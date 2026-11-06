@@ -2,13 +2,18 @@ import Link from 'next/link';
 import { brand } from '@/lib/brand';
 export default function SiteFooter() {
   return (
-    <footer className="shell site-footer">
-      <div>
-        <strong>{brand.name}</strong>
+    <footer className="site-footer">
+      <div className="footer-top">
+        <Link className="footer-wordmark" href="/">
+          LUMIÈRE <span>INDEX</span>
+        </Link>
         <p>{brand.tagline}</p>
       </div>
-      <Link href="/about">About the publication</Link>
-      <span className="foundation-label">Foundation preview</span>
+      <div className="footer-bottom">
+        <span>Entertainment &amp; pop culture</span>
+        <Link href="/about">About the publication ↗</Link>
+        <span>Design review / Not a published edition</span>
+      </div>
     </footer>
   );
 }

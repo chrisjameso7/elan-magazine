@@ -21,7 +21,7 @@ New worktree and branch: `codex/lumiere-index-foundation`. Git ancestry is prese
 - A separate private `lumiere_index` database schema, with no queries into or migrations against `elan`. An isolated local database verifies migration safety. Production database reuse, credentials, and object storage are decisions deferred until reviewed. Secrets are server-only and missing CMS configuration must fail explicitly.
 - Public pages do not import the CMS or require database access merely to build the foundation. No fabricated story fallback.
 - The application starts with one configured owner identity. Additional editor/reporter privileges require an agreed permissions matrix; do not silently grant broader access.
-- Plain CSS with a small token system; a system sans-serif stack, clear reading scale, visible keyboard focus, restrained red accent, flat rules, and no glass panels, ornamental fonts, fake bylines, fabricated article cards, or autoplay.
+- Plain CSS with a small token system; a system sans-serif stack, clear reading scale, visible keyboard focus, restrained blue accent, flat rules, and no glass panels, ornamental fonts, fake bylines, fabricated article cards, or autoplay.
 - Keep dependencies only where exercised by the foundation or its CMS schema. No analytics, email, advertising, payment, social SDK, or external API is represented as connected.
 
 ## Application boundaries

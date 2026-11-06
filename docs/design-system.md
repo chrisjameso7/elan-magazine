@@ -1,9 +1,9 @@
-# Visual foundations
+# Visual foundations — reference-led revision
 
-Lumière Index / News that matters.
+Founder reference: the supplied cinematic entertainment layout, 6 November 2026. Adopt the compact masthead, full-width photograph, overlapping portrait-format inset, white content canvas, small blue section labels, asymmetric columns, image mosaic, and information density. Adapt these to a newsroom; do not rebuild movie catalogs, ratings, cast databases, accounts, or simulated player controls.
 
-Use a system sans-serif (Arial, Helvetica, sans-serif). No external font downloads, ornamental serif wordmark, cursive accents, glass panels, gradients, fake cover shoots, or invented news cards. Identity comes from scale, clear hierarchy, strong rules, controlled whitespace, and editorial photography when licensed material exists.
+Typography remains Arial/Helvetica/system sans-serif. Hierarchy uses compact 11–14px interface labels, 26–36px feature headlines, readable paragraph text, fine separators, and purposeful image scale. There is no decorative font download or oversized slogan masthead. White surfaces sit against a muted grey outer canvas; ink is #20272D and the blue accent is #15799A.
 
-Tokens in `src/app/globals.css`: paper #FAFAF8; ink #111315; secondary text #555B61; rules #D7DADD; red #B4232D used sparingly. The secondary and accent text colors are selected for readable contrast on paper. A 66-character reading measure and 1.8 body line height form the reading foundation. Layout adapts at 700px with fluid typography and 18px mobile gutters.
+The foundation homepage is a labelled design study with sample Unsplash photography. Its copy expresses the proposed brand remit, not reported articles. Screen, Music, and Culture are anchor sections for visual review, not seeded CMS sections or founder-approved newsroom taxonomy. All navigation/CTA links go to working Home/About pages or actual section anchors. No inert search box, account avatar, play control, article link, or newsletter form is shown.
 
-Working Phase 1 routes: Home and About. Every visible link has a destination. No search, newsletter, subscribe, ad, account, or social button is displayed until its actual workflow exists. All routes are noindex during foundation review. The homepage is explicitly a foundation preview, not the finished newsroom layout. Final masthead and section taxonomy are review decisions before Phase 2.
+The shared layout, About page, compact sticky navigation, mobile composition, and footer are revised together. All routes remain noindex and production is not changed. Images use responsive CDN variants and supplied descriptive alt text. Final editorial photographs, rights records, media delivery and article integration remain later work.
