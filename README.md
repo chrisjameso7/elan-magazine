@@ -1,149 +1,33 @@
-# ÉLAN
+# Lumière Index
 
-CULTURE, IN ITS ELEMENT. A global entertainment and culture publication for a new generation.
+News that matters. Entertainment and pop-culture newsroom foundation.
 
-Primary navigation: COVERS, PEOPLE, ENTERTAINMENT, MUSIC, STYLE, CULTURE. Legacy Life and Places URLs redirect to Culture; stored taxonomy values remain editable. Editorial franchises reuse the article model and a shared series archive.
+This is a clean new application on `codex/lumiere-index-foundation`. The former ÉLAN application is preserved at `backup/elan-before-lumiere-index-2026-11-06`; Git history is intact. No movie-ranking product or ÉLAN application code is used by the new reader application.
 
-## Local preview
+## Phase 1 scope
 
-```sh
-npm ci
-npm run dev
-```
+Next.js, React, strict TypeScript, two server-rendered reader routes, an accessible CSS foundation using a system sans-serif, explicit brand/domain configuration, and new Payload/Postgres newsroom schema definitions. Public reader pages build without a database. Canonical domain: https://lumiereindex.com. Foundation routes are noindex.
 
-With no `DATABASE_URI`, development serves clearly labelled sample articles. Explicit non-production previews can set `ELAN_DEMO_PREVIEW=true`. Production never falls back to mock reporting. Configured database failures are surfaced, and configured databases exclude demonstration records from public pages, search, and sitemap.
+The CMS is CLI-only in this phase. No admin screen, reader content integration, search, newsletter, ad system, or newsroom role workflow is presented as complete.
 
-## Persistent local editing
+## Run
 
-1. Start a local PostgreSQL instance. Docker users can run `docker compose up -d`.
-2. Copy `.env.example` to `.env.local`, set `DATABASE_URI`, a random
-   `PAYLOAD_SECRET`, and `NEXT_PUBLIC_SERVER_URL=http://localhost:3000`.
-3. For a disposable local database only, set `PAYLOAD_DB_PUSH=true` and run
-   `npm run seed`. This creates the development schema and seeds four demonstration authors
-   and ten demonstration stories, retained for admin testing and excluded from public database reads. Existing records are never overwritten.
-4. Optionally set `ELAN_EDITOR_EMAIL` and `ELAN_EDITOR_PASSWORD` before seeding
-   to bootstrap the first editor. Otherwise create the first account at `/admin`.
-   Seeding never adds another account when any editor already exists.
-5. Run `npm run dev`, then visit `http://localhost:3000/admin`.
+`npm ci`
+`npm run dev -- -p 3200`
 
-A workspace-local Postgres instance was also provisioned for this checkout.
-Its startup helper and database files live beside the checkout in
-`../local-postgres`; `node ../local-postgres/start.mjs` starts it again.
-The generated `.env.local` and local access credentials are ignored by Git.
+Visit http://localhost:3200. `/` and `/about` work; nonexistent routes return 404. No external font or content requests are required.
 
-Payload's admin and REST API have their own root layout under `(payload)`.
-The magazine has its own `(frontend)` layout. Public pages and search use the
-server-only `cmsAdapter.ts`, query published records with populated authors,
-and adapt native Payload rows to the existing public Article model. Reads are
-request-time when configured, so published edits appear without a rebuild.
+## Verify
 
-The prototype composer preserves all original blocks when editing its opening
-paragraph and first quote. Live Payload editing supports the complete block array.
+`npm run verify`
 
-## Staging and Supabase
+For CMS work, copy `.env.example` into ignored `.env.local`, set a random secret of at least 32 characters, `LUMIERE_OWNER_EMAIL`, and an isolated local PostgreSQL URI. Remote database connections are deliberately refused during Phase 1.
 
-Use an existing project with a dedicated server-side PostgreSQL connection.
-Payload stores its tables in an isolated `elan` schema. The initial migration
-creates this schema and revokes direct access for PUBLIC and, when present,
-Supabase's anon/authenticated roles. Keep `elan` out of Supabase's exposed Data
-API schemas; all editorial access goes through Payload's authentication and
-collection access rules. A Supabase publishable key is not a database URI.
+`npm run payload -- generate:types`
+`npm run payload -- migrate`
 
-Set the following in the staging host's secret/environment settings:
+The new schema is `lumiere_index`; schema push is disabled. `npm run payload -- run scripts/verify-database.ts` verifies the isolated test database on 127.0.0.1:55441. It creates clearly named local test data only. Never use a production database for that command.
 
-```ini
-DATABASE_URI=<server-side PostgreSQL URI with verified TLS>
-PAYLOAD_SECRET=<unique random staging secret>
-NEXT_PUBLIC_SERVER_URL=https://<staging-host>
-PAYLOAD_DB_PUSH=false
-```
+## Decisions and review
 
-Use a distinct staging database or a dedicated schema approved for this app.
-Before applying migrations, inspect the existing project's schema. Never point
-local push mode at staging or production, and never run the initial migration
-against a database already managed using development schema push.
-
-```sh
-npm run payload -- migrate
-npm run payload -- migrate:status
-npm run build
-npm run start
-```
-
-Run the migration using the schema owner's database role. The `elan` schema is
-separate from an existing Supabase public/auth/storage schema. An initial
-migration has been tested against a fresh local PostgreSQL database with push
-disabled. Remote staging activation requires project authorization and a
-server-side database connection; neither passwords nor connection URIs belong
-in Git. Do not use the local editor password or secret for staging.
-
-## Adapter contract
-
-`src/lib/payload-adapter.ts` converts native `blockType` to public `type`,
-stringifies IDs, unwraps tags, requires a populated author, preserves two-image
-arrays and Q&A, and removes native nested row IDs and nullable optional values.
-This also prevents duplicate child IDs when copying a story. Canonical category
-labels and missing formatted dates are derived consistently.
-
-## Validation
-
-```sh
-npm test
-npm run typecheck
-npm run lint
-npm run build
-```
-
-The tests cover mixed-block preservation, schema constraints, nested-ID cleanup,
-Payload conversion, story colors/framing, and the missing-DATABASE_URI fallback.
-Live integration checks additionally cover editor login, denied anonymous writes,
-persisted edits, published public pages, draft protection, and search filtering.
-
-## Dependency triage (2026-10-23)
-
-Next.js and eslint-config-next were updated to 16.4.2. Targeted overrides pin
-DOMPurify 3.4.17, Sass 1.106.1, and source-map-js 1.2.2 to resolve the affected
-runtime/editor/build dependencies.
-
-`npm audit --omit=dev` reports zero high/critical findings and five moderate
-findings in the bundled Drizzle migration-tool chain (drizzle-kit, its esbuild
-loader, and esbuild). This app does not start their vulnerable development
-server, and they are not request handlers. The full audit additionally reports
-five high findings in the ESLint glob/braces dependency chain, which runs during
-local linting. These are tracked tooling findings, not public-route or upload
-buffer vulnerabilities. There is no sharp advisory in the audit, and this
-configuration has no upload collection or uploaded-media processing endpoint.
-Review future dependency updates before production rollout.
-
-Next/Payload integration follows the [official installation guide](https://payloadcms.com/docs/getting-started/installation),
-with [explicit PostgreSQL migrations](https://payloadcms.com/docs/database/migrations).
-
-### Head administrator
-
-Set server-only `ELAN_HEAD_ADMIN_EMAIL` to the owner account email in every deployment. Only that account can enter Payload admin, manage users, or create, update, publish, and delete content. Other accounts cannot make changes; public visitors can still read published stories and contributors. Missing owner configuration denies administrative access. The email is kept in deployment configuration rather than an editable role field. Trusted maintenance scripts using Payload Local API with `overrideAccess: true` retain their normal privileged behavior.
-
-### Vercel environments
-
-Configure both Production and Preview with `DATABASE_URI` (Supabase transaction pooler port 6543 for Vercel; session pooler port 5432 for local development), `PAYLOAD_SECRET`, the environment’s `NEXT_PUBLIC_SERVER_URL`, `ELAN_HEAD_ADMIN_EMAIL`, and `PAYLOAD_DB_PUSH=false`. Use the same Payload secret as the seeded environment. The official Supabase database CA is bundled server-side; remove workstation-specific `sslrootcert` paths when copying a URI. The pool verifies TLS and limits each server instance to three database connections (Payload reserves one during startup). Do not upload seed passwords as deployment variables.
-
-Vercel previews use their own `VERCEL_URL` for Payload admin requests so preview editing stays on the preview origin. Production uses `NEXT_PUBLIC_SERVER_URL`.
-
-### Photo library
-
-See [photo upload setup](docs/media-storage.md) for Supabase Storage / R2 S3 settings, the media collection, migrations, supported formats, and direct uploads from `/admin`.
-
-## Covers, personalities, and originals
-
-Manage Covers and Personalities in the existing Payload admin. A cover links to an existing main article/interview and one or more personalities; add artwork, optional variations, gallery, film, related stories, behind-the-scenes copy, and homepage placement there. The newest released cover selected for the homepage leads. Without one, the strongest feature leads; an empty publication displays the brand opening.
-
-Publish with a future `publishedAt` to schedule public visibility. Drafts and demonstration records remain private. A personality page requires released article or cover coverage. Originals are Articles with type `original`, a supported HTTPS video URL, and optional production credits/gallery. Existing article/feature/interview URLs remain available.
-
-Use `npm run payload -- migrate` for tracked schema changes; never enable schema push in production. The culture-brand migration preserves historical content and marks explicitly credited development samples as demonstrations. See [the architecture audit](docs/culture-brand-audit.md).
-
-## Newsletter
-
-Requests are stored in the existing private subscriber tables. The form requires consent, checks origin, rate limits requests, and reports delivery pending honestly. Anonymous REST access to subscriber records is denied. Signed unsubscribe links support the confirmation page and one-click POST.
-
-Delivery is disabled unless `ELAN_NEWSLETTER_DELIVERY_ENABLED=true`. Enable it only after a real sender is verified and `RESEND_API_KEY`, `RESEND_SENDER_EMAIL`, and the canonical `NEXT_PUBLIC_SERVER_URL` are configured. No newsletter edition scheduler or bulk-send system is included.
-
-Fonts are self-hosted Playfair Display and Plus Jakarta Sans; their OFL licenses are included in `src/app/fonts`.
+See [architecture](docs/architecture.md), [database](docs/database.md), and [visual foundations](docs/design-system.md). The final newsroom taxonomy, roles, contact information, asset storage, production data reuse and cutover require review before later phases. The confirmed domain is lumiereindex.com; no DNS change is included in Phase 1.

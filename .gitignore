@@ -41,6 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Local media uploads (cloud storage on Vercel)
+# Local CMS development media
 /media/
 /work/

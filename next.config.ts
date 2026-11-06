@@ -1,4 +1,3 @@
 import type { NextConfig } from 'next';
-import { withPayload } from '@payloadcms/next/withPayload';
-const nextConfig: NextConfig = {};
-export default withPayload(nextConfig);
+const config: NextConfig = { poweredByHeader: false };
+export default config;
