@@ -1,6 +1,6 @@
 # Netlify launch preparation
 
-Updated 14 November 2026. Status: repository configuration prepared; Netlify account access and hosted verification pending.
+Updated 14 November 2026. Status: Netlify account access verified. Project lumiereindex now selects codex/lumiere-index-foundation, npm run build and .next. Fifteen application variables are configured; automatic builds are paused pending the S3 credential pair and Resend API key. No Lumière release is verified yet.
 
 ## Host decision
 
@@ -19,7 +19,7 @@ Use a temporary Netlify hostname first. Keep `LUMIERE_LAUNCH_READY=false` and `S
 
 ## Environment settings
 
-Configure the keys in `launch-runbook.md` using the Netlify UI/API with **Builds and Functions** scopes. Values in netlify.toml alone are not serverless-function environment variables. Set `AWS_LAMBDA_JS_RUNTIME=nodejs24.x` through the UI/API; Netlify does not accept this runtime setting from netlify.toml.
+Configure the keys in `launch-runbook.md` using the Netlify UI/API. On this Free account, variables use all default scopes; the API rejects selective Builds/Functions scopes and its restricted-secret option. Standard server environment variables are configured without NEXT_PUBLIC prefixes for credentials. Values in netlify.toml alone are not serverless-function environment variables. Set `AWS_LAMBDA_JS_RUNTIME=nodejs24.x` through the UI/API; Netlify does not accept this runtime setting from netlify.toml.
 
 Set `CMS_SERVER_URL` to the actual temporary HTTPS site origin. If it is unset, the application can derive the origin from Netlify's deploy URLs where available; hosted execution fails closed if there is no valid public HTTPS origin. Credentials and secrets must never be placed in next.config.ts, netlify.toml, a client variable, chat or Git.
 
@@ -37,3 +37,9 @@ The restricted database URI and independent Payload secret are already prepared 
 - Remove recorded test fixtures, then create a fresh one-use founder setup link.
 
 After verification, configure production media prefix and canonical CMS origin, use the Netlify-specified domain records, preserve unrelated mail and verification TXT records, and test TLS and redirects. Keep a verified rollback release. No Netlify deployment or DNS change is claimed by this preparation document.
+
+## Verified project configuration
+
+Project ID: `aa4fb05c-8e02-4bca-be10-7365465754a4`. Public test origin: `https://lumiereindex.netlify.app`. The imported project had deployed main at the legacy ÉLAN commit and returned Netlify generic 404s for the homepage, admin and health endpoint. The production-branch setting is now corrected to the Lumière branch. The selected source, build command, publish directory and paused-build flag were read back through the API. No custom domain was changed.
+
+Remaining provider values must be supplied directly to Netlify: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `RESEND_API_KEY`. If their original values were not saved, create replacement credentials through the provider's normal account settings; do not delete the old keys used by the preserved Vercel release. Resume builds only after values are present and nonempty, then verify the native workflow and media delivery.
