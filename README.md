@@ -22,9 +22,9 @@ Use Node 24 and `npm ci`. Copy `.env.example` to ignored `.env.local`, supply an
 
 The native workflow is Save Draft → Pending review → saved editor approval → Publish. Future first-publication dates hold stories until release; updates to already-live stories retain the original publication date and go through draft/review again. Concurrent editing uses Payload's record lock and explicit Take over control.
 
-## Hosted configuration
+## Hosted configuration — Netlify
 
-See [launch runbook](docs/launch-runbook.md). Hosted connections require an explicit Supabase host allowlist and certificate validation. Schema push is disabled. The runtime database role is restricted to `lumiere_index`; old `elan` data is separate.
+The selected launch host is Netlify. `netlify.toml` supplies the Next.js build settings and Node 24; Netlify detects its OpenNext adapter automatically. See [Netlify handoff](docs/netlify-launch.md) and the [launch runbook](docs/launch-runbook.md). Hosted connections require an explicit Supabase host allowlist and certificate validation. Schema push is disabled. The runtime database role is restricted to `lumiere_index`; old `elan` data is separate.
 
 Hosted uploads use private S3-compatible storage and isolated environment prefixes, access-checked download URLs and signed client uploads. Recovery mail uses the Payload Resend adapter with an explicitly configured Lumière sender; installed adapters are not evidence of successful delivery.
 

@@ -1,3 +1,4 @@
+import { isHostedRuntime } from "./hosting";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { resendAdapter } from "@payloadcms/email-resend";
 import { isStaff } from "./access";
@@ -5,7 +6,7 @@ export function newsroomIntegrations(
   env: Record<string, string | undefined> = process.env,
 ) {
   const hosted = env.MEDIA_STORAGE === "s3";
-  if (env.VERCEL && !hosted)
+  if (isHostedRuntime(env) && !hosted)
     throw Error("Hosted deployments require durable S3 media storage.");
   if (hosted) {
     for (const name of [

@@ -44,3 +44,6 @@ next-env.d.ts
 # Local CMS development media
 /media/
 /work/
+
+# Netlify local state and cached build output
+.netlify/

@@ -1,3 +1,4 @@
+import { cmsServerURL } from "./cms/hosting";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
@@ -13,11 +14,7 @@ export default buildConfig({
   email: integrations.email,
   plugins: [integrations.storage],
   cookiePrefix: "lumiere",
-  serverURL:
-    process.env.CMS_SERVER_URL ||
-    (process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3200"),
+  serverURL: cmsServerURL(),
   admin: {
     user: "users",
     importMap: {

@@ -1,3 +1,5 @@
+> Hosting decision updated 14 November 2026: the founder selected moving away from Vercel's Hobby restrictions. Netlify is the proposed launch host. The Vercel preview remains a test artifact, not a production release. See `netlify-launch.md` for the active deployment steps. Provider credentials and deployment verification must be completed on Netlify before any DNS cutover.
+
 # Staging and production launch runbook
 
 Updated 13 November 2026. Production is not yet approved by verification.

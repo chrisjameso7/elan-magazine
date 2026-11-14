@@ -1,3 +1,4 @@
+import { cmsServerURL, isHostedRuntime } from "../src/cms/hosting";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { brand, siteURL } from "../src/lib/brand";
@@ -148,4 +149,41 @@ test("deepmerge cannot poison returned objects through either operand", async ()
     assert.equal(result.safe, true);
   }
   assert.deepEqual(merge({ items: [1] }, { items: [2] }), { items: [1, 2] });
+});
+
+test("Netlify detects hosted functions and selects the actual preview origin", () => {
+  assert.equal(
+    isHostedRuntime({ NETLIFY: "true", CONTEXT: "deploy-preview" }),
+    true,
+  );
+  assert.equal(
+    isHostedRuntime({ AWS_LAMBDA_FUNCTION_NAME: "next-server" }),
+    true,
+  );
+  assert.equal(isHostedRuntime({ NETLIFY: "true", CONTEXT: "dev" }), false);
+  assert.equal(
+    cmsServerURL({
+      NETLIFY: "true",
+      DEPLOY_PRIME_URL: "https://deploy-preview-5--lumiere.netlify.app",
+      URL: "https://lumiere.netlify.app",
+    }),
+    "https://deploy-preview-5--lumiere.netlify.app",
+  );
+  assert.throws(() =>
+    cmsServerURL({ NETLIFY: "true", CMS_SERVER_URL: "http://localhost:3200" }),
+  );
+  assert.throws(() =>
+    cmsServerURL({
+      NETLIFY: "true",
+      CMS_SERVER_URL: "https://user:pass@example.com",
+    }),
+  );
+  assert.throws(() => cmsServerURL({ NETLIFY: "true" }));
+  const local = {
+    DATABASE_URI: "postgresql://local@127.0.0.1:55441/postgres",
+    PAYLOAD_SECRET: "x".repeat(40),
+    LUMIERE_OWNER_EMAIL: "owner@example.com",
+    NETLIFY: "true",
+  };
+  assert.throws(() => cmsEnvironment(local));
 });

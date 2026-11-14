@@ -1,3 +1,4 @@
+import { isHostedRuntime } from "./hosting";
 export function cmsEnvironment(
   env: Record<string, string | undefined> = process.env,
 ) {
@@ -21,7 +22,7 @@ export function cmsEnvironment(
     if (!parsed.password)
       throw new Error("Hosted database credentials are required.");
   }
-  if (env.VERCEL && local)
+  if (isHostedRuntime(env) && local)
     throw new Error("A deployment cannot use a local database.");
   const secret = env.PAYLOAD_SECRET?.trim();
   if (!secret || secret.length < 32)
