@@ -1,33 +1,31 @@
 # Lumière Index
 
-News that matters. Entertainment and pop-culture newsroom foundation.
+News that matters. Entertainment and pop-culture newsroom, operated by Lumiere Media and Entertainment Technologies.
 
-This is a clean new application on `codex/lumiere-index-foundation`. The former ÉLAN application is preserved at `backup/elan-before-lumiere-index-2026-11-06`; Git history is intact. No movie-ranking product or ÉLAN application code is used by the new reader application.
+The application is Next.js 16 / React 19 / Payload 3 with PostgreSQL. Original Git history and the recoverable `backup/elan-before-lumiere-index-2026-11-06` branch are preserved. Work is on `codex/lumiere-index-foundation`; production cutover is a separate verified step.
 
-## Phase 1 scope
+## Development
 
-Next.js, React, strict TypeScript, two server-rendered reader routes, an accessible CSS foundation using a system sans-serif, explicit brand/domain configuration, and new Payload/Postgres newsroom schema definitions. Public reader pages build without a database. Canonical domain: https://lumiereindex.com. Foundation routes are noindex.
+Use Node 24 and `npm ci`. Copy `.env.example` to ignored `.env.local`, supply an isolated PostgreSQL connection, a random Payload secret and the owner email. Run reviewed migrations with `npm run payload -- migrate`, then `npm run dev -- --port 3200`.
 
-The CMS is CLI-only in this phase. No admin screen, reader content integration, search, newsletter, ad system, or newsroom role workflow is presented as complete.
+- Public edition: `/`; individual articles: `/news/[slug]`.
+- Newsroom: `/admin`. Accounts are provisioned by an administrator; there is no public registration.
+- Private saved-draft preview: `/preview/[id]`, restricted to permitted staff.
+- Navigation: Latest, Celebrity, Film & TV, Music, Culture, Exclusives and Features. Features uses the existing article format. Other sections use their canonical CMS slugs.
+- Canonical publication domain: `https://lumiereindex.com`. Staging remains noindex.
 
-## Run
+## Verification
 
-`npm ci`
-`npm run dev -- -p 3200`
+`npm run verify` runs unit tests, lint, TypeScript and the production build. The production build does not establish provider readiness.
 
-Visit http://localhost:3200. `/` and `/about` work; nonexistent routes return 404. No external font or content requests are required.
+`npm run payload -- run scripts/verify-database.ts` creates clearly labelled test records **only on the isolated database at 127.0.0.1:55441**. Set `LUMIERE_OWNER_EMAIL=owner@lumiere.test` for that command so it cannot reset a real founder account. Never run fixture creation against production.
 
-## Verify
+The native workflow is Save Draft → Pending review → saved editor approval → Publish. Future first-publication dates hold stories until release; updates to already-live stories retain the original publication date and go through draft/review again. Concurrent editing uses Payload's record lock and explicit Take over control.
 
-`npm run verify`
+## Hosted configuration
 
-For CMS work, copy `.env.example` into ignored `.env.local`, set a random secret of at least 32 characters, `LUMIERE_OWNER_EMAIL`, and an isolated local PostgreSQL URI. Remote database connections are deliberately refused during Phase 1.
+See [launch runbook](docs/launch-runbook.md). Hosted connections require an explicit Supabase host allowlist and certificate validation. Schema push is disabled. The runtime database role is restricted to `lumiere_index`; old `elan` data is separate.
 
-`npm run payload -- generate:types`
-`npm run payload -- migrate`
+Hosted uploads use private S3-compatible storage and isolated environment prefixes, access-checked download URLs and signed client uploads. Recovery mail uses the Payload Resend adapter with an explicitly configured Lumière sender; installed adapters are not evidence of successful delivery.
 
-The new schema is `lumiere_index`; schema push is disabled. `npm run payload -- run scripts/verify-database.ts` verifies the isolated test database on 127.0.0.1:55441. It creates clearly named local test data only. Never use a production database for that command.
-
-## Decisions and review
-
-See [architecture](docs/architecture.md), [database](docs/database.md), and [visual foundations](docs/design-system.md). The final newsroom taxonomy, roles, contact information, asset storage, production data reuse and cutover require review before later phases. The confirmed domain is lumiereindex.com; no DNS change is included in Phase 1.
+Node dependencies include a reviewed, idempotent postinstall mitigation for the deepmerge prototype-poisoning advisory. Keep its regression test and remove the mitigation only after an upstream fix is verified. See the launch runbook for remaining audit findings.

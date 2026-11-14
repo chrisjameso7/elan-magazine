@@ -10,18 +10,23 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "payload": "payload",
-    "verify": "npm run test && npm run lint && npm run typecheck && npm run build"
+    "verify": "npm run test && npm run lint && npm run typecheck && npm run build",
+    "postinstall": "node scripts/patch-deepmerge.mjs"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "3.91.0",
+    "@payloadcms/email-resend": "3.91.0",
     "@payloadcms/next": "3.91.0",
     "@payloadcms/richtext-lexical": "3.91.0",
+    "@payloadcms/storage-s3": "3.91.0",
+    "@payloadcms/ui": "3.91.0",
     "next": "16.4.2",
     "payload": "3.91.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "@aws-sdk/client-s3": "3.1164.0"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -35,7 +40,15 @@
   "overrides": {
     "dompurify": "3.4.17",
     "sass": "1.106.1",
-    "source-map-js": "1.2.2"
+    "source-map-js": "1.2.2",
+    "happy-dom": "21.0.4",
+    "zod": "4.6.7",
+    "payload": {
+      "undici": "8.12.4"
+    }
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  }
 }

@@ -1,6 +1,10 @@
 export const brand = {
   name: 'Lumière Index',
   tagline: 'News that matters.',
+  operator:'Lumiere Media and Entertainment Technologies',
+  founder:'Chris James',
+  contactEmail:'contact@lumiereindex.com',
+  privacyEmail:'privacy@lumiereindex.com',
   domain: 'lumiereindex.com',
   description: 'An entertainment and pop-culture newsroom.',
 } as const;

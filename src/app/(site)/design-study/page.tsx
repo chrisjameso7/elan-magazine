@@ -1,8 +1,10 @@
+import {notFound} from 'next/navigation';
 import Link from 'next/link';
 import PreviewImage from '@/components/PreviewImage';
 import { previewMedia } from '@/lib/preview-media';
 export const metadata = { alternates: { canonical: '/' } };
 export default function Home() {
+  if(process.env.LUMIERE_DESIGN_PREVIEW!=='true')notFound();
   return (
     <main id="main-content">
       <div className="review-notice">

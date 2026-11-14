@@ -1,19 +1,23 @@
-import type { Metadata } from 'next';
-import SiteHeader from '@/components/SiteHeader';
-import SiteFooter from '@/components/SiteFooter';
-import { brand, siteURL } from '@/lib/brand';
-import './globals.css';
+import type { Metadata } from "next";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+import { brand, siteURL } from "@/lib/brand";
+import "../globals.css";
+import "../lumiere.css";
 
 export const metadata: Metadata = {
   metadataBase: siteURL(),
   title: { default: brand.name, template: `%s | ${brand.name}` },
   description: brand.description,
-  robots: { index: false, follow: false },
+  robots:
+    process.env.LUMIERE_LAUNCH_READY === "true"
+      ? { index: true, follow: true }
+      : { index: false, follow: false },
   openGraph: {
     siteName: brand.name,
     title: brand.name,
     description: brand.description,
-    type: 'website',
+    type: "website",
   },
 };
 export default function RootLayout({

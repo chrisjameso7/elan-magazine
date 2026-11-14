@@ -130,6 +130,8 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   name: string;
+  role: 'administrator' | 'editor' | 'writer';
+  contributor?: (number | null) | Contributor;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -159,18 +161,7 @@ export interface Contributor {
   name: string;
   slug: string;
   bio?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "sections".
- */
-export interface Section {
-  id: number;
-  name: string;
-  slug: string;
-  description?: string | null;
+  portrait?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -183,6 +174,20 @@ export interface Media {
   alt: string;
   caption?: string | null;
   credit: string;
+  licenseType: 'owned' | 'licensed' | 'permission' | 'press' | 'creative-commons' | 'other';
+  /**
+   * Licence URL, contract reference or source record.
+   */
+  licenseReference?: string | null;
+  rightsNotes?: string | null;
+  licenseExpiresAt?: string | null;
+  /**
+   * An editor confirms that publication rights have been checked.
+   */
+  rightsConfirmed?: boolean | null;
+  uploadedBy?: (number | null) | User;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -194,8 +199,49 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    story?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sections".
+ */
+export interface Section {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  navOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Save your draft before using Preview. Approval and publication are separate actions.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "articles".
  */
@@ -203,10 +249,7 @@ export interface Article {
   id: number;
   title: string;
   slug: string;
-  standfirst?: string | null;
-  section: number | Section;
-  contributors: (number | Contributor)[];
-  hero?: (number | null) | Media;
+  standfirst: string;
   body: {
     root: {
       type: string;
@@ -222,7 +265,24 @@ export interface Article {
     };
     [k: string]: unknown;
   };
+  hero?: (number | null) | Media;
+  section: number | Section;
+  contributors: (number | Contributor)[];
+  format: 'news' | 'feature' | 'interview' | 'analysis' | 'review';
+  /**
+   * Save approval before publishing.
+   */
+  reviewStatus: 'draft' | 'in_review' | 'changes_requested' | 'approved';
+  assignedTo?: (number | null) | User;
+  /**
+   * First publication: use a future time to hold an approved published story until release. Keep this date when updating a live story.
+   */
   publishedAt?: string | null;
+  isFeatured?: boolean | null;
+  /**
+   * Private editorial feedback. Never included in public responses.
+   */
+  editorialNotes?: string | null;
   sources?:
     | {
         label: string;
@@ -230,6 +290,14 @@ export interface Article {
         id?: string | null;
       }[]
     | null;
+  createdBy?: (number | null) | User;
+  updatedBy?: (number | null) | User;
+  approvedBy?: (number | null) | User;
+  submittedAt?: string | null;
+  approvedAt?: string | null;
+  firstPublishedAt?: string | null;
+  linkedMedia?: (number | Media)[] | null;
+  isTestData?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -326,6 +394,8 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
+  contributor?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -352,6 +422,7 @@ export interface ContributorsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   bio?: T;
+  portrait?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -363,6 +434,7 @@ export interface SectionsSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   description?: T;
+  navOrder?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -374,6 +446,14 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   credit?: T;
+  licenseType?: T;
+  licenseReference?: T;
+  rightsNotes?: T;
+  licenseExpiresAt?: T;
+  rightsConfirmed?: T;
+  uploadedBy?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -385,6 +465,40 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        story?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -394,11 +508,16 @@ export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   standfirst?: T;
+  body?: T;
+  hero?: T;
   section?: T;
   contributors?: T;
-  hero?: T;
-  body?: T;
+  format?: T;
+  reviewStatus?: T;
+  assignedTo?: T;
   publishedAt?: T;
+  isFeatured?: T;
+  editorialNotes?: T;
   sources?:
     | T
     | {
@@ -406,6 +525,14 @@ export interface ArticlesSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
+  createdBy?: T;
+  updatedBy?: T;
+  approvedBy?: T;
+  submittedAt?: T;
+  approvedAt?: T;
+  firstPublishedAt?: T;
+  linkedMedia?: T;
+  isTestData?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
