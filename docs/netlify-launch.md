@@ -1,0 +1,57 @@
+# Netlify launch preparation
+
+Updated 14 November 2026. Status: Netlify account access verified. Project lumiereindex now selects codex/lumiere-index-foundation, npm run build and .next. Fifteen application variables are configured; automatic builds are paused pending the S3 credential pair and Resend API key. No Lumière release is verified yet.
+
+## Host decision
+
+Netlify explicitly permits commercial projects on its Free plan and supports Next.js App Router, route handlers and Server Actions. The plan is usage-limited and may pause projects at the monthly limit; do not describe it as unlimited hosting.
+
+Official references:
+- https://www.netlify.com/blog/introducing-netlify-free-plan/
+- https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/
+- https://www.netlify.com/pricing/
+
+## Connect the correct code
+
+Import `chrisjameso7/elan-magazine`. Select **codex/lumiere-index-foundation**, not `main`, for the initial test deployment: main still contains the legacy ÉLAN application. Build command: `npm run build`; publish directory: `.next`; Node: 24. The Next.js adapter is explicitly installed and configured in netlify.toml. Automatic detection previously uploaded raw .next files without server functions or routing; build success alone did not establish a working deployment. Do not configure a static export or a catch-all SPA redirect.
+
+Use a temporary Netlify hostname first. Keep `LUMIERE_LAUNCH_READY=false` and `S3_PREFIX=lumiere-index/preview`. Do not connect lumiereindex.com until the application and newsroom pass hosted verification. Do not activate automatic production releases of unverified changes.
+
+## Environment settings
+
+Configure the keys in `launch-runbook.md` using the Netlify UI/API. On this Free account, variables use all default scopes; the API rejects selective Builds/Functions scopes and its restricted-secret option. Standard server environment variables are configured without NEXT_PUBLIC prefixes for credentials. Values in netlify.toml alone are not serverless-function environment variables. Set `AWS_LAMBDA_JS_RUNTIME=nodejs24.x` through the UI/API; Netlify does not accept this runtime setting from netlify.toml.
+
+Set `CMS_SERVER_URL` to the actual temporary HTTPS site origin. If it is unset, the application can derive the origin from Netlify's deploy URLs where available; hosted execution fails closed if there is no valid public HTTPS origin. Credentials and secrets must never be placed in next.config.ts, netlify.toml, a client variable, chat or Git.
+
+The restricted database URI and independent Payload secret are already prepared in an ignored local handoff file. Do not reuse a database administrator account. The S3 and Resend secrets held as sensitive Vercel variables are not available for plaintext export through the connected API. Provision/rotate scoped provider credentials through their normal account interfaces if they are not held in the founder's secret store. Do not expose them through a diagnostic endpoint or publish them.
+
+## Verify before cutover
+
+- Initial edition, canonical section pages, About, Contact, Privacy, Terms, robots and sitemap.
+- Owner password setup and login; writer/editor/server-side permission enforcement.
+- Native draft → review → saved approval → publish; saved draft preview; article updates.
+- Direct media upload, generated image sizes, credits/licence fields; private draft media denial and published delivery.
+- First-publication scheduling, unpublishing, search and filtering.
+- Phone/tablet/desktop layouts and menu behavior; real image decode and no client errors.
+- Recovery email actually delivered from a verified lumiereindex.com sender.
+- Remove recorded test fixtures, then create a fresh one-use founder setup link.
+
+After verification, configure production media prefix and canonical CMS origin, use the Netlify-specified domain records, preserve unrelated mail and verification TXT records, and test TLS and redirects. Keep a verified rollback release. No Netlify deployment or DNS change is claimed by this preparation document.
+
+## Verified project configuration
+
+Project ID: `aa4fb05c-8e02-4bca-be10-7365465754a4`. Public test origin: `https://lumiereindex.netlify.app`. The imported project had deployed main at the legacy ÉLAN commit and returned Netlify generic 404s for the homepage, admin and health endpoint. The production-branch setting is now corrected to the Lumière branch. The selected source, build command, publish directory and paused-build flag were read back through the API. No custom domain was changed.
+
+Remaining provider values must be supplied directly to Netlify: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `RESEND_API_KEY`. If their original values were not saved, create replacement credentials through the provider's normal account settings; do not delete the old keys used by the preserved Vercel release. Resume builds only after values are present and nonempty, then verify the native workflow and media delivery.
+
+## 16 November verification correction
+
+All three provider keys are now present in Netlify. Draft 6afb0494da84cdb9026ba205 built successfully but its deployment summary reported no functions or routing rules. Preview access also returned Netlify team-login protection. The public hostname still serves the earlier broken release. Explicit adapter configuration is being tested in a new draft; hosted workflow verification and domain cutover remain incomplete.
+
+Corrected draft `6afb060169370768da37a6d1` at commit `5ff9b54` is ready. Netlify confirms one Next.js server handler, three redirect rules and one header rule. Direct HTTP checks returned 200 for `/`, `/admin`, `/api/health` (`ready: true`), `/robots.txt` and `/sitemap.xml`. Founder made previews public for verification. The original public alias remains on the earlier release; no production promotion or custom-domain change has occurred. Hosted article/media/email workflow tests remain outstanding.
+
+## Hosted workflow verification, 16 November
+
+Native hosted logins, administrator/editor/writer permissions, escalation denial, real S3 image upload and derivatives, private media denial, rights approval, draft→review→saved approval→publication, public article HTML/media delivery, public field filtering, reviewed live updates and unpublishing all passed against the corrected Netlify preview. A timed first publication was withheld before release and readable after its release time; search and authenticated draft preview passed. The founder confirmed recovery email delivery. Test fixtures are recorded privately for removal before launch.
+
+A new tomato identity, original vector logo, responsive desktop/mobile layout, reduced-motion-aware 750ms opening identity and branded recovery template are being prepared for release. Custom domain aliases are attached in Netlify; the founder is updating Spaceship DNS. Production promotion and domain/TLS checks are still pending.

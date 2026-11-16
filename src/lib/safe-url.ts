@@ -1,0 +1,1 @@
+export function safeURL(value:unknown):string|undefined{if(typeof value!=='string'||!value.trim())return;const url=value.trim();if(url.startsWith('/')&&!url.startsWith('//')&&!url.includes('\\'))return url;if(url.startsWith('#'))return url;try{const parsed=new URL(url);if(['https:','http:','mailto:'].includes(parsed.protocol))return parsed.href;}catch{return;}return;}

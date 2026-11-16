@@ -1,0 +1,15 @@
+import Link from 'next/link';
+import {headers} from 'next/headers';
+import type {Where} from 'payload';
+import {getCMS} from '@/lib/cms';
+import {isEditor,isStaff,releasedArticlesWhere} from '../access';
+const listURL=(where:Record<string,Record<string,string>>)=>'/admin/collections/articles?'+Object.entries(where).flatMap(([field,conditions])=>Object.entries(conditions).map(([operator,value])=>`${encodeURIComponent(`where[${field}][${operator}]`)}=${encodeURIComponent(value)}`)).join('&');
+export async function Dashboard(){const cms=await getCMS();const {user}=await cms.auth({headers:await headers()});if(!isStaff(user))return null;const now=new Date().toISOString();const queries:Array<{name:string;where:Where;href:string}>=[
+ {name:'Drafts',where:{and:[{_status:{equals:'draft'}},{reviewStatus:{not_equals:'in_review'}}]},href:listURL({_status:{equals:'draft'},reviewStatus:{not_equals:'in_review'}})},
+ {name:'Pending review',where:{reviewStatus:{equals:'in_review'}},href:listURL({reviewStatus:{equals:'in_review'}})},
+ {name:'Scheduled',where:{and:[{_status:{equals:'published'}},{publishedAt:{greater_than:now}}]},href:listURL({_status:{equals:'published'},publishedAt:{greater_than:now}})},
+ {name:'Published',where:releasedArticlesWhere(),href:listURL({_status:{equals:'published'},publishedAt:{less_than_equal:now}})},
+ ];
+ const [counts,queue]=await Promise.all([Promise.all(queries.map(q=>cms.find({collection:'articles',user,overrideAccess:false,draft:true,depth:0,limit:1,where:q.where}))),cms.find({collection:'articles',user,overrideAccess:false,draft:true,depth:0,limit:8,sort:'-updatedAt',where:{or:[{reviewStatus:{equals:'in_review'}},{and:[{_status:{equals:'draft'}},{reviewStatus:{equals:'approved'}}]}]}})]);
+ return <section className="newsroom-dashboard"><div className="newsroom-dashboard-heading"><div><span>LUMIÈRE INDEX / NEWSROOM</span><h1>{isEditor(user)?'The editorial desk.':'Your writing desk.'}</h1><p>{isEditor(user)?'Drafts, reviews and publication in one place.':'Your drafts and assigned stories. Submit completed work for editorial review.'}</p></div><Link href="/admin/collections/articles/create" className="newsroom-create">New story ↗</Link></div><div className="newsroom-metrics">{queries.map((q,i)=><Link key={q.name} href={q.href}><span>{q.name}</span><strong>{counts[i].totalDocs}</strong><small>Open queue ↗</small></Link>)}</div><div className="newsroom-queue"><h2>{isEditor(user)?'Review & publication queue':'Your submissions'}</h2>{queue.docs.length?<ul>{queue.docs.map(a=><li key={a.id}><Link href={`/admin/collections/articles/${a.id}`}>{a.title||'Untitled draft'}</Link><span>{a.reviewStatus==='approved'?'Ready to publish':'Pending review'}</span></li>)}</ul>:<p>No stories are waiting in this queue.</p>}</div><div className="newsroom-guide"><strong>The publishing workflow</strong><p>Save draft → Pending review → Editor approval → Publish. A future publication time holds a new approved story until release. Save live-story changes as drafts until their next approval.</p><Link href="/" target="_blank">Open publication ↗</Link></div></section>;
+}

@@ -1,27 +1,27 @@
-import * as migration_20261023_095728_initial from './20261023_095728_initial';
-import * as migration_20261023_190410_media_uploads from './20261023_190410_media_uploads';
-import * as migration_20261024_201733_newsletter from './20261024_201733_newsletter';
-import * as migration_20261102_173359_culture_brand from './20261102_173359_culture_brand';
+import * as migration_20261106_101026_foundation from './20261106_101026_foundation';
+import * as migration_20261106_220538_newsroom_workflow from './20261106_220538_newsroom_workflow';
+import * as migration_20261106_221546_public_media_eligibility from './20261106_221546_public_media_eligibility';
+import * as migration_20261113_112619 from './20261113_112619';
 
 export const migrations = [
   {
-    up: migration_20261023_095728_initial.up,
-    down: migration_20261023_095728_initial.down,
-    name: '20261023_095728_initial',
+    up: migration_20261106_101026_foundation.up,
+    down: migration_20261106_101026_foundation.down,
+    name: '20261106_101026_foundation',
   },
   {
-    up: migration_20261023_190410_media_uploads.up,
-    down: migration_20261023_190410_media_uploads.down,
-    name: '20261023_190410_media_uploads',
+    up: migration_20261106_220538_newsroom_workflow.up,
+    down: migration_20261106_220538_newsroom_workflow.down,
+    name: '20261106_220538_newsroom_workflow',
   },
   {
-    up: migration_20261024_201733_newsletter.up,
-    down: migration_20261024_201733_newsletter.down,
-    name: '20261024_201733_newsletter',
+    up: migration_20261106_221546_public_media_eligibility.up,
+    down: migration_20261106_221546_public_media_eligibility.down,
+    name: '20261106_221546_public_media_eligibility',
   },
   {
-    up: migration_20261102_173359_culture_brand.up,
-    down: migration_20261102_173359_culture_brand.down,
-    name: '20261102_173359_culture_brand'
+    up: migration_20261113_112619.up,
+    down: migration_20261113_112619.down,
+    name: '20261113_112619'
   },
 ];
