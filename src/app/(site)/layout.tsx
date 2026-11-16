@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BrandLogo from "@/components/BrandLogo";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { brand, siteURL } from "@/lib/brand";
@@ -8,6 +9,7 @@ import "../lumiere.css";
 export const metadata: Metadata = {
   metadataBase: siteURL(),
   title: { default: brand.name, template: `%s | ${brand.name}` },
+  icons: { icon: "/brand/monogram.svg", apple: "/brand/apple-touch-icon.png" },
   description: brand.description,
   robots:
     process.env.LUMIERE_LAUNCH_READY === "true"
@@ -28,6 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <div className="brand-intro" aria-hidden="true">
+          <BrandLogo />
+          <span />
+        </div>
         <div className="site-frame">
           <SiteHeader />
           {children}

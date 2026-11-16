@@ -6,6 +6,7 @@ import {
   type Section,
   type Contributor,
 } from "@/lib/publication";
+import BrandLogo from "@/components/BrandLogo";
 import CoverStory from "@/components/CoverStory";
 import StoryCard from "@/components/StoryCard";
 export const dynamic = "force-dynamic";
@@ -39,21 +40,47 @@ export default async function Home() {
       {lead ? (
         <CoverStory slides={slides} />
       ) : (
-        <section className="first-edition editorial-body">
-          <p className="eyebrow">The first edition</p>
-          <h1>News that matters.</h1>
-          <p>Entertainment. Culture. Everything in between.</p>
-          <p className="empty-edition">
-            Our first stories will appear here as they are published.
-          </p>
-          <Link className="text-link" href="/about">
-            Meet Lumière Index →
-          </Link>
+        <section className="first-edition">
+          <div className="edition-intro-copy">
+            <p className="eyebrow">Entertainment. Culture. In focus.</p>
+            <h1>
+              News that
+              <br />
+              matters<span>.</span>
+            </h1>
+            <p className="edition-deck">
+              The people. The work. The stories behind it.
+            </p>
+            <p className="empty-edition">
+              Our first stories will appear here as they are published.
+            </p>
+            <Link className="cover-read" href="/about">
+              Meet Lumière Index <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+          <div className="edition-brand-panel" aria-hidden="true">
+            <span className="edition-number">L / I — 001</span>
+            <BrandLogo light />
+            <p>
+              ENTERTAINMENT.
+              <br />
+              CULTURE.
+              <br />
+              EVERYTHING IN BETWEEN.
+            </p>
+            <span className="edition-panel-tag">
+              AN INDEPENDENT POINT OF VIEW
+            </span>
+          </div>
         </section>
       )}
       <div className="editorial-body cover-content">
         {rest.length > 0 && (
           <section aria-label="Latest stories" className="cover-latest">
+            <div className="section-topline">
+              <h2>Latest stories</h2>
+              <Link href="/search">All stories →</Link>
+            </div>
             <div className="cover-grid">
               {rest.slice(0, 4).map((a) => (
                 <StoryCard key={a.id} story={a} cover />

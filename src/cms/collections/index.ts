@@ -1,3 +1,4 @@
+import { recoveryEmail } from "../recovery-email";
 import type { CollectionConfig, Field, PayloadRequest } from "payload";
 import {
   isAdmin,
@@ -43,7 +44,18 @@ const staffReadField = {
 };
 export const Users: CollectionConfig = {
   slug: "users",
-  auth: { tokenExpiration: 28800, maxLoginAttempts: 5, lockTime: 600000 },
+  auth: {
+    tokenExpiration: 28800,
+    maxLoginAttempts: 5,
+    lockTime: 600000,
+    forgotPassword: {
+      generateEmailSubject: () => "Reset your Lumière Index newsroom password",
+      generateEmailHTML: (args) => {
+        if (!args?.token) throw new Error("Recovery token is required.");
+        return recoveryEmail({ token: args.token, name: args.user?.name });
+      },
+    },
+  },
   admin: {
     useAsTitle: "email",
     group: "Newsroom",

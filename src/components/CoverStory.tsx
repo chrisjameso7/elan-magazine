@@ -59,6 +59,21 @@ export default function CoverStory({ slides }: { slides: CoverSlide[] }) {
         <span className="cover-credit">Photo: {slide.media.credit}</span>
       )}
       {slides.length > 1 && (
+        <div className="lead-index" aria-label="Choose a top story">
+          {slides.map((item, position) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-pressed={position === index}
+              onClick={() => setIndex(position)}
+            >
+              <span>{String(position + 1).padStart(2, "0")}</span>
+              <strong>{item.title}</strong>
+            </button>
+          ))}
+        </div>
+      )}
+      {slides.length > 1 && (
         <div className="cover-pagination">
           <span aria-label={`Story ${index + 1} of ${slides.length}`}>
             {index + 1} / {slides.length}

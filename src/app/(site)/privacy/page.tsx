@@ -1,4 +1,62 @@
-import InfoPage from '@/components/InfoPage';
-import {brand} from '@/lib/brand';
-export const metadata={title:'Privacy',alternates:{canonical:'/privacy'}};
-export default function Privacy(){return <InfoPage title="Privacy." eyebrow="Publication information"><p>Updated 6 November 2026</p><p>{brand.name} is operated by {brand.operator}. This page describes the information handled by the publication website and private newsroom.</p><h2>Website requests</h2><p>Hosting and infrastructure providers process technical requests needed to serve pages and files. These may include IP addresses, browser information, requested URLs and timestamps used for delivery, security and diagnostics.</p><h2>Newsroom accounts</h2><p>The private publishing system stores staff names, email addresses, password hashes, session information and editorial activity. Authentication cookies support staff sign-in. Access is restricted by newsroom roles; staff credentials are not published as contributor profiles.</p><h2>Correspondence and media</h2><p>If you email us, we receive the information you choose to send. Uploaded editorial media may contain credits, licence records and descriptive metadata. Public image credits are separate from private rights notes.</p><h2>Cookies, analytics and advertising</h2><p>The current application uses essential authentication functionality for staff. It does not include a reader account system, advertising scripts, marketing pixels or a newsletter signup form. If non-essential analytics or advertising is introduced, the disclosures and any required choices must be updated before activation.</p><h2>Service providers</h2><p>The application is prepared for Netlify hosting and Supabase database and media storage. These providers process information required to deliver their services. Editorial photographs are served from the publication’s media library; design-study sample imagery is not part of the launch news edition.</p><h2>Requests</h2><p>For privacy questions or requests concerning information you have shared, email <a href={`mailto:${brand.privacyEmail}`}>{brand.privacyEmail}</a>. Describe your request without sending passwords or unnecessary sensitive information.</p></InfoPage>;}
+import InfoPage from "@/components/InfoPage";
+import { brand } from "@/lib/brand";
+export const metadata = {
+  title: "Privacy",
+  alternates: { canonical: "/privacy" },
+};
+export default function Privacy() {
+  return (
+    <InfoPage title="Privacy." eyebrow="Publication information">
+      <p>Updated 16 November 2026</p>
+      <p>
+        {brand.name} is operated by {brand.operator}. This page describes the
+        information handled by the publication website and private newsroom.
+      </p>
+      <h2>Website requests</h2>
+      <p>
+        Hosting and infrastructure providers process technical requests needed
+        to serve pages and files. These may include IP addresses, browser
+        information, requested URLs and timestamps used for delivery, security
+        and diagnostics.
+      </p>
+      <h2>Newsroom accounts</h2>
+      <p>
+        The private publishing system stores staff names, email addresses,
+        password hashes, session information and editorial activity.
+        Authentication cookies support staff sign-in. Access is restricted by
+        newsroom roles; staff credentials are not published as contributor
+        profiles.
+      </p>
+      <h2>Correspondence and media</h2>
+      <p>
+        If you email us, we receive the information you choose to send. Uploaded
+        editorial media may contain credits, licence records and descriptive
+        metadata. Public image credits are separate from private rights notes.
+      </p>
+      <h2>Cookies, analytics and advertising</h2>
+      <p>
+        The current application uses essential authentication functionality for
+        staff. It does not include a reader account system, advertising scripts,
+        marketing pixels or a newsletter signup form. If non-essential analytics
+        or advertising is introduced, the disclosures and any required choices
+        must be updated before activation.
+      </p>
+      <h2>Service providers</h2>
+      <p>
+        The application uses Netlify hosting, Supabase database and media
+        storage, and Resend for newsroom account-recovery emails. These
+        providers process information required to deliver their services.
+        Editorial photographs are served from the publication’s media library;
+        design-study sample imagery is not part of the launch news edition.
+      </p>
+      <h2>Requests</h2>
+      <p>
+        For privacy questions or requests concerning information you have
+        shared, email{" "}
+        <a href={`mailto:${brand.privacyEmail}`}>{brand.privacyEmail}</a>.
+        Describe your request without sending passwords or unnecessary sensitive
+        information.
+      </p>
+    </InfoPage>
+  );
+}

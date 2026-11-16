@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import BrandLogo from "./BrandLogo";
 import { brand } from "@/lib/brand";
 import { editorialNavigation } from "@/lib/navigation";
 export default function SiteHeader() {
@@ -50,8 +51,7 @@ export default function SiteHeader() {
           aria-label={`${brand.name} home`}
           onClick={() => setMenuOpen(false)}
         >
-          <span>LUMIÈRE</span>
-          <small>INDEX</small>
+          <BrandLogo />
         </Link>
         <button
           className="mobile-menu-toggle"
