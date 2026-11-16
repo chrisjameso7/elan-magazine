@@ -13,7 +13,7 @@ Official references:
 
 ## Connect the correct code
 
-Import `chrisjameso7/elan-magazine`. Select **codex/lumiere-index-foundation**, not `main`, for the initial test deployment: main still contains the legacy ÉLAN application. Build command: `npm run build`; publish directory: `.next`; Node: 24. Let Netlify install its current Next.js adapter automatically. Do not configure a static export or a catch-all SPA redirect.
+Import `chrisjameso7/elan-magazine`. Select **codex/lumiere-index-foundation**, not `main`, for the initial test deployment: main still contains the legacy ÉLAN application. Build command: `npm run build`; publish directory: `.next`; Node: 24. The Next.js adapter is explicitly installed and configured in netlify.toml. Automatic detection previously uploaded raw .next files without server functions or routing; build success alone did not establish a working deployment. Do not configure a static export or a catch-all SPA redirect.
 
 Use a temporary Netlify hostname first. Keep `LUMIERE_LAUNCH_READY=false` and `S3_PREFIX=lumiere-index/preview`. Do not connect lumiereindex.com until the application and newsroom pass hosted verification. Do not activate automatic production releases of unverified changes.
 
@@ -43,3 +43,7 @@ After verification, configure production media prefix and canonical CMS origin, 
 Project ID: `aa4fb05c-8e02-4bca-be10-7365465754a4`. Public test origin: `https://lumiereindex.netlify.app`. The imported project had deployed main at the legacy ÉLAN commit and returned Netlify generic 404s for the homepage, admin and health endpoint. The production-branch setting is now corrected to the Lumière branch. The selected source, build command, publish directory and paused-build flag were read back through the API. No custom domain was changed.
 
 Remaining provider values must be supplied directly to Netlify: `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `RESEND_API_KEY`. If their original values were not saved, create replacement credentials through the provider's normal account settings; do not delete the old keys used by the preserved Vercel release. Resume builds only after values are present and nonempty, then verify the native workflow and media delivery.
+
+## 16 November verification correction
+
+All three provider keys are now present in Netlify. Draft 6afb0494da84cdb9026ba205 built successfully but its deployment summary reported no functions or routing rules. Preview access also returned Netlify team-login protection. The public hostname still serves the earlier broken release. Explicit adapter configuration is being tested in a new draft; hosted workflow verification and domain cutover remain incomplete.
