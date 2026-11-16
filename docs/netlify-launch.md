@@ -47,3 +47,5 @@ Remaining provider values must be supplied directly to Netlify: `S3_ACCESS_KEY_I
 ## 16 November verification correction
 
 All three provider keys are now present in Netlify. Draft 6afb0494da84cdb9026ba205 built successfully but its deployment summary reported no functions or routing rules. Preview access also returned Netlify team-login protection. The public hostname still serves the earlier broken release. Explicit adapter configuration is being tested in a new draft; hosted workflow verification and domain cutover remain incomplete.
+
+Corrected draft `6afb060169370768da37a6d1` at commit `5ff9b54` is ready. Netlify confirms one Next.js server handler, three redirect rules and one header rule. Direct HTTP checks returned 200 for `/`, `/admin`, `/api/health` (`ready: true`), `/robots.txt` and `/sitemap.xml`. Founder made previews public for verification. The original public alias remains on the earlier release; no production promotion or custom-domain change has occurred. Hosted article/media/email workflow tests remain outstanding.
