@@ -23,8 +23,8 @@ export default function SiteFooter() {
         <Link href="/admin">Newsroom sign-in</Link>
       </nav>
       <div className="footer-bottom">
-        <span>© 2026 Lumiere Media and Entertainment Technologies</span>
-        <span>Entertainment &amp; pop culture</span>
+        <span>© 2026 Lumiere Index. All rights reserved.</span>
+        <span>A Lumiere Publication.</span>
       </div>
     </footer>
   );

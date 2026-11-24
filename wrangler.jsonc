@@ -1,0 +1,46 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lumiere-index-staging",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-16",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "workers_dev": true,
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "lumiere-index-staging"
+    }
+  ],
+  "account_id": "2241635031ca0144e2e6556ef78bfec1",
+  "images": {
+    "binding": "IMAGES"
+  },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "dd0c37ae794d4e058113f837b2658559"
+    }
+  ],
+  "vars": {
+    "LUMIERE_HOSTING_PLATFORM": "cloudflare",
+    "LUMIERE_DATABASE_MODE": "hosted",
+    "LUMIERE_DATABASE_HOST": "aws-0-eu-west-1.pooler.supabase.com",
+    "LUMIERE_OWNER_EMAIL": "jamesadebajo7@gmail.com",
+    "CMS_SERVER_URL": "https://lumiere-index-staging.phonefuturist.workers.dev",
+    "NEXT_PUBLIC_SITE_URL": "https://lumiereindex.com",
+    "LUMIERE_LAUNCH_READY": "false",
+    "MEDIA_STORAGE": "s3",
+    "S3_ENDPOINT": "https://wpqsmcczmdbzvsioydmy.storage.supabase.co/storage/v1/s3",
+    "S3_REGION": "eu-west-1",
+    "S3_BUCKET": "elan-media",
+    "S3_PREFIX": "lumiere-index/preview",
+    "LUMIERE_SENDER_EMAIL": "contact@lumiereindex.com"
+  }
+}

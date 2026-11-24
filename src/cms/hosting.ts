@@ -2,6 +2,7 @@ export function isHostedRuntime(
   env: Record<string, string | undefined> = process.env,
 ): boolean {
   return Boolean(
+    env.LUMIERE_HOSTING_PLATFORM === "cloudflare" ||
     env.VERCEL ||
     env.AWS_LAMBDA_FUNCTION_NAME ||
     (env.NETLIFY && env.CONTEXT !== "dev"),

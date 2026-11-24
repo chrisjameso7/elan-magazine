@@ -2,8 +2,8 @@ import { cmsServerURL } from "./cms/hosting";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import sharp from "sharp";
-import { postgresPool } from "./lib/postgres-pool";
+import { cloudflareImages } from "./cms/cloudflare-images";
+import { cloudflarePostgresPool } from "./cms/cloudflare-postgres";
 import { newsroomIntegrations } from "./cms/integrations";
 import { newsroomCollections } from "./cms/collections";
 import { cmsEnvironment } from "./cms/environment";
@@ -33,10 +33,10 @@ export default buildConfig({
   },
   collections: newsroomCollections,
   editor: lexicalEditor(),
-  sharp,
+  sharp: cloudflareImages,
   db: postgresAdapter({
     schemaName: "lumiere_index",
-    pool: postgresPool(env.uri),
+    pool: cloudflarePostgresPool(env.uri),
     push: false,
     migrationDir: "src/migrations",
   }),

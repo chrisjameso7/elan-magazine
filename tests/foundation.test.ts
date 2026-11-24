@@ -187,3 +187,20 @@ test("Netlify detects hosted functions and selects the actual preview origin", (
   };
   assert.throws(() => cmsEnvironment(local));
 });
+
+test("Cloudflare hosting fails closed for local database configuration", () => {
+  assert.equal(
+    isHostedRuntime({ LUMIERE_HOSTING_PLATFORM: "cloudflare" }),
+    true,
+  );
+  assert.throws(
+    () =>
+      cmsEnvironment({
+        LUMIERE_HOSTING_PLATFORM: "cloudflare",
+        DATABASE_URI: "postgresql://test@127.0.0.1:55441/postgres",
+        PAYLOAD_SECRET: "x".repeat(40),
+        LUMIERE_OWNER_EMAIL: "owner@example.com",
+      }),
+    /local database/,
+  );
+});

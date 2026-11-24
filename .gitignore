@@ -47,3 +47,8 @@ next-env.d.ts
 
 # Netlify local state and cached build output
 .netlify/
+
+# Cloudflare staging artifacts and local secrets
+.open-next/
+.wrangler/
+.dev.vars*

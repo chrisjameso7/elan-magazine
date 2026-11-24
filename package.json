@@ -4,29 +4,33 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint src tests scripts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "payload": "payload",
     "verify": "npm run test && npm run lint && npm run typecheck && npm run build",
-    "postinstall": "node scripts/patch-deepmerge.mjs"
+    "postinstall": "node scripts/patch-deepmerge.mjs && node scripts/patch-opennext-windows.mjs",
+    "build:cloudflare": "node scripts/patch-opennext-windows.mjs && opennextjs-cloudflare build",
+    "preview:cloudflare": "opennextjs-cloudflare preview"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1164.0",
+    "@opennextjs/cloudflare": "1.20.17",
     "@payloadcms/db-postgres": "3.91.0",
     "@payloadcms/email-resend": "3.91.0",
     "@payloadcms/next": "3.91.0",
     "@payloadcms/richtext-lexical": "3.91.0",
     "@payloadcms/storage-s3": "3.91.0",
     "@payloadcms/ui": "3.91.0",
-    "next": "16.4.2",
+    "next": "16.4.6",
     "payload": "3.91.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",
-    "sharp": "^0.35.5"
+    "sharp": "^0.35.5",
+    "wrangler": "4.163.0"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "5.16.7",
@@ -34,7 +38,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.4.2",
+    "eslint-config-next": "16.4.6",
     "tsx": "4.23.15",
     "typescript": "^5"
   },
@@ -51,5 +55,12 @@
   "type": "module",
   "engines": {
     "node": "24.x"
+  },
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.28.2": true,
+    "esbuild@0.25.12": true,
+    "workerd@1.20261116.1": true,
+    "unrs-resolver@1.12.2": true
   }
 }
