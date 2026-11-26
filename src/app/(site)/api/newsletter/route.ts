@@ -17,7 +17,8 @@ export async function POST(request: Request) {
   }
   const parsed = parseSubscriber(body);
   if ("error" in parsed) return json({ error: parsed.error }, 400);
-  const apiKey = process.env.RESEND_CONTACTS_KEY;
+  // A dedicated contacts key if set, otherwise the full-access sending key.
+  const apiKey = process.env.RESEND_CONTACTS_KEY || process.env.RESEND_API_KEY;
   const segmentId = process.env.RESEND_NEWSLETTER_SEGMENT_ID;
   const topicId = process.env.RESEND_NEWSLETTER_TOPIC_ID;
   if (!apiKey || !segmentId || !topicId)
