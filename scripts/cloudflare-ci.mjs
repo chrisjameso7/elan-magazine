@@ -20,12 +20,14 @@ const RUNTIME_SECRETS = [
   "RESEND_API_KEY",
 ];
 const missing = RUNTIME_SECRETS.filter((name) => !env[name]?.trim());
-if (missing.length) {
-  console.error(
-    `Add these as build variables (Settings → Build → Variables and secrets): ${missing.join(", ")}`,
+if (missing.length)
+  console.warn(
+    `Not in build variables: ${missing.join(", ")}. The deploy keeps any value already saved as a Worker secret (Settings → Variables and Secrets).`,
   );
-  process.exit(1);
-}
+// The build only needs well-formed values to load the CMS config. Real values
+// are read from the Worker's secrets at runtime and are never bundled.
+if (mode === "build")
+  for (const name of missing) env[name] = `build-only-placeholder-${"x".repeat(32)}`;
 function run(command, args, extraEnv = {}) {
   const result = spawnSync(command, args, {
     stdio: "inherit",
@@ -47,22 +49,21 @@ if (mode === "build") {
   } else {
     console.log("MIGRATION_DATABASE_URI is not set; skipping migrations.");
   }
-  mkdirSync(".open-next", { recursive: true });
-  const file = ".open-next/runtime-secrets.json";
-  writeFileSync(
-    file,
-    JSON.stringify(
-      Object.fromEntries(
-        [...RUNTIME_SECRETS, ...OPTIONAL_SECRETS]
-          .filter((k) => env[k]?.trim())
-          .map((k) => [k, env[k]]),
-      ),
-    ),
-    { mode: 0o600 },
+  const secrets = Object.fromEntries(
+    [...RUNTIME_SECRETS, ...OPTIONAL_SECRETS]
+      .filter((k) => process.env[k]?.trim())
+      .map((k) => [k, process.env[k]]),
   );
-  try {
-    run("npx", ["wrangler", "deploy", "--secrets-file", file]);
-  } finally {
-    rmSync(file, { force: true });
+  if (!Object.keys(secrets).length) {
+    run("npx", ["wrangler", "deploy"]);
+  } else {
+    mkdirSync(".open-next", { recursive: true });
+    const file = ".open-next/runtime-secrets.json";
+    writeFileSync(file, JSON.stringify(secrets), { mode: 0o600 });
+    try {
+      run("npx", ["wrangler", "deploy", "--secrets-file", file]);
+    } finally {
+      rmSync(file, { force: true });
+    }
   }
 }
