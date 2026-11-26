@@ -27,6 +27,13 @@ export default function Privacy() {
         newsroom roles; staff credentials are not published as contributor
         profiles.
       </p>
+      <h2>Newsletter</h2>
+      <p>
+        If you subscribe, we store your email address with our email provider,
+        Resend, and use it only to send The Index newsletter. Every email has
+        an unsubscribe link, and you can ask us to delete your address at any
+        time.
+      </p>
       <h2>Put Us On tips</h2>
       <p>
         If you send a tip, we store the name or handle and link you share, your

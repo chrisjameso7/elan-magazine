@@ -11,6 +11,7 @@ import {
 import StoryCard, { StoryDate, TakeRow, storyMeta } from "@/components/StoryCard";
 import StoryImage from "@/components/StoryImage";
 import Verdict from "@/components/Verdict";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import { brand } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
@@ -219,6 +220,8 @@ export default async function Home() {
             <p className="empty-note">The first list isn’t out yet.</p>
           )}
         </section>
+
+        <NewsletterSignup />
 
         {more.length > 0 && (
           <section className="more" aria-labelledby="more-title">

@@ -46,6 +46,8 @@
     "S3_REGION": "eu-west-1",
     "S3_BUCKET": "elan-media",
     "S3_PREFIX": "lumiere-index/preview",
-    "LUMIERE_SENDER_EMAIL": "noreply@lumiereindex.com"
+    "LUMIERE_SENDER_EMAIL": "noreply@lumiereindex.com",
+    "RESEND_NEWSLETTER_SEGMENT_ID": "740497f0-6566-42f0-a679-92cdf3e9086a",
+    "RESEND_NEWSLETTER_TOPIC_ID": "51e9b5aa-9def-448f-8918-1e4203bc31b0"
   }
 }

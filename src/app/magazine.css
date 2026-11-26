@@ -1312,3 +1312,72 @@ textarea {
   outline: 3px solid var(--signal);
   outline-offset: 2px;
 }
+
+/* Newsletter */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.newsletter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px 40px;
+  padding: 44px 0;
+  border-bottom: var(--rule);
+}
+.newsletter > div {
+  flex: 1 1 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.newsletter h2 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(34px, 4.2vw, 52px);
+  line-height: 1;
+}
+.newsletter form {
+  flex: 1 1 380px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.newsletter input[type="email"] {
+  flex: 1 1 220px;
+  height: 52px;
+  border: var(--rule);
+  border-radius: 999px;
+  background: var(--white);
+  padding: 0 18px;
+  font-size: 16px;
+}
+.newsletter .pill {
+  height: 52px;
+}
+.newsletter .hp {
+  position: absolute;
+  left: -9999px;
+}
+.newsletter .form-error {
+  flex-basis: 100%;
+}
+.newsletter-done {
+  font-weight: 700;
+  font-size: 18px;
+}
+.newsletter--compact {
+  border: var(--rule);
+  background: var(--highlight);
+  padding: 24px;
+  margin-top: 8px;
+}
+.newsletter--compact h2 {
+  font-size: 30px;
+}

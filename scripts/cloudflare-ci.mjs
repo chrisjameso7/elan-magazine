@@ -12,7 +12,7 @@ if (!["build", "deploy"].includes(mode)) {
 const vars = JSON.parse(readFileSync("wrangler.jsonc", "utf8")).vars ?? {};
 const env = { ...vars, ...process.env };
 // DATABASE_URI is optional: the Worker reaches Postgres through Hyperdrive.
-const OPTIONAL_SECRETS = ["DATABASE_URI"];
+const OPTIONAL_SECRETS = ["DATABASE_URI", "RESEND_CONTACTS_KEY"];
 const RUNTIME_SECRETS = [
   "PAYLOAD_SECRET",
   "S3_ACCESS_KEY_ID",

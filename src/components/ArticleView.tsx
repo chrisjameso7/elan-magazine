@@ -6,6 +6,7 @@ import StoryTools from "./StoryTools";
 import StoryImage from "./StoryImage";
 import StoryCard from "./StoryCard";
 import Verdict from "./Verdict";
+import NewsletterSignup from "./NewsletterSignup";
 import { safeURL } from "@/lib/safe-url";
 const object = <T,>(value: unknown): T | undefined =>
   typeof value === "object" && value ? (value as T) : undefined;
@@ -97,6 +98,11 @@ export default function ArticleView({
           </div>
         </aside>
       </div>
+      {!preview && (
+        <div className="wrap">
+          <NewsletterSignup compact />
+        </div>
+      )}
       {related.length > 0 && (
         <section className="related wrap" aria-labelledby="related-title">
           <h2 id="related-title" className="kicker kicker--ink">

@@ -242,3 +242,30 @@ test("Writer applications are validated and cleaned", async () => {
   assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: ["music"], pitch: "too short" }));
   assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: ["music"], pitch: "x".repeat(50), website: "spam" }));
 });
+test("Newsletter sign-up opts readers in to The Index topic only", async () => {
+  const { parseSubscriber, subscribe } = await import("../src/lib/newsletter");
+  assert.deepEqual(parseSubscriber({ email: " Ada@Example.com " }), { email: "ada@example.com" });
+  assert.ok("error" in parseSubscriber({ email: "nope" }));
+  assert.ok("error" in parseSubscriber({ email: "a@b.co", website: "spam" }));
+  const config = { apiKey: "k", segmentId: "seg", topicId: "top" };
+  const calls: { url: string; method?: string; body?: string }[] = [];
+  const ok = async (url: string, init?: RequestInit) => {
+    calls.push({ url, method: init?.method, body: init?.body as string });
+    return new Response("{}", { status: 200 });
+  };
+  await subscribe("ada@example.com", config, ok as typeof fetch);
+  assert.equal(calls.length, 1);
+  const created = JSON.parse(calls[0].body!);
+  assert.deepEqual(created.segments, [{ id: "seg" }]);
+  assert.deepEqual(created.topics, [{ id: "top", subscription: "opt_in" }]);
+  calls.length = 0;
+  const existing = async (url: string, init?: RequestInit) => {
+    calls.push({ url, method: init?.method, body: init?.body as string });
+    return new Response("{}", { status: init?.method === "POST" && url.endsWith("/contacts") ? 409 : 200 });
+  };
+  await subscribe("ada@example.com", config, existing as typeof fetch);
+  assert.deepEqual(calls.map((c) => c.method), ["POST", "POST", "PATCH"]);
+  assert.match(calls[1].url, /\/contacts\/ada%40example\.com\/segments\/seg$/);
+  assert.equal(created.unsubscribed, false);
+  await assert.rejects(subscribe("ada@example.com", config, (async () => new Response("{}", { status: 500 })) as typeof fetch));
+});
