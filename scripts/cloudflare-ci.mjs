@@ -38,7 +38,18 @@ function run(command, args, extraEnv = {}) {
 }
 
 if (mode === "build") {
+  // Webpack treats node_modules as immutable and caches compiled packages by
+  // version, so a restored cache would skip our postinstall patches to Payload.
+  rmSync(".next/cache/webpack", { recursive: true, force: true });
   run("npm", ["run", "build:cloudflare"]);
+  const handler = readFileSync(
+    ".open-next/server-functions/default/handler.mjs",
+    "utf8",
+  );
+  if (!handler.includes("pbkdf2-sha256-w100k:")) {
+    console.error("The Workers password-hashing patch is missing from the bundle.");
+    process.exit(1);
+  }
 } else {
   if (env.MIGRATION_DATABASE_URI?.trim()) {
     console.log("Applying newsroom database migrations…");
