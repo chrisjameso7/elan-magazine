@@ -11,7 +11,7 @@
     "test": "tsx --test tests/*.test.ts",
     "payload": "payload",
     "verify": "npm run test && npm run lint && npm run typecheck && npm run build",
-    "postinstall": "node scripts/patch-deepmerge.mjs && node scripts/patch-opennext-windows.mjs",
+    "postinstall": "node scripts/patch-deepmerge.mjs && node scripts/patch-opennext-windows.mjs && node scripts/patch-payload-workers-hash.mjs",
     "build:cloudflare": "node scripts/patch-opennext-windows.mjs && opennextjs-cloudflare build",
     "preview:cloudflare": "opennextjs-cloudflare preview",
     "deploy:cloudflare": "npm run build:cloudflare && opennextjs-cloudflare deploy",
