@@ -55,7 +55,7 @@ export default async function TheIndexPage() {
           })}
         </ol>
       ) : (
-        <p className="empty-note">The first Index publishes this Thursday.</p>
+        <p className="empty-note">The first list isn’t out yet. It comes out on a Thursday.</p>
       )}
       <section className="tip-banner" aria-labelledby="tip-title">
         <h2 id="tip-title">

@@ -46,7 +46,7 @@ export default function WriteForUs() {
             </ol>
           </div>
           <p className="small">
-            Only want to tip us off about someone? <Link className="underline" href="/put-us-on">Put us on</Link>
+            Only want to tip us off about someone? <Link className="underline" href="/put-us-on">Put us on</Link>.
             <br />
             Read our <Link className="underline" href="/standards">editorial standards</Link> first.
           </p>

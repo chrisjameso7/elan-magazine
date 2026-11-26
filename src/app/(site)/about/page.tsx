@@ -46,7 +46,8 @@ export default function About() {
       <p>
         Pitches and enquiries:{" "}
         <a href={`mailto:${brand.contactEmail}`}>{brand.contactEmail}</a>. Know
-        someone we should cover? <Link href="/put-us-on">Put us on</Link> Want to write for us? <Link href="/write-for-us">Apply here</Link>
+        someone we should cover? <Link href="/put-us-on">Put us on</Link>. Want to write for us?{" "}
+        <Link href="/write-for-us">Apply here</Link>.
       </p>
       <p>
         <Link href="/standards">Read our editorial standards</Link>

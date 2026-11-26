@@ -100,7 +100,7 @@ export default function ArticleView({
       {related.length > 0 && (
         <section className="related wrap" aria-labelledby="related-title">
           <h2 id="related-title" className="kicker kicker--ink">
-            If you liked this, you’ll like
+            More from {section?.name || "The Index"}
           </h2>
           <div className="card-grid">
             {related.map((s) => (

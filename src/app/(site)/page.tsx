@@ -45,7 +45,12 @@ export default async function Home() {
   const takePicks = takes.docs.filter((s) => s.id !== lead?.id).slice(0, 4);
   takePicks.forEach((s) => used.add(s.id));
   const more = pick(latest.docs, 6);
-  const today = formatDate(new Date().toISOString(), "short");
+  const today = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Africa/Lagos",
+  }).format(new Date());
   const leadMeta = lead ? storyMeta(lead) : undefined;
 
   return (
@@ -87,7 +92,7 @@ export default async function Home() {
                 <StoryImage media={leadMeta.media} priority sizes="(min-width:1000px) 600px, 100vw" />
               ) : (
                 <div className="lead-placeholder" aria-hidden="true">
-                  the{" "}<i>index</i>
+                  <span>the <i>index</i></span>
                 </div>
               )}
               {leadMeta?.media?.credit && (
@@ -114,7 +119,7 @@ export default async function Home() {
             </div>
             <div className="lead-visual">
               <div className="lead-placeholder" aria-hidden="true">
-                the{" "}<i>index</i>
+                <span>the <i>index</i></span>
               </div>
             </div>
           </section>
@@ -125,7 +130,7 @@ export default async function Home() {
             <h2 id="called-title">
               <i>Called it.</i>
             </h2>
-            <p>Who we wrote about before everyone else did. Dated and kept.</p>
+            <p>People we wrote about before everyone else did, with the date we first covered them.</p>
           </div>
           <div className="called-cells">
             {called.map((d) => (
@@ -211,7 +216,7 @@ export default async function Home() {
               })}
             </ol>
           ) : (
-            <p className="empty-note">The first Index publishes this Thursday.</p>
+            <p className="empty-note">The first list isn’t out yet.</p>
           )}
         </section>
 
@@ -219,7 +224,7 @@ export default async function Home() {
           <section className="more" aria-labelledby="more-title">
             <div className="section-head">
               <h2 id="more-title">Latest</h2>
-              <Link href="/search">Everything</Link>
+              <Link href="/search">All stories</Link>
             </div>
             <div className="card-grid">
               {more.map((s) => (

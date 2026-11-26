@@ -438,7 +438,8 @@ textarea {
 /* Trio + cards */
 .trio {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   border-bottom: var(--rule);
 }
 .trio > * {
@@ -1146,7 +1147,7 @@ textarea {
     color: var(--signal-text);
   }
   .trio {
-    grid-template-columns: 1fr;
+    grid-auto-flow: row;
   }
   .trio > * {
     padding: 24px 0;

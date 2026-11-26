@@ -52,7 +52,7 @@ export default async function CalledIt() {
         </div>
       ) : (
         <p className="empty-note">
-          The wall starts with Issue 001. <Link className="underline" href="/put-us-on">Send us who should be first</Link>
+          The wall starts with Issue 001. <Link className="underline" href="/put-us-on">Tell us who should be first</Link>.
         </p>
       )}
     </main>
