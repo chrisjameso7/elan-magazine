@@ -27,7 +27,7 @@ export default function ArticleView({
     <main id="main-content" className="article">
       {preview && (
         <aside className="draft-banner">
-          Private preview — {article.reviewStatus}. This view can include
+          Private preview ({article.reviewStatus}). This view can include
           unpublished changes.
         </aside>
       )}
@@ -92,7 +92,7 @@ export default function ArticleView({
           <div className="aside-tip">
             <b>Know who’s next?</b>
             <Link className="underline" href="/put-us-on">
-              Put us on →
+              Put us on
             </Link>
           </div>
         </aside>

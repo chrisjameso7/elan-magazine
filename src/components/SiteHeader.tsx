@@ -45,12 +45,12 @@ export default function SiteHeader() {
             </Link>
           ))}
           <Link className="nav-tip" href="/put-us-on" onClick={close}>
-            Put us on →
+            Put us on
           </Link>
         </nav>
         <div className="header-actions">
           <Link className="pill pill--signal" href="/put-us-on">
-            Put us on →
+            Put us on
           </Link>
           <Link className="icon-button" href="/search" aria-label="Search The Index">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">

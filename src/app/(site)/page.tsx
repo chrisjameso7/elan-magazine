@@ -79,7 +79,7 @@ export default async function Home() {
                 {lead.verdict && <Verdict value={lead.verdict} size="large" prefix />}
               </div>
               <Link className="arrow-link" href={`/news/${lead.slug}`}>
-                Read the story →
+                Read the story
               </Link>
             </div>
             <div className="lead-visual">
@@ -105,12 +105,11 @@ export default async function Home() {
                 Who’s next, <i>first.</i>
               </h1>
               <p className="lead-standfirst">
-                {brand.fullName}: criticism with a verdict, personal essays, and
-                the people we think culture will be talking about next — on
-                screen, online, on stage and on the page.
+                Reviews with a straight verdict, personal essays, and early
+                looks at people who are about to blow up.
               </p>
               <Link className="arrow-link" href="/put-us-on">
-                Tell us who we should be writing about →
+                Tell us who we should be writing about
               </Link>
             </div>
             <div className="lead-visual">
@@ -147,7 +146,7 @@ export default async function Home() {
               </span>
               <b>Your tip could be next</b>
               <Link className="underline" href="/put-us-on">
-                Send us a name →
+                Send us a name
               </Link>
             </div>
           </div>
@@ -170,7 +169,7 @@ export default async function Home() {
                   ))}
                 </ul>
                 <Link className="arrow-link" href="/sections/critique">
-                  All verdicts →
+                  All verdicts
                 </Link>
               </div>
             )}
@@ -186,12 +185,11 @@ export default async function Home() {
               Who’s rising <i>this week.</i>
             </h2>
             <p>
-              50 people and works across music, film, TV, the internet, style,
-              sport and books, ranked every Thursday. Public signals build the
-              shortlist. Our editors set the order.
+              Fifty names, ranked every Thursday. The numbers make the
+              shortlist and our editors set the order.
             </p>
             <Link className="pill pill--ink" href="/the-index">
-              See all 50 →
+              See all 50
             </Link>
           </div>
           {index.entries.length ? (
@@ -221,7 +219,7 @@ export default async function Home() {
           <section className="more" aria-labelledby="more-title">
             <div className="section-head">
               <h2 id="more-title">Latest</h2>
-              <Link href="/search">Everything →</Link>
+              <Link href="/search">Everything</Link>
             </div>
             <div className="card-grid">
               {more.map((s) => (
@@ -236,7 +234,7 @@ export default async function Home() {
             Know someone before everyone else does? <i>Put us on.</i>
           </h2>
           <Link className="pill pill--signal" href="/put-us-on">
-            Send a tip →
+            Send a tip
           </Link>
         </section>
       </div>

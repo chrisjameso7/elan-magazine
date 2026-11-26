@@ -10,9 +10,9 @@ export const applicationBeats = {
   culture: "Culture",
 } as const;
 export const applicationFormats = {
-  discover: "Discover — first looks at who’s next",
-  critique: "Critique — reviews with a verdict",
-  personal: "Personal — first-person essays",
+  discover: "Discover",
+  critique: "Critique",
+  personal: "Personal",
 } as const;
 export type ApplicationInput = {
   name: string;

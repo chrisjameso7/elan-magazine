@@ -7,7 +7,7 @@ export const brand = {
   contactEmail:'contact@lumiereindex.com',
   privacyEmail:'privacy@lumiereindex.com',
   domain: 'lumiereindex.com',
-  description: 'A culture magazine of criticism, personal essays and discovery — finding who’s next before everyone else.',
+  description: 'A culture magazine. Reviews with a straight verdict, personal essays, and early looks at people who are about to blow up.',
 } as const;
 
 export function siteURL(value = process.env.NEXT_PUBLIC_SITE_URL): URL {

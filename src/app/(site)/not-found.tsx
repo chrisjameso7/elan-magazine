@@ -10,7 +10,7 @@ export default function NotFound() {
           </h1>
           <p>It may have moved, or it was never here.</p>
           <Link className="arrow-link" href="/">
-            Back to The Index →
+            Back to The Index
           </Link>
         </div>
       </header>

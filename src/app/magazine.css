@@ -366,9 +366,7 @@ textarea {
   font-family: var(--serif);
   font-size: clamp(64px, 9vw, 128px);
   color: var(--paper);
-  background:
-    radial-gradient(circle at 70% 30%, rgba(255, 90, 31, 0.35), transparent 55%),
-    #1e1c1a;
+  background: #1e1c1a;
 }
 .photo-credit {
   position: absolute;

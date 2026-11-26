@@ -18,9 +18,8 @@ export default async function CalledIt() {
             <i>Called it.</i>
           </h1>
           <p>
-            Everyone we wrote about early: actors, creators, designers, writers,
-            athletes and artists. Dated the day we first covered them, so you
-            can check our work.
+            Everyone we wrote about early, with the date we first covered them.
+            Check our work.
           </p>
         </div>
       </header>
@@ -44,7 +43,7 @@ export default async function CalledIt() {
                 )}
                 {story?.slug && (
                   <Link className="underline" href={`/news/${story.slug}`}>
-                    Read what we wrote →
+                    Read what we wrote
                   </Link>
                 )}
               </article>
@@ -53,7 +52,7 @@ export default async function CalledIt() {
         </div>
       ) : (
         <p className="empty-note">
-          The wall starts with Issue 001. <Link className="underline" href="/put-us-on">Send us who should be first →</Link>
+          The wall starts with Issue 001. <Link className="underline" href="/put-us-on">Send us who should be first</Link>
         </p>
       )}
     </main>

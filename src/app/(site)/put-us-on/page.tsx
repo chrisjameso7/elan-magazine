@@ -14,9 +14,9 @@ export default function PutUsOn() {
             Who should we be writing about <i>right now?</i>
           </h1>
           <p>
-            Send us the actor, creator, designer, writer, athlete, show, film or
-            artist you’d bet on. Yourself counts. If we write about them, you
-            get credit on the Called It wall.
+            Tell us who you’d bet on. It can be anyone, in any field, and it can
+            be you. If we write about them, you get the credit on the Called It
+            wall.
           </p>
           <p className="small">
             We only use your email to credit you or ask a follow-up question.

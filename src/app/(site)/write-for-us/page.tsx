@@ -12,13 +12,12 @@ export default function WriteForUs() {
         <div>
           <span className="kicker kicker--ink">Write for us</span>
           <h1>
-            Your byline, <i>early.</i>
+            Write for <i>The Index.</i>
           </h1>
           <p>
-            We’re looking for writers who notice things first: the actor before
-            the breakout, the creator before the brand deal, the album before
-            the discourse. No CV needed. Experience matters less than taste and
-            a voice people want to read.
+            We want writers who spot people early and can explain why they
+            matter. You don’t need a CV or a list of bylines. Send one good
+            pitch.
           </p>
         </div>
       </header>
@@ -28,16 +27,13 @@ export default function WriteForUs() {
             <span className="kicker kicker--ink">What we publish</span>
             <ul>
               <li>
-                <b>Discover</b>: first looks at people we think are next, in
-                any part of culture.
+                <b>Discover</b>: first looks at people we think are next.
               </li>
               <li>
-                <b>Critique</b>: reviews that end in a clear verdict: Obsessed,
-                On repeat, It’s fine or Skip.
+                <b>Critique</b>: reviews that end in a verdict.
               </li>
               <li>
-                <b>Personal</b>: first-person essays about the culture that
-                shaped you.
+                <b>Personal</b>: first-person essays.
               </li>
             </ul>
           </div>
@@ -50,7 +46,7 @@ export default function WriteForUs() {
             </ol>
           </div>
           <p className="small">
-            Only want to tip us off about someone? <Link className="underline" href="/put-us-on">Put us on →</Link>
+            Only want to tip us off about someone? <Link className="underline" href="/put-us-on">Put us on</Link>
             <br />
             Read our <Link className="underline" href="/standards">editorial standards</Link> first.
           </p>

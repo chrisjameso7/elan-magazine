@@ -38,10 +38,10 @@ export default function ApplicationForm() {
   if (state === "sent")
     return (
       <div className="tip-sent" role="status">
-        <b>Application in. Thank you.</b>
+        <b>Thanks, we’ve got it.</b>
         <p>
-          An editor reads every one. If your pitch fits, we’ll email you within
-          two weeks to talk about your first piece.
+          An editor reads every application. If your pitch fits, we’ll email
+          you within two weeks.
         </p>
       </div>
     );
@@ -90,18 +90,18 @@ export default function ApplicationForm() {
       <label>
         Your first pitch
         <small>
-          The story you’d write first: who or what, the angle, and why now. A
-          few sentences is enough.
+          Who or what you’d write about first, and why now. A few sentences
+          is enough.
         </small>
         <textarea name="pitch" required maxLength={1500} rows={6} />
       </label>
       <label>
         Why you? <small>(optional)</small>
-        <textarea name="whyThem" maxLength={800} rows={3} placeholder="What you know, what you’ve spotted early, what you can’t stop talking about" />
+        <textarea name="whyThem" maxLength={800} rows={3} placeholder="What do you know that most people don’t?" />
       </label>
       <label>
         Writing samples <small>(optional, links)</small>
-        <textarea name="samples" maxLength={1000} rows={3} placeholder="Blog, Substack, threads, school paper, anything you’ve written" />
+        <textarea name="samples" maxLength={1000} rows={3} placeholder="Links to anything you’ve written" />
       </label>
       <label className="hp" aria-hidden="true">
         Website

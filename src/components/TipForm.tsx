@@ -32,8 +32,8 @@ export default function TipForm() {
   if (state === "sent")
     return (
       <div className="tip-sent" role="status">
-        <b>Got it. Thank you.</b>
-        <p>We read every tip. If we write about them, you’ll see it on the Called It wall.</p>
+        <b>Thanks, we’ve got it.</b>
+        <p>We read every tip. If we write about them, we’ll credit you on the Called It wall.</p>
         <button type="button" className="pill pill--ink" onClick={() => setState("idle")}>
           Send another
         </button>

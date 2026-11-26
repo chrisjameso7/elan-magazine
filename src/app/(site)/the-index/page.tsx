@@ -27,10 +27,10 @@ export default async function TheIndexPage() {
             The Index <i className="signal-text">50</i>
           </h1>
           <p>
-            The people and work moving culture this week, across music, film,
-            TV, the internet, style, sport and books. Public signals build the
-            shortlist. Editors set the order, and can move anyone up or down
-            five places, never more.
+            Who and what people are talking about this week. We build the
+            shortlist from public numbers like views, streams and search
+            interest. Editors set the order, and can move an entry five places
+            at most.
           </p>
         </div>
       </header>
@@ -62,7 +62,7 @@ export default async function TheIndexPage() {
           Someone missing? <i>Put us on.</i>
         </h2>
         <Link className="pill pill--signal" href="/put-us-on">
-          Send a tip →
+          Send a tip
         </Link>
       </section>
     </main>
