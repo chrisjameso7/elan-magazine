@@ -229,3 +229,16 @@ test("Cloudflare Workers can run on Hyperdrive alone, other hosts still need DAT
   assert.throws(() => cmsEnvironment({ ...base, LUMIERE_HOSTING_PLATFORM: "cloudflare", PAYLOAD_SECRET: "short" }), /PAYLOAD_SECRET/);
   assert.throws(() => cmsEnvironment(base), /DATABASE_URI/);
 });
+test("Writer applications are validated and cleaned", async () => {
+  const { parseApplication } = await import("../src/lib/applications");
+  const ok = parseApplication({ name: " Ada ", email: "ADA@Example.com", beats: ["music", "nope", "music"], formats: ["critique"], pitch: "A first look at a director shooting sci-fi on a borrowed phone in Lagos." });
+  assert.ok("application" in ok);
+  if ("application" in ok) {
+    assert.equal(ok.application.email, "ada@example.com");
+    assert.deepEqual(ok.application.beats, ["music"]);
+  }
+  assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: [], pitch: "x".repeat(50) }));
+  assert.ok("error" in parseApplication({ name: "Ada", email: "bad", beats: ["music"], pitch: "x".repeat(50) }));
+  assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: ["music"], pitch: "too short" }));
+  assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: ["music"], pitch: "x".repeat(50), website: "spam" }));
+});

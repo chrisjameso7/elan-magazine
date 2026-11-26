@@ -13,6 +13,7 @@ export default function SiteFooter() {
         </div>
         <nav className="footer-links" aria-label="Publication information">
           <Link href="/put-us-on">Put us on</Link>
+          <Link href="/write-for-us">Write for us</Link>
           <Link href="/about">About</Link>
           <Link href="/contact">Contact</Link>
           <Link href="/standards">Editorial standards</Link>

@@ -75,6 +75,7 @@ export interface Config {
     'index-entries': IndexEntry;
     discoveries: Discovery;
     tips: Tip;
+    applications: Application;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     'index-entries': IndexEntriesSelect<false> | IndexEntriesSelect<true>;
     discoveries: DiscoveriesSelect<false> | DiscoveriesSelect<true>;
     tips: TipsSelect<false> | TipsSelect<true>;
+    applications: ApplicationsSelect<false> | ApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -383,6 +385,31 @@ export interface Tip {
   createdAt: string;
 }
 /**
+ * Applications from the Write for us page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applications".
+ */
+export interface Application {
+  id: number;
+  name: string;
+  email: string;
+  location?: string | null;
+  beats?: ('music' | 'film-tv' | 'internet' | 'style' | 'books' | 'art' | 'sport' | 'gaming' | 'culture')[] | null;
+  formats?: ('discover' | 'critique' | 'personal')[] | null;
+  pitch: string;
+  whyThem?: string | null;
+  samples?: string | null;
+  social?: string | null;
+  status: 'new' | 'reviewing' | 'accepted' | 'declined';
+  /**
+   * Private to staff.
+   */
+  editorNotes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -437,6 +464,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tips';
         value: number | Tip;
+      } | null)
+    | ({
+        relationTo: 'applications';
+        value: number | Application;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -673,6 +704,25 @@ export interface TipsSelect<T extends boolean = true> {
   isSelf?: T;
   email?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "applications_select".
+ */
+export interface ApplicationsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  location?: T;
+  beats?: T;
+  formats?: T;
+  pitch?: T;
+  whyThem?: T;
+  samples?: T;
+  social?: T;
+  status?: T;
+  editorNotes?: T;
   updatedAt?: T;
   createdAt?: T;
 }

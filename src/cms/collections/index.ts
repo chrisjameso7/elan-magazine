@@ -598,6 +598,78 @@ export const Tips: CollectionConfig = {
     },
   ],
 };
+export const beatOptions = [
+  { label: "Music", value: "music" },
+  { label: "Film & TV", value: "film-tv" },
+  { label: "Internet", value: "internet" },
+  { label: "Style", value: "style" },
+  { label: "Books", value: "books" },
+  { label: "Art & design", value: "art" },
+  { label: "Sport", value: "sport" },
+  { label: "Gaming", value: "gaming" },
+  { label: "Culture", value: "culture" },
+];
+export const Applications: CollectionConfig = {
+  slug: "applications",
+  labels: { singular: "Writer application", plural: "Writer applications" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["name", "status", "beats", "createdAt"],
+    description: "Applications from the Write for us page.",
+  },
+  defaultSort: "-createdAt",
+  access: {
+    read: staffOnly,
+    create: () => false,
+    update: staffOnly,
+    delete: adminOnly,
+  },
+  fields: [
+    { name: "name", type: "text", required: true, maxLength: 120 },
+    { name: "email", type: "email", required: true },
+    { name: "location", type: "text", maxLength: 120 },
+    {
+      name: "beats",
+      label: "What they want to cover",
+      type: "select",
+      hasMany: true,
+      options: beatOptions,
+    },
+    {
+      name: "formats",
+      type: "select",
+      hasMany: true,
+      options: [
+        { label: "Discover (first looks)", value: "discover" },
+        { label: "Critique (reviews)", value: "critique" },
+        { label: "Personal (essays)", value: "personal" },
+      ],
+    },
+    { name: "pitch", label: "First pitch", type: "textarea", required: true, maxLength: 1500 },
+    { name: "whyThem", label: "Why them", type: "textarea", maxLength: 800 },
+    { name: "samples", label: "Writing samples", type: "textarea", maxLength: 1000 },
+    { name: "social", label: "Social handle", type: "text", maxLength: 120 },
+    {
+      name: "status",
+      type: "select",
+      required: true,
+      defaultValue: "new",
+      options: [
+        { label: "New", value: "new" },
+        { label: "Reviewing", value: "reviewing" },
+        { label: "Accepted", value: "accepted" },
+        { label: "Declined", value: "declined" },
+      ],
+      admin: { position: "sidebar" },
+    },
+    {
+      name: "editorNotes",
+      type: "textarea",
+      admin: { position: "sidebar", description: "Private to staff." },
+    },
+  ],
+};
 export const newsroomCollections = [
   Users,
   Contributors,
@@ -607,4 +679,5 @@ export const newsroomCollections = [
   IndexEntries,
   Discoveries,
   Tips,
+  Applications,
 ];

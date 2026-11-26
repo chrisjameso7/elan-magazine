@@ -35,6 +35,13 @@ export default function Privacy() {
         use your email only to credit you or ask a follow-up question, and we
         never publish it. To have a tip deleted, email us at the address below.
       </p>
+      <h2>Writer applications</h2>
+      <p>
+        If you apply to write for us, we store your name, email, optional
+        location and social handle, the topics and formats you choose, your
+        pitch and any samples you link. Editors use this only to review your
+        application and reply. Ask us at the address below to delete it.
+      </p>
       <h2>Correspondence and media</h2>
       <p>
         If you email us, we receive the information you choose to send. Uploaded

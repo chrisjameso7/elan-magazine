@@ -1225,3 +1225,91 @@ textarea {
     transition: none !important;
   }
 }
+
+/* Write for us */
+.apply-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  padding-bottom: 64px;
+}
+.apply-notes {
+  flex: 0 1 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  font-size: 15px;
+}
+.apply-notes ul,
+.apply-notes ol {
+  margin: 10px 0 0;
+  padding-left: 1.2em;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.apply-form {
+  flex: 1 1 520px;
+  border: var(--rule);
+  background: var(--white);
+  padding: clamp(20px, 3vw, 36px);
+}
+.apply-form .form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.apply-form textarea {
+  border: var(--rule);
+  background: var(--paper);
+  padding: 12px 14px;
+  font-size: 16px;
+  border-radius: 0;
+  resize: vertical;
+}
+.apply-form label small {
+  font-weight: 400;
+  color: var(--soft);
+}
+.chips {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chips legend {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  padding: 0;
+}
+.tip-form .chip {
+  flex-direction: row;
+  gap: 0;
+  font-weight: 600;
+}
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border: var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--paper);
+}
+.chip input:checked + span {
+  background: var(--highlight);
+}
+.chip input:focus-visible + span {
+  outline: 3px solid var(--signal);
+  outline-offset: 2px;
+}
