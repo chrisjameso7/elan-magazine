@@ -21,7 +21,7 @@ export default async function SectionPage({ params, searchParams }: Props) {
   const { slug } = await params;
   const s = await getSection(slug);
   const configured = editorialNavigation.find(
-    (item) => item.slug === slug && item.slug !== "",
+    (item) => item.slug === slug && item.href.startsWith("/sections/"),
   );
   if (!s && !configured) notFound();
   const query = await searchParams;
@@ -36,6 +36,7 @@ export default async function SectionPage({ params, searchParams }: Props) {
   if (page > stories.totalPages && page > 1) notFound();
   return (
     <StoryArchive
+      kicker="Section"
       title={configured?.label || s!.name}
       intro={s?.description || undefined}
       stories={stories.docs}

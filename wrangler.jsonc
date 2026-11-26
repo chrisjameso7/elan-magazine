@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lumiere-index-staging",
+  "name": "lumiere-index",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-11-16",
   "compatibility_flags": [
@@ -15,7 +15,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "lumiere-index-staging"
+      "service": "lumiere-index"
     }
   ],
   "account_id": "2241635031ca0144e2e6556ef78bfec1",
@@ -33,7 +33,7 @@
     "LUMIERE_DATABASE_MODE": "hosted",
     "LUMIERE_DATABASE_HOST": "aws-0-eu-west-1.pooler.supabase.com",
     "LUMIERE_OWNER_EMAIL": "jamesadebajo7@gmail.com",
-    "CMS_SERVER_URL": "https://lumiere-index-staging.phonefuturist.workers.dev",
+    "CMS_SERVER_URL": "https://lumiere-index.phonefuturist.workers.dev",
     "NEXT_PUBLIC_SITE_URL": "https://lumiereindex.com",
     "LUMIERE_LAUNCH_READY": "false",
     "MEDIA_STORAGE": "s3",

@@ -1,12 +1,13 @@
 export const brand = {
-  name: 'Lumière Index',
-  tagline: 'News that matters.',
+  name: 'The Index',
+  fullName: 'The Index Magazine by Lumière',
+  tagline: 'Who’s next, first.',
   operator:'Lumiere Media and Entertainment Technologies',
   founder:'Chris James',
   contactEmail:'contact@lumiereindex.com',
   privacyEmail:'privacy@lumiereindex.com',
   domain: 'lumiereindex.com',
-  description: 'An entertainment and pop-culture newsroom.',
+  description: 'A culture magazine of criticism, personal essays and discovery — finding who’s next before everyone else.',
 } as const;
 
 export function siteURL(value = process.env.NEXT_PUBLIC_SITE_URL): URL {

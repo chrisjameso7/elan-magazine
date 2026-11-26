@@ -12,7 +12,8 @@ import {
 import { safeURL } from "../src/lib/safe-url";
 import { editorialFingerprint } from "../src/cms/workflow";
 test("confirmed canonical domain and safe origin configuration", () => {
-  assert.equal(brand.name, "Lumière Index");
+  assert.equal(brand.name, "The Index");
+  assert.equal(brand.fullName, "The Index Magazine by Lumière");
   assert.equal(siteURL("").origin, "https://lumiereindex.com");
   for (const v of [
     "javascript:alert(1)",
@@ -203,4 +204,20 @@ test("Cloudflare hosting fails closed for local database configuration", () => {
       }),
     /local database/,
   );
+});
+test("Put Us On tips are validated, trimmed and protected from bots", async () => {
+  const { parseTip } = await import("../src/lib/tips");
+  const ok = parseTip({ name: "  Ada  ", link: "https://www.tiktok.com/@ada", why: "x".repeat(400), isSelf: true });
+  assert.ok("tip" in ok);
+  if ("tip" in ok) {
+    assert.equal(ok.tip.name, "Ada");
+    assert.equal(ok.tip.why?.length, 280);
+    assert.equal(ok.tip.isSelf, true);
+  }
+  assert.ok("error" in parseTip({ name: "Ada", link: "javascript:alert(1)" }));
+  assert.ok("error" in parseTip({ name: "Ada", link: "https://u:p@example.com" }));
+  assert.ok("error" in parseTip({ name: "A", link: "https://example.com" }));
+  assert.ok("error" in parseTip({ name: "Ada", link: "https://example.com", website: "spam" }));
+  assert.ok("error" in parseTip({ name: "Ada", link: "https://example.com", email: "nope" }));
+  assert.ok("error" in parseTip(null));
 });

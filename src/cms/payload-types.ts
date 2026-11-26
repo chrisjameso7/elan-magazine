@@ -72,6 +72,9 @@ export interface Config {
     sections: Section;
     media: Media;
     articles: Article;
+    'index-entries': IndexEntry;
+    discoveries: Discovery;
+    tips: Tip;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +87,9 @@ export interface Config {
     sections: SectionsSelect<false> | SectionsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    'index-entries': IndexEntriesSelect<false> | IndexEntriesSelect<true>;
+    discoveries: DiscoveriesSelect<false> | DiscoveriesSelect<true>;
+    tips: TipsSelect<false> | TipsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -270,6 +276,10 @@ export interface Article {
   contributors: (number | Contributor)[];
   format: 'news' | 'feature' | 'interview' | 'analysis' | 'review';
   /**
+   * The Index verdict scale. Shown on reviews only.
+   */
+  verdict?: ('obsessed' | 'on-repeat' | 'fine' | 'skip') | null;
+  /**
    * Save approval before publishing.
    */
   reviewStatus: 'draft' | 'in_review' | 'changes_requested' | 'approved';
@@ -301,6 +311,76 @@ export interface Article {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * One row per place on the weekly list. Signals build the shortlist; editors may move an entry at most five places.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "index-entries".
+ */
+export interface IndexEntry {
+  id: number;
+  /**
+   * The Thursday this list is published.
+   */
+  week: string;
+  rank: number;
+  name: string;
+  category: 'music' | 'film-tv' | 'internet' | 'style' | 'books' | 'art' | 'sport' | 'gaming' | 'culture';
+  why: string;
+  movement: 'new' | 'up' | 'down' | 'same';
+  /**
+   * How many places it moved since last week.
+   */
+  places?: number | null;
+  story?: (number | null) | Article;
+  /**
+   * Only published entries appear on the site.
+   */
+  isPublished?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Our receipts: who we covered before everyone else. Only use figures you can source.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "discoveries".
+ */
+export interface Discovery {
+  id: number;
+  name: string;
+  story?: (number | null) | Article;
+  firstCoveredAt: string;
+  /**
+   * What the figure counts, e.g. followers, monthly listeners, subscribers, views. Leave blank to show a milestone instead.
+   */
+  metricLabel?: string | null;
+  metricThen?: string | null;
+  metricNow?: string | null;
+  /**
+   * Only published entries appear on the site.
+   */
+  isPublished?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Reader tips from the Put Us On form.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tips".
+ */
+export interface Tip {
+  id: number;
+  name: string;
+  link: string;
+  why?: string | null;
+  isSelf?: boolean | null;
+  email?: string | null;
+  status: 'new' | 'listening' | 'covered' | 'passed';
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -345,6 +425,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'articles';
         value: number | Article;
+      } | null)
+    | ({
+        relationTo: 'index-entries';
+        value: number | IndexEntry;
+      } | null)
+    | ({
+        relationTo: 'discoveries';
+        value: number | Discovery;
+      } | null)
+    | ({
+        relationTo: 'tips';
+        value: number | Tip;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -513,6 +605,7 @@ export interface ArticlesSelect<T extends boolean = true> {
   section?: T;
   contributors?: T;
   format?: T;
+  verdict?: T;
   reviewStatus?: T;
   assignedTo?: T;
   publishedAt?: T;
@@ -536,6 +629,52 @@ export interface ArticlesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "index-entries_select".
+ */
+export interface IndexEntriesSelect<T extends boolean = true> {
+  week?: T;
+  rank?: T;
+  name?: T;
+  category?: T;
+  why?: T;
+  movement?: T;
+  places?: T;
+  story?: T;
+  isPublished?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "discoveries_select".
+ */
+export interface DiscoveriesSelect<T extends boolean = true> {
+  name?: T;
+  story?: T;
+  firstCoveredAt?: T;
+  metricLabel?: T;
+  metricThen?: T;
+  metricNow?: T;
+  isPublished?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tips_select".
+ */
+export interface TipsSelect<T extends boolean = true> {
+  name?: T;
+  link?: T;
+  why?: T;
+  isSelf?: T;
+  email?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

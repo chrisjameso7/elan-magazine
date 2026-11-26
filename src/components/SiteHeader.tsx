@@ -1,95 +1,36 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import BrandLogo from "./BrandLogo";
 import { brand } from "@/lib/brand";
 import { editorialNavigation } from "@/lib/navigation";
 export default function SiteHeader() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  useEffect(() => {
-    const update = () => setScrolled(window.scrollY > 24);
-    update();
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, []);
+  const close = () => setMenuOpen(false);
   return (
-    <header
-      className={`site-header ${pathname === "/" ? "site-header--cover" : ""} ${scrolled ? "site-header--scrolled" : ""} ${menuOpen ? "site-header--menu-open" : ""}`}
-    >
+    <header className={`site-header ${menuOpen ? "is-open" : ""}`}>
       <a className="skip-link" href="#main-content">
         Skip to content
       </a>
-      <div className="newsroom-topline">
-        <span>{brand.tagline}</span>
-        <p>Entertainment. Culture. Everything in between.</p>
+      <div className="header-inner wrap">
         <Link
-          className="header-search"
-          href="/search"
-          aria-label="Search Lumière Index"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="18"
-            height="18"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden="true"
-          >
-            <circle cx="10.5" cy="10.5" r="6.5" />
-            <path d="m16 16 5 5" />
-          </svg>
-        </Link>
-      </div>
-      <div className="header-inner">
-        <Link
-          className="wordmark"
+          className="header-logo"
           href="/"
-          aria-label={`${brand.name} home`}
-          onClick={() => setMenuOpen(false)}
+          aria-label={`${brand.fullName} home`}
+          onClick={close}
         >
           <BrandLogo />
         </Link>
-        <button
-          className="mobile-menu-toggle"
-          type="button"
-          aria-expanded={menuOpen}
-          aria-controls="editorial-navigation"
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={
-            menuOpen ? "Close navigation menu" : "Open navigation menu"
-          }
-        >
-          <svg
-            aria-hidden="true"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            {menuOpen ? (
-              <path d="m5 5 14 14M19 5 5 19" />
-            ) : (
-              <path d="M3 6h18M3 12h18M3 18h18" />
-            )}
-          </svg>
-          <small>Menu</small>
-        </button>
         <nav
-          id="editorial-navigation"
+          id="site-navigation"
           className="site-nav"
-          aria-label="Main navigation"
+          aria-label="Sections"
           onKeyDown={(event) => {
             if (event.key === "Escape") {
-              setMenuOpen(false);
-              document
-                .querySelector<HTMLButtonElement>(".mobile-menu-toggle")
-                ?.focus();
+              close();
+              document.querySelector<HTMLButtonElement>(".menu-toggle")?.focus();
             }
           }}
         >
@@ -97,13 +38,39 @@ export default function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              onClick={() => setMenuOpen(false)}
+              onClick={close}
               aria-current={pathname === item.href ? "page" : undefined}
             >
               {item.label}
             </Link>
           ))}
+          <Link className="nav-tip" href="/put-us-on" onClick={close}>
+            Put us on →
+          </Link>
         </nav>
+        <div className="header-actions">
+          <Link className="pill pill--signal" href="/put-us-on">
+            Put us on →
+          </Link>
+          <Link className="icon-button" href="/search" aria-label="Search The Index">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-4-4" />
+            </svg>
+          </Link>
+          <button
+            className="icon-button menu-toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="site-navigation"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" aria-hidden="true">
+              {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 8h16M4 16h16" />}
+            </svg>
+          </button>
+        </div>
       </div>
     </header>
   );

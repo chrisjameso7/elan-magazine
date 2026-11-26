@@ -1,13 +1,19 @@
-import Link from 'next/link';
+import Link from "next/link";
 export default function NotFound() {
   return (
-    <main id="main-content" className="shell about-page">
-      <p className="eyebrow">404</p>
-      <h1>Page not found.</h1>
-      <p>The page may have moved or is not available.</p>
-      <Link className="text-link" href="/">
-        Return to Lumière Index ↗
-      </Link>
+    <main id="main-content" className="wrap">
+      <header className="page-head">
+        <div>
+          <span className="kicker kicker--ink">404</span>
+          <h1>
+            This page <i>isn’t on the list.</i>
+          </h1>
+          <p>It may have moved, or it was never here.</p>
+          <Link className="arrow-link" href="/">
+            Back to The Index →
+          </Link>
+        </div>
+      </header>
     </main>
   );
 }

@@ -311,6 +311,21 @@ export const Articles: CollectionConfig = {
       admin: { position: "sidebar" },
     },
     {
+      name: "verdict",
+      type: "select",
+      options: [
+        { label: "Obsessed", value: "obsessed" },
+        { label: "On repeat", value: "on-repeat" },
+        { label: "It's fine", value: "fine" },
+        { label: "Skip", value: "skip" },
+      ],
+      admin: {
+        position: "sidebar",
+        condition: (data) => data?.format === "review",
+        description: "The Index verdict scale. Shown on reviews only.",
+      },
+    },
+    {
       name: "reviewStatus",
       type: "select",
       defaultValue: "draft",
@@ -431,10 +446,165 @@ export const Articles: CollectionConfig = {
     },
   ],
 };
+const publishedOrStaff = ({ req }: { req: PayloadRequest }) =>
+  isStaff(req.user) ? true : { isPublished: { equals: true } };
+const publishedField: Field = {
+  name: "isPublished",
+  type: "checkbox",
+  defaultValue: false,
+  index: true,
+  admin: { position: "sidebar", description: "Only published entries appear on the site." },
+};
+export const IndexEntries: CollectionConfig = {
+  slug: "index-entries",
+  labels: { singular: "Index entry", plural: "The Index 50" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["week", "rank", "name", "category", "movement", "isPublished"],
+    description:
+      "One row per place on the weekly list. Signals build the shortlist; editors may move an entry at most five places.",
+  },
+  defaultSort: ["-week", "rank"],
+  access: {
+    read: publishedOrStaff,
+    create: editorOnly,
+    update: editorOnly,
+    delete: adminOnly,
+  },
+  fields: [
+    {
+      name: "week",
+      type: "date",
+      required: true,
+      index: true,
+      admin: { description: "The Thursday this list is published." },
+    },
+    { name: "rank", type: "number", required: true, min: 1, max: 50 },
+    { name: "name", type: "text", required: true, maxLength: 120 },
+    {
+      name: "category",
+      type: "select",
+      required: true,
+      defaultValue: "music",
+      options: [
+        { label: "Music", value: "music" },
+        { label: "Film & TV", value: "film-tv" },
+        { label: "Internet", value: "internet" },
+        { label: "Style", value: "style" },
+        { label: "Books", value: "books" },
+        { label: "Art & design", value: "art" },
+        { label: "Sport", value: "sport" },
+        { label: "Gaming", value: "gaming" },
+        { label: "Culture", value: "culture" },
+      ],
+    },
+    { name: "why", label: "Why this week", type: "text", required: true, maxLength: 160 },
+    {
+      name: "movement",
+      type: "select",
+      required: true,
+      defaultValue: "new",
+      options: [
+        { label: "New entry", value: "new" },
+        { label: "Up", value: "up" },
+        { label: "Down", value: "down" },
+        { label: "No change", value: "same" },
+      ],
+    },
+    {
+      name: "places",
+      type: "number",
+      min: 0,
+      max: 49,
+      admin: {
+        condition: (data) => data?.movement === "up" || data?.movement === "down",
+        description: "How many places it moved since last week.",
+      },
+    },
+    { name: "story", type: "relationship", relationTo: "articles" },
+    publishedField,
+  ],
+};
+export const Discoveries: CollectionConfig = {
+  slug: "discoveries",
+  labels: { singular: "Called It entry", plural: "Called It" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["name", "firstCoveredAt", "metricThen", "metricNow", "isPublished"],
+    description:
+      "Our receipts: who we covered before everyone else. Only use figures you can source.",
+  },
+  defaultSort: "-firstCoveredAt",
+  access: {
+    read: publishedOrStaff,
+    create: editorOnly,
+    update: editorOnly,
+    delete: adminOnly,
+  },
+  fields: [
+    { name: "name", type: "text", required: true, maxLength: 120 },
+    { name: "story", type: "relationship", relationTo: "articles" },
+    { name: "firstCoveredAt", type: "date", required: true },
+    {
+      name: "metricLabel",
+      type: "text",
+      maxLength: 40,
+      admin: {
+        description:
+          "What the figure counts, e.g. followers, monthly listeners, subscribers, views. Leave blank to show a milestone instead.",
+      },
+    },
+    { name: "metricThen", label: "Then (figure or milestone)", type: "text", maxLength: 60 },
+    { name: "metricNow", label: "Now (figure or milestone)", type: "text", maxLength: 60 },
+    publishedField,
+  ],
+};
+export const Tips: CollectionConfig = {
+  slug: "tips",
+  labels: { singular: "Tip", plural: "Put Us On tips" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["name", "status", "isSelf", "createdAt"],
+    description: "Reader tips from the Put Us On form.",
+  },
+  defaultSort: "-createdAt",
+  access: {
+    read: staffOnly,
+    create: () => false,
+    update: staffOnly,
+    delete: adminOnly,
+  },
+  fields: [
+    { name: "name", label: "Who", type: "text", required: true, maxLength: 120 },
+    { name: "link", type: "text", required: true, maxLength: 500 },
+    { name: "why", label: "Why now", type: "text", maxLength: 280 },
+    { name: "isSelf", label: "Sent by the person themselves", type: "checkbox", defaultValue: false },
+    { name: "email", type: "email" },
+    {
+      name: "status",
+      type: "select",
+      defaultValue: "new",
+      required: true,
+      options: [
+        { label: "New", value: "new" },
+        { label: "Listening", value: "listening" },
+        { label: "Covered", value: "covered" },
+        { label: "Passed", value: "passed" },
+      ],
+      admin: { position: "sidebar" },
+    },
+  ],
+};
 export const newsroomCollections = [
   Users,
   Contributors,
   Sections,
   Media,
   Articles,
+  IndexEntries,
+  Discoveries,
+  Tips,
 ];

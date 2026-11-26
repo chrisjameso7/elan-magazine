@@ -21,7 +21,7 @@ export default buildConfig({
       baseDir: process.cwd(),
       importMapFile: "src/app/(cms)/admin/importMap.js",
     },
-    meta: { titleSuffix: " | Lumière Newsroom" },
+    meta: { titleSuffix: " | The Index newsroom" },
     components: {
       graphics: {
         Logo: "/src/cms/components/Brand#Logo",

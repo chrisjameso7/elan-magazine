@@ -7,9 +7,9 @@ export const metadata = {
 export default function Privacy() {
   return (
     <InfoPage title="Privacy." eyebrow="Publication information">
-      <p>Updated 16 November 2026</p>
+      <p>Updated 26 November 2026</p>
       <p>
-        {brand.name} is operated by {brand.operator}. This page describes the
+        {brand.fullName} is operated by {brand.operator}. This page describes the
         information handled by the publication website and private newsroom.
       </p>
       <h2>Website requests</h2>
@@ -27,6 +27,14 @@ export default function Privacy() {
         newsroom roles; staff credentials are not published as contributor
         profiles.
       </p>
+      <h2>Put Us On tips</h2>
+      <p>
+        If you send a tip, we store the name or handle and link you share, your
+        one-line reason, whether it is your own work, and your email address
+        if you choose to give it. Editors use tips to decide what to cover. We
+        use your email only to credit you or ask a follow-up question, and we
+        never publish it. To have a tip deleted, email us at the address below.
+      </p>
       <h2>Correspondence and media</h2>
       <p>
         If you email us, we receive the information you choose to send. Uploaded
@@ -43,11 +51,10 @@ export default function Privacy() {
       </p>
       <h2>Service providers</h2>
       <p>
-        The application uses Netlify hosting, Supabase database and media
+        The application uses Cloudflare hosting, Supabase database and media
         storage, and Resend for newsroom account-recovery emails. These
         providers process information required to deliver their services.
-        Editorial photographs are served from the publication’s media library;
-        design-study sample imagery is not part of the launch news edition.
+        Editorial photographs are served from the publication’s media library.
       </p>
       <h2>Requests</h2>
       <p>
