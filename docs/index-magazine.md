@@ -37,12 +37,23 @@ It then re-applies the schema hardening: it revokes access from PUBLIC, anon and
 
 Local verification: the migration applied cleanly on a fresh Postgres 16 database, rolled down and applied again. A seeded review, an Index week, a Called It entry and tips from both the API and the browser form all rendered correctly at 1440px and 390px with no horizontal overflow.
 
-## Cloudflare
+## Cloudflare (Workers Builds, no local terminal)
 
-`wrangler.jsonc` now names the production Worker `lumiere-index`. The old staging Worker was deleted. For the first deploy, `CMS_SERVER_URL` is the workers.dev origin.
+`wrangler.jsonc` names the production Worker `lumiere-index`. Cloudflare builds and deploys it from GitHub.
 
-1. Apply the migration to the hosted schema with the migration (DDL) credentials: `npm run payload -- migrate`.
-2. Add the provider secrets: `wrangler secret put` for each of `DATABASE_URI`, `PAYLOAD_SECRET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` and `RESEND_API_KEY`, with `--name lumiere-index`.
-3. Deploy with `npm run deploy:cloudflare`.
-4. Verify on workers.dev: `/api/health`, home, admin sign-in, the draft → review → publish flow, an image upload, a password-reset email and a tip.
-5. Attach `lumiereindex.com` and `www.lumiereindex.com` as Worker custom domains. This replaces the Netlify A and CNAME records. Then set `CMS_SERVER_URL=https://lumiereindex.com` and `LUMIERE_LAUNCH_READY=true` and redeploy. Netlify stays as the rollback.
+- Build command: `npm run ci:cloudflare:build`
+- Deploy command: `npm run ci:cloudflare:deploy`
+
+Add these encrypted build variables in the Worker's Settings → Build → Variables and secrets:
+
+| Name | Value |
+| --- | --- |
+| `DATABASE_URI` | Restricted `lumiere_runtime` Supabase pooler string. The Worker reaches the database through Hyperdrive; this value must still pass validation. |
+| `PAYLOAD_SECRET` | The newsroom secret, at least 32 characters |
+| `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Supabase Storage S3 key |
+| `RESEND_API_KEY` | Resend sending key |
+| `MIGRATION_DATABASE_URI` | Optional. The admin `postgres` session-pooler string. When it is set, each deploy runs `payload migrate` first. |
+
+`scripts/cloudflare-ci.mjs` reads the non-secret settings from the `wrangler.jsonc` vars. It fails with a list of any missing names. It uploads the five runtime secrets with `wrangler deploy --secrets-file`, using a temporary file that it deletes afterwards. This avoids the dashboard's "Add variable and deploy" flow, which fails for this bundle size.
+
+After verification on workers.dev, attach `lumiereindex.com` and `www.lumiereindex.com` as custom domains. This replaces the Netlify A and CNAME records. Then set `CMS_SERVER_URL=https://lumiereindex.com` and `LUMIERE_LAUNCH_READY=true` in `wrangler.jsonc`. Netlify stays as the rollback.
