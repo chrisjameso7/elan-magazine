@@ -21,5 +21,5 @@ export function cloudflarePostgresPool(connectionString: string) {
       connectionTimeoutMillis: 20000,
     };
   }
-  return postgresPool(connectionString);
+  return postgresPool(connectionString || undefined);
 }

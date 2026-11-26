@@ -221,3 +221,11 @@ test("Put Us On tips are validated, trimmed and protected from bots", async () =
   assert.ok("error" in parseTip({ name: "Ada", link: "https://example.com", email: "nope" }));
   assert.ok("error" in parseTip(null));
 });
+test("Cloudflare Workers can run on Hyperdrive alone, other hosts still need DATABASE_URI", () => {
+  const base = { PAYLOAD_SECRET: "x".repeat(40), LUMIERE_OWNER_EMAIL: "owner@lumiere.test" };
+  const cf = cmsEnvironment({ ...base, LUMIERE_HOSTING_PLATFORM: "cloudflare" });
+  assert.equal(cf.uri, "");
+  assert.equal(cf.hyperdriveOnly, true);
+  assert.throws(() => cmsEnvironment({ ...base, LUMIERE_HOSTING_PLATFORM: "cloudflare", PAYLOAD_SECRET: "short" }), /PAYLOAD_SECRET/);
+  assert.throws(() => cmsEnvironment(base), /DATABASE_URI/);
+});

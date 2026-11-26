@@ -11,8 +11,9 @@ if (!["build", "deploy"].includes(mode)) {
 }
 const vars = JSON.parse(readFileSync("wrangler.jsonc", "utf8")).vars ?? {};
 const env = { ...vars, ...process.env };
+// DATABASE_URI is optional: the Worker reaches Postgres through Hyperdrive.
+const OPTIONAL_SECRETS = ["DATABASE_URI"];
 const RUNTIME_SECRETS = [
-  "DATABASE_URI",
   "PAYLOAD_SECRET",
   "S3_ACCESS_KEY_ID",
   "S3_SECRET_ACCESS_KEY",
@@ -50,7 +51,13 @@ if (mode === "build") {
   const file = ".open-next/runtime-secrets.json";
   writeFileSync(
     file,
-    JSON.stringify(Object.fromEntries(RUNTIME_SECRETS.map((k) => [k, env[k]]))),
+    JSON.stringify(
+      Object.fromEntries(
+        [...RUNTIME_SECRETS, ...OPTIONAL_SECRETS]
+          .filter((k) => env[k]?.trim())
+          .map((k) => [k, env[k]]),
+      ),
+    ),
     { mode: 0o600 },
   );
   try {

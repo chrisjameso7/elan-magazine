@@ -48,7 +48,7 @@ Add these encrypted build variables in the Worker's Settings → Build → Varia
 
 | Name | Value |
 | --- | --- |
-| `DATABASE_URI` | Restricted `lumiere_runtime` Supabase pooler string. The Worker reaches the database through Hyperdrive; this value must still pass validation. |
+| `DATABASE_URI` | Optional on Cloudflare. The Worker reaches the database only through its Hyperdrive binding. |
 | `PAYLOAD_SECRET` | The newsroom secret, at least 32 characters |
 | `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | Supabase Storage S3 key |
 | `RESEND_API_KEY` | Resend sending key |
