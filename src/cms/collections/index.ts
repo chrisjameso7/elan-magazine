@@ -49,7 +49,7 @@ export const Users: CollectionConfig = {
     maxLoginAttempts: 5,
     lockTime: 600000,
     forgotPassword: {
-      generateEmailSubject: () => "Reset your Lumière Index newsroom password",
+      generateEmailSubject: () => "Reset your password for The Index newsroom",
       generateEmailHTML: (args) => {
         if (!args?.token) throw new Error("Recovery token is required.");
         return recoveryEmail({ token: args.token, name: args.user?.name });
