@@ -8,6 +8,10 @@
     "global_fetch_strictly_public"
   ],
   "workers_dev": true,
+  "routes": [
+    { "pattern": "lumiereindex.com", "custom_domain": true },
+    { "pattern": "www.lumiereindex.com", "custom_domain": true }
+  ],
   "observability": { "enabled": true, "head_sampling_rate": 1 },
   "assets": {
     "directory": ".open-next/assets",
@@ -34,9 +38,9 @@
     "LUMIERE_DATABASE_MODE": "hosted",
     "LUMIERE_DATABASE_HOST": "aws-0-eu-west-1.pooler.supabase.com",
     "LUMIERE_OWNER_EMAIL": "jamesadebajo7@gmail.com",
-    "CMS_SERVER_URL": "https://lumiere-index.phonefuturist.workers.dev",
+    "CMS_SERVER_URL": "https://lumiereindex.com",
     "NEXT_PUBLIC_SITE_URL": "https://lumiereindex.com",
-    "LUMIERE_LAUNCH_READY": "false",
+    "LUMIERE_LAUNCH_READY": "true",
     "MEDIA_STORAGE": "s3",
     "S3_ENDPOINT": "https://wpqsmcczmdbzvsioydmy.storage.supabase.co/storage/v1/s3",
     "S3_REGION": "eu-west-1",
