@@ -49,6 +49,10 @@ if (mode === "build") {
   } else {
     console.log("MIGRATION_DATABASE_URI is not set; skipping migrations.");
   }
+  // OpenNext's deploy step starts a local Wrangler proxy that insists on a
+  // local stand-in for the Hyperdrive binding. It is never deployed or used.
+  env.CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE ||=
+    "postgres://placeholder:placeholder@127.0.0.1:5432/placeholder";
   const secrets = Object.fromEntries(
     [...RUNTIME_SECRETS, ...OPTIONAL_SECRETS]
       .filter((k) => process.env[k]?.trim())
