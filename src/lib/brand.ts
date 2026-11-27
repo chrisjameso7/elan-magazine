@@ -2,7 +2,7 @@ export const brand = {
   name: 'The Index',
   fullName: 'The Index Magazine by Lumière',
   tagline: 'Who’s next, first.',
-  operator:'Lumiere Media and Entertainment Technologies',
+  operator:'Lumiere Media',
   founder:'Chris James',
   contactEmail:'contact@lumiereindex.com',
   privacyEmail:'privacy@lumiereindex.com',
