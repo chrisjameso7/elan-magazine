@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props) {
           alt: hero.alt,
         },
       ]
-    : undefined;
+    : [{ url: "/brand/og.png", width: 1200, height: 630, type: "image/png", alt: "The Index" }];
   return a
     ? {
         title: a.title,
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props) {
           images,
         },
         twitter: {
-          card: images ? "summary_large_image" : "summary",
+          card: "summary_large_image",
           title: a.title,
           description: a.standfirst,
           images,
