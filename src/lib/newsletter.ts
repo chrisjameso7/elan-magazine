@@ -84,6 +84,7 @@ export function welcomeEmailHTML() {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#F4F1EA"><tr><td align="center" style="padding:32px 16px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:2px solid #121212">
 <tr><td style="padding:28px 28px 8px;border-bottom:3px solid #FF5A1F">
+<a href="https://lumiereindex.com" style="text-decoration:none"><img src="https://lumiereindex.com/brand/email-mark.png" alt="The Index" width="56" height="56" style="display:block;width:56px;height:56px;border:0;margin:0 0 14px"></a>
 <p style="margin:0;font:28px/1 Georgia,'Times New Roman',serif;color:#121212">the <i>index</i></p>
 <p style="margin:6px 0 16px;font:bold 10px/1 Arial,Helvetica,sans-serif;letter-spacing:2px;color:#4A463F">MAGAZINE BY LUMIÈRE</p></td></tr>
 <tr><td style="padding:28px">
