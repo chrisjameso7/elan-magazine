@@ -22,7 +22,8 @@ export default function SiteFooter() {
           <Link href="/admin">Newsroom sign-in</Link>
         </nav>
         <p className="footer-legal">
-          © 2026 {brand.operator}. {brand.fullName}.
+          © 2026 Lumiere Index. All rights reserved.
+          <br />A Lumiere publication.
         </p>
       </div>
     </footer>
