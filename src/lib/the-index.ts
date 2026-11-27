@@ -3,30 +3,38 @@ import { cache } from "react";
 import { getCMS } from "./cms";
 import type { Discovery, IndexEntry } from "@/cms/payload-types";
 
-/** The most recent published week of The Index, ranked. */
+/** The most recent week whose entries are all published, ranked. */
 export const getLatestIndex = cache(async (limit = 50) => {
   const cms = await getCMS();
-  const latest = await cms.find({
+  const recent = await cms.find({
     collection: "index-entries",
     user: null,
     overrideAccess: false,
     depth: 0,
-    limit: 1,
+    limit: 200,
     sort: "-week",
     select: { week: true },
   });
-  const week = latest.docs[0]?.week;
-  if (!week) return { week: null, entries: [] as IndexEntry[] };
-  const result = await cms.find({
-    collection: "index-entries",
-    user: null,
-    overrideAccess: false,
-    depth: 1,
-    limit,
-    sort: "rank",
-    where: { week: { equals: week } },
-  });
-  return { week, entries: result.docs };
+  const weeks = [...new Set(recent.docs.map((d) => d.week))];
+  for (const week of weeks) {
+    const unpublished = await cms.count({
+      collection: "index-entries",
+      overrideAccess: true,
+      where: { and: [{ week: { equals: week } }, { isPublished: { not_equals: true } }] },
+    });
+    if (unpublished.totalDocs) continue;
+    const result = await cms.find({
+      collection: "index-entries",
+      user: null,
+      overrideAccess: false,
+      depth: 1,
+      limit,
+      sort: "rank",
+      where: { week: { equals: week } },
+    });
+    return { week, entries: result.docs };
+  }
+  return { week: null, entries: [] as IndexEntry[] };
 });
 
 export const getDiscoveries = cache(async (limit = 24) => {

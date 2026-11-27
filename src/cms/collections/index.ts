@@ -1,4 +1,5 @@
 import { recoveryEmail } from "../recovery-email";
+import { indexEntryRules } from "../index-entries";
 import type { CollectionConfig, Field, PayloadRequest } from "payload";
 import {
   isAdmin,
@@ -472,13 +473,18 @@ export const IndexEntries: CollectionConfig = {
     update: editorOnly,
     delete: adminOnly,
   },
+  hooks: { beforeChange: [indexEntryRules] },
   fields: [
     {
       name: "week",
       type: "date",
       required: true,
       index: true,
-      admin: { description: "The Thursday this list is published." },
+      admin: {
+        date: { pickerAppearance: "dayOnly", displayFormat: "d MMM yyyy" },
+        description:
+          "The Thursday this list is published. A week only appears on the site once every entry in it is published.",
+      },
     },
     { name: "rank", type: "number", required: true, min: 1, max: 50 },
     { name: "name", type: "text", required: true, maxLength: 120 },
@@ -505,6 +511,10 @@ export const IndexEntries: CollectionConfig = {
       type: "select",
       required: true,
       defaultValue: "new",
+      admin: {
+        readOnly: true,
+        description: "Worked out on save by comparing names with last week's list.",
+      },
       options: [
         { label: "New entry", value: "new" },
         { label: "Up", value: "up" },
@@ -518,8 +528,9 @@ export const IndexEntries: CollectionConfig = {
       min: 0,
       max: 49,
       admin: {
+        readOnly: true,
         condition: (data) => data?.movement === "up" || data?.movement === "down",
-        description: "How many places it moved since last week.",
+        description: "How many places it moved since last week. Worked out on save.",
       },
     },
     { name: "story", type: "relationship", relationTo: "articles" },

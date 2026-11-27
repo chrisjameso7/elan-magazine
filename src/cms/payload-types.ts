@@ -327,16 +327,19 @@ export interface Article {
 export interface IndexEntry {
   id: number;
   /**
-   * The Thursday this list is published.
+   * The Thursday this list is published. A week only appears on the site once every entry in it is published.
    */
   week: string;
   rank: number;
   name: string;
   category: 'music' | 'film-tv' | 'internet' | 'style' | 'books' | 'art' | 'sport' | 'gaming' | 'culture';
   why: string;
+  /**
+   * Worked out on save by comparing names with last week's list.
+   */
   movement: 'new' | 'up' | 'down' | 'same';
   /**
-   * How many places it moved since last week.
+   * How many places it moved since last week. Worked out on save.
    */
   places?: number | null;
   story?: (number | null) | Article;

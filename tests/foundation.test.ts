@@ -283,3 +283,13 @@ test("Newsletter welcome email is plain, branded and never throws", async () => 
   assert.equal(sent.reply_to, "contact@lumiereindex.com");
   await sendWelcome("ada@example.com", "k", (async () => { throw new Error("down"); }) as typeof fetch);
 });
+test("Index weeks snap to one calendar day and movement is computed from last week", async () => {
+  const { normalizeWeek, movementFrom } = await import("../src/cms/index-entries");
+  assert.equal(normalizeWeek("2026-11-25T23:00:00.000Z"), "2026-11-26T12:00:00.000Z");
+  assert.equal(normalizeWeek("2026-11-26T13:45:00.000Z"), "2026-11-26T12:00:00.000Z");
+  assert.equal(normalizeWeek("nonsense"), undefined);
+  assert.deepEqual(movementFrom(4), { movement: "new", places: null });
+  assert.deepEqual(movementFrom(4, 9), { movement: "up", places: 5 });
+  assert.deepEqual(movementFrom(9, 4), { movement: "down", places: 5 });
+  assert.deepEqual(movementFrom(4, 4), { movement: "same", places: null });
+});
