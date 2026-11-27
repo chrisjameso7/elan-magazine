@@ -33,7 +33,7 @@ export function newsroomIntegrations(
       ? resendAdapter({
           apiKey: env.RESEND_API_KEY,
           defaultFromAddress: sender,
-          defaultFromName: "Lumière Index Newsroom",
+          defaultFromName: "The Index",
         })
       : undefined;
   const storage = s3Storage({

@@ -12,7 +12,8 @@ import {
 import { safeURL } from "../src/lib/safe-url";
 import { editorialFingerprint } from "../src/cms/workflow";
 test("confirmed canonical domain and safe origin configuration", () => {
-  assert.equal(brand.name, "Lumière Index");
+  assert.equal(brand.name, "The Index");
+  assert.equal(brand.fullName, "The Index Magazine by Lumière");
   assert.equal(siteURL("").origin, "https://lumiereindex.com");
   for (const v of [
     "javascript:alert(1)",
@@ -203,4 +204,92 @@ test("Cloudflare hosting fails closed for local database configuration", () => {
       }),
     /local database/,
   );
+});
+test("Put Us On tips are validated, trimmed and protected from bots", async () => {
+  const { parseTip } = await import("../src/lib/tips");
+  const ok = parseTip({ name: "  Ada  ", link: "https://www.tiktok.com/@ada", why: "x".repeat(400), isSelf: true });
+  assert.ok("tip" in ok);
+  if ("tip" in ok) {
+    assert.equal(ok.tip.name, "Ada");
+    assert.equal(ok.tip.why?.length, 280);
+    assert.equal(ok.tip.isSelf, true);
+  }
+  assert.ok("error" in parseTip({ name: "Ada", link: "javascript:alert(1)" }));
+  assert.ok("error" in parseTip({ name: "Ada", link: "https://u:p@example.com" }));
+  assert.ok("error" in parseTip({ name: "A", link: "https://example.com" }));
+  assert.ok("error" in parseTip({ name: "Ada", link: "https://example.com", website: "spam" }));
+  assert.ok("error" in parseTip({ name: "Ada", link: "https://example.com", email: "nope" }));
+  assert.ok("error" in parseTip(null));
+});
+test("Cloudflare Workers can run on Hyperdrive alone, other hosts still need DATABASE_URI", () => {
+  const base = { PAYLOAD_SECRET: "x".repeat(40), LUMIERE_OWNER_EMAIL: "owner@lumiere.test" };
+  const cf = cmsEnvironment({ ...base, LUMIERE_HOSTING_PLATFORM: "cloudflare" });
+  assert.equal(cf.uri, "");
+  assert.equal(cf.hyperdriveOnly, true);
+  assert.throws(() => cmsEnvironment({ ...base, LUMIERE_HOSTING_PLATFORM: "cloudflare", PAYLOAD_SECRET: "short" }), /PAYLOAD_SECRET/);
+  assert.throws(() => cmsEnvironment(base), /DATABASE_URI/);
+});
+test("Writer applications are validated and cleaned", async () => {
+  const { parseApplication } = await import("../src/lib/applications");
+  const ok = parseApplication({ name: " Ada ", email: "ADA@Example.com", beats: ["music", "nope", "music"], formats: ["critique"], pitch: "A first look at a director shooting sci-fi on a borrowed phone in Lagos." });
+  assert.ok("application" in ok);
+  if ("application" in ok) {
+    assert.equal(ok.application.email, "ada@example.com");
+    assert.deepEqual(ok.application.beats, ["music"]);
+  }
+  assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: [], pitch: "x".repeat(50) }));
+  assert.ok("error" in parseApplication({ name: "Ada", email: "bad", beats: ["music"], pitch: "x".repeat(50) }));
+  assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: ["music"], pitch: "too short" }));
+  assert.ok("error" in parseApplication({ name: "Ada", email: "ada@example.com", beats: ["music"], pitch: "x".repeat(50), website: "spam" }));
+});
+test("Newsletter sign-up opts readers in to The Index topic only", async () => {
+  const { parseSubscriber, subscribe } = await import("../src/lib/newsletter");
+  assert.deepEqual(parseSubscriber({ email: " Ada@Example.com " }), { email: "ada@example.com" });
+  assert.ok("error" in parseSubscriber({ email: "nope" }));
+  assert.ok("error" in parseSubscriber({ email: "a@b.co", website: "spam" }));
+  const config = { apiKey: "k", segmentId: "seg", topicId: "top" };
+  const calls: { url: string; method?: string; body?: string }[] = [];
+  const ok = async (url: string, init?: RequestInit) => {
+    calls.push({ url, method: init?.method, body: init?.body as string });
+    return new Response("{}", { status: 200 });
+  };
+  await subscribe("ada@example.com", config, ok as typeof fetch);
+  assert.equal(calls.length, 1);
+  const created = JSON.parse(calls[0].body!);
+  assert.deepEqual(created.segments, [{ id: "seg" }]);
+  assert.deepEqual(created.topics, [{ id: "top", subscription: "opt_in" }]);
+  calls.length = 0;
+  const existing = async (url: string, init?: RequestInit) => {
+    calls.push({ url, method: init?.method, body: init?.body as string });
+    return new Response("{}", { status: init?.method === "POST" && url.endsWith("/contacts") ? 409 : 200 });
+  };
+  await subscribe("ada@example.com", config, existing as typeof fetch);
+  assert.deepEqual(calls.map((c) => c.method), ["POST", "POST", "PATCH"]);
+  assert.match(calls[1].url, /\/contacts\/ada%40example\.com\/segments\/seg$/);
+  assert.equal(created.unsubscribed, false);
+  await assert.rejects(subscribe("ada@example.com", config, (async () => new Response("{}", { status: 500 })) as typeof fetch));
+});
+test("Newsletter welcome email is plain, branded and never throws", async () => {
+  const { sendWelcome, welcomeEmailHTML } = await import("../src/lib/newsletter");
+  const html = welcomeEmailHTML();
+  assert.match(html, /You’re on the <i>list\.<\/i>/);
+  assert.equal(html.includes("—"), false);
+  let sent: Record<string, unknown> = {};
+  await sendWelcome("ada@example.com", "k", (async (_u: string, init?: RequestInit) => {
+    sent = JSON.parse(init!.body as string);
+    return new Response("{}", { status: 200 });
+  }) as typeof fetch);
+  assert.equal(sent.from, "The Index <newsletter@lumiereindex.com>");
+  assert.equal(sent.reply_to, "contact@lumiereindex.com");
+  await sendWelcome("ada@example.com", "k", (async () => { throw new Error("down"); }) as typeof fetch);
+});
+test("Index weeks snap to one calendar day and movement is computed from last week", async () => {
+  const { normalizeWeek, movementFrom } = await import("../src/cms/index-entries");
+  assert.equal(normalizeWeek("2026-11-25T23:00:00.000Z"), "2026-11-26T12:00:00.000Z");
+  assert.equal(normalizeWeek("2026-11-26T13:45:00.000Z"), "2026-11-26T12:00:00.000Z");
+  assert.equal(normalizeWeek("nonsense"), undefined);
+  assert.deepEqual(movementFrom(4), { movement: "new", places: null });
+  assert.deepEqual(movementFrom(4, 9), { movement: "up", places: 5 });
+  assert.deepEqual(movementFrom(9, 4), { movement: "down", places: 5 });
+  assert.deepEqual(movementFrom(4, 4), { movement: "same", places: null });
 });

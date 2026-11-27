@@ -1,132 +1,250 @@
 import Link from "next/link";
+import { getSection, storyList, type PublicStory } from "@/lib/publication";
 import {
-  storyList,
-  populated,
-  type Media,
-  type Section,
-  type Contributor,
-} from "@/lib/publication";
-import BrandLogo from "@/components/BrandLogo";
-import CoverStory from "@/components/CoverStory";
-import StoryCard from "@/components/StoryCard";
+  formatDate,
+  getDiscoveries,
+  getLatestIndex,
+  indexCategories,
+  isoWeek,
+  movementLabel,
+} from "@/lib/the-index";
+import StoryCard, { StoryDate, TakeRow, storyMeta } from "@/components/StoryCard";
+import StoryImage from "@/components/StoryImage";
+import Verdict from "@/components/Verdict";
+import NewsletterSignup from "@/components/NewsletterSignup";
+import { brand } from "@/lib/brand";
+
 export const dynamic = "force-dynamic";
 export const metadata = { alternates: { canonical: "/" } };
+
+async function bySection(slug: string, limit: number) {
+  const section = await getSection(slug);
+  if (!section) return [] as PublicStory[];
+  return (await storyList({ section: section.id, limit })).docs;
+}
+
 export default async function Home() {
-  const [latest, featured] = await Promise.all([
-    storyList({ limit: 17 }),
-    storyList({ featured: true, limit: 1 }),
-  ]);
+  const [latest, featured, discover, personal, takes, index, called] =
+    await Promise.all([
+      storyList({ limit: 12 }),
+      storyList({ featured: true, limit: 1 }),
+      bySection("discover", 2),
+      bySection("personal", 2),
+      storyList({ reviewsOnly: true, limit: 5 }),
+      getLatestIndex(5),
+      getDiscoveries(2),
+    ]);
   const lead = featured.docs[0] || latest.docs[0];
-  const rest = latest.docs.filter((a) => a.id !== lead?.id);
-  const slides = (lead ? [lead, ...rest.slice(0, 3)] : []).map((story) => ({
-    id: story.id,
-    slug: story.slug,
-    title: story.title,
-    standfirst: story.standfirst,
-    label: populated<Section>(story.section)?.name || story.format,
-    authors:
-      story.contributors
-        ?.map((a) => populated<Contributor>(a)?.name)
-        .filter(Boolean)
-        .join(", ") || "",
-    publishedAt: story.publishedAt,
-    media: populated<Media>(story.hero),
-  }));
+  const used = new Set([lead?.id]);
+  const pick = (list: PublicStory[], n: number) => {
+    const out = list.filter((s) => !used.has(s.id)).slice(0, n);
+    out.forEach((s) => used.add(s.id));
+    return out;
+  };
+  const discoverPicks = pick(discover, 1);
+  const personalPicks = pick(personal, 1);
+  const takePicks = takes.docs.filter((s) => s.id !== lead?.id).slice(0, 4);
+  takePicks.forEach((s) => used.add(s.id));
+  const more = pick(latest.docs, 6);
+  const today = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "Africa/Lagos",
+  }).format(new Date());
+  const leadMeta = lead ? storyMeta(lead) : undefined;
+
   return (
-    <main
-      id="main-content"
-      className={`cover-edition ${lead ? "cover-edition--populated" : ""}`}
-    >
-      {lead ? (
-        <CoverStory slides={slides} />
-      ) : (
-        <section className="first-edition">
-          <div className="edition-intro-copy">
-            <p className="eyebrow">Entertainment. Culture. In focus.</p>
-            <h1>
-              News that
-              <br />
-              matters<span>.</span>
-            </h1>
-            <p className="edition-deck">
-              The people. The work. The stories behind it.
-            </p>
-            <p className="empty-edition">
-              Our first stories will appear here as they are published.
-            </p>
-            <Link className="cover-read" href="/about">
-              Meet Lumière Index <span aria-hidden="true">→</span>
-            </Link>
+    <main id="main-content">
+      <div className="strip">
+        <div className="wrap strip-inner">
+          <span>{today.toUpperCase()}</span>
+          <span>{brand.tagline.toUpperCase()}</span>
+          <span>LUMIEREINDEX.COM</span>
+        </div>
+      </div>
+      <div className="wrap">
+        {lead ? (
+          <section className="lead" aria-labelledby="lead-title">
+            <div className="lead-copy">
+              <p className="tags">
+                <span className="tag">{leadMeta?.section?.name || "The Index"}</span>
+                {lead.format !== "news" && <span>{lead.format}</span>}
+              </p>
+              <h1 id="lead-title">
+                <Link href={`/news/${lead.slug}`}>{lead.title}</Link>
+              </h1>
+              <p className="lead-standfirst">{lead.standfirst}</p>
+              <div className="lead-meta">
+                {leadMeta?.authors && (
+                  <span>
+                    By <b>{leadMeta.authors}</b>
+                  </span>
+                )}
+                <StoryDate value={lead.publishedAt} />
+                {lead.verdict && <Verdict value={lead.verdict} size="large" prefix />}
+              </div>
+              <Link className="arrow-link" href={`/news/${lead.slug}`}>
+                Read the story
+              </Link>
+            </div>
+            <div className="lead-visual">
+              {leadMeta?.media?.url ? (
+                <StoryImage media={leadMeta.media} priority sizes="(min-width:1000px) 600px, 100vw" />
+              ) : (
+                <div className="lead-placeholder" aria-hidden="true">
+                  <span>the <i>index</i></span>
+                </div>
+              )}
+              {leadMeta?.media?.credit && (
+                <span className="photo-credit">Photo: {leadMeta.media.credit}</span>
+              )}
+            </div>
+          </section>
+        ) : (
+          <section className="lead lead--empty" aria-labelledby="lead-title">
+            <div className="lead-copy">
+              <p className="tags">
+                <span className="tag">Issue 001</span>
+              </p>
+              <h1 id="lead-title">
+                Who’s next, <i>first.</i>
+              </h1>
+              <p className="lead-standfirst">
+                Reviews with a straight verdict, personal essays, and early
+                looks at people who are about to blow up.
+              </p>
+              <Link className="arrow-link" href="/put-us-on">
+                Tell us who we should be writing about
+              </Link>
+            </div>
+            <div className="lead-visual">
+              <div className="lead-placeholder" aria-hidden="true">
+                <span>the <i>index</i></span>
+              </div>
+            </div>
+          </section>
+        )}
+
+        <section className="called-strip" aria-labelledby="called-title">
+          <div className="called-intro">
+            <h2 id="called-title">
+              <i>Called it.</i>
+            </h2>
+            <p>People we wrote about before everyone else did, with the date we first covered them.</p>
           </div>
-          <div className="edition-brand-panel" aria-hidden="true">
-            <span className="edition-number">L / I — 001</span>
-            <BrandLogo light />
-            <p>
-              ENTERTAINMENT.
-              <br />
-              CULTURE.
-              <br />
-              EVERYTHING IN BETWEEN.
-            </p>
-            <span className="edition-panel-tag">
-              AN INDEPENDENT POINT OF VIEW
-            </span>
+          <div className="called-cells">
+            {called.map((d) => (
+              <div className="called-cell" key={d.id}>
+                <span className="receipt">First covered {formatDate(d.firstCoveredAt, "short")}</span>
+                <b>{d.name}</b>
+                {(d.metricThen || d.metricNow) && (
+                  <span>
+                    {d.metricThen && <>Then: {d.metricThen}{d.metricLabel ? ` ${d.metricLabel}` : ""}. </>}
+                    {d.metricNow && <>Now: {d.metricNow}{d.metricLabel ? ` ${d.metricLabel}` : ""}.</>}
+                  </span>
+                )}
+              </div>
+            ))}
+            <div className="called-cell">
+              <span className="receipt receipt--dashed">
+                {called.length ? "Could be next" : "Starts with this issue"}
+              </span>
+              <b>Your tip could be next</b>
+              <Link className="underline" href="/put-us-on">
+                Send us a name
+              </Link>
+            </div>
           </div>
         </section>
-      )}
-      <div className="editorial-body cover-content">
-        {rest.length > 0 && (
-          <section aria-label="Latest stories" className="cover-latest">
-            <div className="section-topline">
-              <h2>Latest stories</h2>
-              <Link href="/search">All stories →</Link>
-            </div>
-            <div className="cover-grid">
-              {rest.slice(0, 4).map((a) => (
-                <StoryCard key={a.id} story={a} cover />
-              ))}
-            </div>
+
+        {(discoverPicks.length > 0 || personalPicks.length > 0 || takePicks.length > 0) && (
+          <section className="trio" aria-label="This week">
+            {discoverPicks.map((s) => (
+              <StoryCard key={s.id} story={s} kicker="Discover · First look" />
+            ))}
+            {personalPicks.map((s) => (
+              <StoryCard key={s.id} story={s} kicker="Personal · Essay" />
+            ))}
+            {takePicks.length > 0 && (
+              <div className="takes">
+                <span className="kicker">Critique · Quick takes</span>
+                <ul>
+                  {takePicks.map((s) => (
+                    <TakeRow key={s.id} story={s} />
+                  ))}
+                </ul>
+                <Link className="arrow-link" href="/sections/critique">
+                  All verdicts
+                </Link>
+              </div>
+            )}
           </section>
         )}
-        <div
-          className={`edition-bottom ${rest[4] ? "" : "edition-bottom--single"}`}
-        >
-          {rest[4] && (
-            <section
-              className="edition-feature"
-              aria-label="More from the newsroom"
-            >
-              <StoryCard story={rest[4]} />
-            </section>
-          )}
-          <aside className="publication-note">
-            <p className="eyebrow">Lumière Index</p>
-            <h2>A closer look at the stories shaping culture.</h2>
+
+        <section className="index-teaser" aria-labelledby="index-title">
+          <div className="index-teaser-copy">
+            <span className="kicker kicker--ink">
+              The Index{index.week ? ` · Week ${isoWeek(index.week)}` : ""}
+            </span>
+            <h2 id="index-title">
+              Who’s rising <i>this week.</i>
+            </h2>
             <p>
-              News, features, interviews and analysis. Read our editorial
-              standards and find out how to reach the newsroom.
+              Fifty names, ranked every Thursday. The numbers make the
+              shortlist and our editors set the order.
             </p>
-            <Link className="text-link" href="/standards">
-              Our editorial standards →
+            <Link className="pill pill--ink" href="/the-index">
+              See all 50
             </Link>
-            <Link className="text-link" href="/contact">
-              Contact the newsroom →
-            </Link>
-          </aside>
-        </div>
-        {rest.length > 5 && (
-          <section className="home-section">
-            <div className="section-topline">
-              <h2>More from Lumière</h2>
-              <Link href="/search">All stories →</Link>
+          </div>
+          {index.entries.length ? (
+            <ol className="rank-list">
+              {index.entries.slice(0, 5).map((e) => {
+                const move = movementLabel(e);
+                return (
+                  <li key={e.id}>
+                    <span className="rank">{String(e.rank).padStart(2, "0")}</span>
+                    <span className="rank-name">
+                      <b>{e.name}</b>
+                      <small>{indexCategories[e.category]}</small>
+                    </span>
+                    <span className={`move ${e.movement === "new" ? "move--new" : ""}`} aria-label={move.label}>
+                      {move.text}
+                    </span>
+                  </li>
+                );
+              })}
+            </ol>
+          ) : (
+            <p className="empty-note">The first list isn’t out yet.</p>
+          )}
+        </section>
+
+        <NewsletterSignup />
+
+        {more.length > 0 && (
+          <section className="more" aria-labelledby="more-title">
+            <div className="section-head">
+              <h2 id="more-title">Latest</h2>
+              <Link href="/search">All stories</Link>
             </div>
-            <div className="news-grid">
-              {rest.slice(5).map((a) => (
-                <StoryCard key={a.id} story={a} />
+            <div className="card-grid">
+              {more.map((s) => (
+                <StoryCard key={s.id} story={s} />
               ))}
             </div>
           </section>
         )}
+
+        <section className="tip-banner" aria-labelledby="tip-title">
+          <h2 id="tip-title">
+            Know someone before everyone else does? <i>Put us on.</i>
+          </h2>
+          <Link className="pill pill--signal" href="/put-us-on">
+            Send a tip
+          </Link>
+        </section>
       </div>
     </main>
   );

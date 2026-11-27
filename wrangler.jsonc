@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lumiere-index-staging",
+  "name": "lumiere-index",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-11-16",
   "compatibility_flags": [
@@ -8,6 +8,11 @@
     "global_fetch_strictly_public"
   ],
   "workers_dev": true,
+  "routes": [
+    { "pattern": "lumiereindex.com", "custom_domain": true },
+    { "pattern": "www.lumiereindex.com", "custom_domain": true }
+  ],
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
@@ -15,7 +20,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "lumiere-index-staging"
+      "service": "lumiere-index"
     }
   ],
   "account_id": "2241635031ca0144e2e6556ef78bfec1",
@@ -33,14 +38,16 @@
     "LUMIERE_DATABASE_MODE": "hosted",
     "LUMIERE_DATABASE_HOST": "aws-0-eu-west-1.pooler.supabase.com",
     "LUMIERE_OWNER_EMAIL": "jamesadebajo7@gmail.com",
-    "CMS_SERVER_URL": "https://lumiere-index-staging.phonefuturist.workers.dev",
+    "CMS_SERVER_URL": "https://lumiereindex.com",
     "NEXT_PUBLIC_SITE_URL": "https://lumiereindex.com",
-    "LUMIERE_LAUNCH_READY": "false",
+    "LUMIERE_LAUNCH_READY": "true",
     "MEDIA_STORAGE": "s3",
     "S3_ENDPOINT": "https://wpqsmcczmdbzvsioydmy.storage.supabase.co/storage/v1/s3",
     "S3_REGION": "eu-west-1",
     "S3_BUCKET": "elan-media",
     "S3_PREFIX": "lumiere-index/preview",
-    "LUMIERE_SENDER_EMAIL": "contact@lumiereindex.com"
+    "LUMIERE_SENDER_EMAIL": "noreply@lumiereindex.com",
+    "RESEND_NEWSLETTER_SEGMENT_ID": "740497f0-6566-42f0-a679-92cdf3e9086a",
+    "RESEND_NEWSLETTER_TOPIC_ID": "51e9b5aa-9def-448f-8918-1e4203bc31b0"
   }
 }

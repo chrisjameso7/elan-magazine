@@ -12,7 +12,7 @@ test("recovery email escapes account data and encodes the native one-use reset U
   assert.ok(html.includes("/admin/reset/secret%2F%3F%26%22"));
   assert.ok(
     html.includes(
-      "https://lumiereindex.netlify.app/brand/lumiere-index-logo.png",
+      "https://lumiereindex.netlify.app/brand/email-mark.png",
     ),
   );
   assert.equal((html.match(/href=/g) || []).length, 2);

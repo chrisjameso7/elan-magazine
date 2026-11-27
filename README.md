@@ -1,6 +1,6 @@
 # Lumière Index
 
-News that matters. Entertainment and pop-culture newsroom, operated by Lumiere Media and Entertainment Technologies.
+The Index Magazine by Lumière, published by Lumiere Media.
 
 The application is Next.js 16 / React 19 / Payload 3 with PostgreSQL. Original Git history and the recoverable `backup/elan-before-lumiere-index-2026-11-06` branch are preserved. Work is on `codex/lumiere-index-foundation`; production cutover is a separate verified step.
 

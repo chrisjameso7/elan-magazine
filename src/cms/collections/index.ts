@@ -1,4 +1,5 @@
 import { recoveryEmail } from "../recovery-email";
+import { indexEntryRules } from "../index-entries";
 import type { CollectionConfig, Field, PayloadRequest } from "payload";
 import {
   isAdmin,
@@ -49,7 +50,7 @@ export const Users: CollectionConfig = {
     maxLoginAttempts: 5,
     lockTime: 600000,
     forgotPassword: {
-      generateEmailSubject: () => "Reset your Lumière Index newsroom password",
+      generateEmailSubject: () => "Reset your password for The Index newsroom",
       generateEmailHTML: (args) => {
         if (!args?.token) throw new Error("Recovery token is required.");
         return recoveryEmail({ token: args.token, name: args.user?.name });
@@ -311,6 +312,21 @@ export const Articles: CollectionConfig = {
       admin: { position: "sidebar" },
     },
     {
+      name: "verdict",
+      type: "select",
+      options: [
+        { label: "Obsessed", value: "obsessed" },
+        { label: "On repeat", value: "on-repeat" },
+        { label: "It's fine", value: "fine" },
+        { label: "Skip", value: "skip" },
+      ],
+      admin: {
+        position: "sidebar",
+        condition: (data) => data?.format === "review",
+        description: "The Index verdict scale. Shown on reviews only.",
+      },
+    },
+    {
       name: "reviewStatus",
       type: "select",
       defaultValue: "draft",
@@ -431,10 +447,248 @@ export const Articles: CollectionConfig = {
     },
   ],
 };
+const publishedOrStaff = ({ req }: { req: PayloadRequest }) =>
+  isStaff(req.user) ? true : { isPublished: { equals: true } };
+const publishedField: Field = {
+  name: "isPublished",
+  type: "checkbox",
+  defaultValue: false,
+  index: true,
+  admin: { position: "sidebar", description: "Only published entries appear on the site." },
+};
+export const IndexEntries: CollectionConfig = {
+  slug: "index-entries",
+  labels: { singular: "Index entry", plural: "The Index 50" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["week", "rank", "name", "category", "movement", "isPublished"],
+    description:
+      "One row per place on the weekly list. Signals build the shortlist; editors may move an entry at most five places.",
+  },
+  defaultSort: ["-week", "rank"],
+  access: {
+    read: publishedOrStaff,
+    create: editorOnly,
+    update: editorOnly,
+    delete: adminOnly,
+  },
+  hooks: { beforeChange: [indexEntryRules] },
+  fields: [
+    {
+      name: "week",
+      type: "date",
+      required: true,
+      index: true,
+      admin: {
+        date: { pickerAppearance: "dayOnly", displayFormat: "d MMM yyyy" },
+        description:
+          "The Thursday this list is published. A week only appears on the site once every entry in it is published.",
+      },
+    },
+    { name: "rank", type: "number", required: true, min: 1, max: 50 },
+    { name: "name", type: "text", required: true, maxLength: 120 },
+    {
+      name: "category",
+      type: "select",
+      required: true,
+      defaultValue: "music",
+      options: [
+        { label: "Music", value: "music" },
+        { label: "Film & TV", value: "film-tv" },
+        { label: "Internet", value: "internet" },
+        { label: "Style", value: "style" },
+        { label: "Books", value: "books" },
+        { label: "Art & design", value: "art" },
+        { label: "Sport", value: "sport" },
+        { label: "Gaming", value: "gaming" },
+        { label: "Culture", value: "culture" },
+      ],
+    },
+    { name: "why", label: "Why this week", type: "text", required: true, maxLength: 160 },
+    {
+      name: "movement",
+      type: "select",
+      required: true,
+      defaultValue: "new",
+      admin: {
+        readOnly: true,
+        description: "Worked out on save by comparing names with last week's list.",
+      },
+      options: [
+        { label: "New entry", value: "new" },
+        { label: "Up", value: "up" },
+        { label: "Down", value: "down" },
+        { label: "No change", value: "same" },
+      ],
+    },
+    {
+      name: "places",
+      type: "number",
+      min: 0,
+      max: 49,
+      admin: {
+        readOnly: true,
+        condition: (data) => data?.movement === "up" || data?.movement === "down",
+        description: "How many places it moved since last week. Worked out on save.",
+      },
+    },
+    { name: "story", type: "relationship", relationTo: "articles" },
+    publishedField,
+  ],
+};
+export const Discoveries: CollectionConfig = {
+  slug: "discoveries",
+  labels: { singular: "Called It entry", plural: "Called It" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["name", "firstCoveredAt", "metricThen", "metricNow", "isPublished"],
+    description:
+      "Our receipts: who we covered before everyone else. Only use figures you can source.",
+  },
+  defaultSort: "-firstCoveredAt",
+  access: {
+    read: publishedOrStaff,
+    create: editorOnly,
+    update: editorOnly,
+    delete: adminOnly,
+  },
+  fields: [
+    { name: "name", type: "text", required: true, maxLength: 120 },
+    { name: "story", type: "relationship", relationTo: "articles" },
+    { name: "firstCoveredAt", type: "date", required: true },
+    {
+      name: "metricLabel",
+      type: "text",
+      maxLength: 40,
+      admin: {
+        description:
+          "What the figure counts, e.g. followers, monthly listeners, subscribers, views. Leave blank to show a milestone instead.",
+      },
+    },
+    { name: "metricThen", label: "Then (figure or milestone)", type: "text", maxLength: 60 },
+    { name: "metricNow", label: "Now (figure or milestone)", type: "text", maxLength: 60 },
+    publishedField,
+  ],
+};
+export const Tips: CollectionConfig = {
+  slug: "tips",
+  labels: { singular: "Tip", plural: "Put Us On tips" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["name", "status", "isSelf", "createdAt"],
+    description: "Reader tips from the Put Us On form.",
+  },
+  defaultSort: "-createdAt",
+  access: {
+    read: staffOnly,
+    create: () => false,
+    update: staffOnly,
+    delete: adminOnly,
+  },
+  fields: [
+    { name: "name", label: "Who", type: "text", required: true, maxLength: 120 },
+    { name: "link", type: "text", required: true, maxLength: 500 },
+    { name: "why", label: "Why now", type: "text", maxLength: 280 },
+    { name: "isSelf", label: "Sent by the person themselves", type: "checkbox", defaultValue: false },
+    { name: "email", type: "email" },
+    {
+      name: "status",
+      type: "select",
+      defaultValue: "new",
+      required: true,
+      options: [
+        { label: "New", value: "new" },
+        { label: "Listening", value: "listening" },
+        { label: "Covered", value: "covered" },
+        { label: "Passed", value: "passed" },
+      ],
+      admin: { position: "sidebar" },
+    },
+  ],
+};
+export const beatOptions = [
+  { label: "Music", value: "music" },
+  { label: "Film & TV", value: "film-tv" },
+  { label: "Internet", value: "internet" },
+  { label: "Style", value: "style" },
+  { label: "Books", value: "books" },
+  { label: "Art & design", value: "art" },
+  { label: "Sport", value: "sport" },
+  { label: "Gaming", value: "gaming" },
+  { label: "Culture", value: "culture" },
+];
+export const Applications: CollectionConfig = {
+  slug: "applications",
+  labels: { singular: "Writer application", plural: "Writer applications" },
+  admin: {
+    useAsTitle: "name",
+    group: "The Index",
+    defaultColumns: ["name", "status", "beats", "createdAt"],
+    description: "Applications from the Write for us page.",
+  },
+  defaultSort: "-createdAt",
+  access: {
+    read: staffOnly,
+    create: () => false,
+    update: staffOnly,
+    delete: adminOnly,
+  },
+  fields: [
+    { name: "name", type: "text", required: true, maxLength: 120 },
+    { name: "email", type: "email", required: true },
+    { name: "location", type: "text", maxLength: 120 },
+    {
+      name: "beats",
+      label: "What they want to cover",
+      type: "select",
+      hasMany: true,
+      options: beatOptions,
+    },
+    {
+      name: "formats",
+      type: "select",
+      hasMany: true,
+      options: [
+        { label: "Discover (first looks)", value: "discover" },
+        { label: "Critique (reviews)", value: "critique" },
+        { label: "Personal (essays)", value: "personal" },
+      ],
+    },
+    { name: "pitch", label: "First pitch", type: "textarea", required: true, maxLength: 1500 },
+    { name: "whyThem", label: "Why them", type: "textarea", maxLength: 800 },
+    { name: "samples", label: "Writing samples", type: "textarea", maxLength: 1000 },
+    { name: "social", label: "Social handle", type: "text", maxLength: 120 },
+    {
+      name: "status",
+      type: "select",
+      required: true,
+      defaultValue: "new",
+      options: [
+        { label: "New", value: "new" },
+        { label: "Reviewing", value: "reviewing" },
+        { label: "Accepted", value: "accepted" },
+        { label: "Declined", value: "declined" },
+      ],
+      admin: { position: "sidebar" },
+    },
+    {
+      name: "editorNotes",
+      type: "textarea",
+      admin: { position: "sidebar", description: "Private to staff." },
+    },
+  ],
+};
 export const newsroomCollections = [
   Users,
   Contributors,
   Sections,
   Media,
   Articles,
+  IndexEntries,
+  Discoveries,
+  Tips,
+  Applications,
 ];

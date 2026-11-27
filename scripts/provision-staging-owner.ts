@@ -10,7 +10,7 @@ try{
  let owner=(await cms.find({collection:'users',where:{email:{equals:email}},overrideAccess:true,limit:1})).docs[0];
  if(!owner)owner=await cms.create({collection:'users',overrideAccess:true,context:{bootstrapOwner:true},data:{name:'Chris James',email,role:'administrator',password:randomBytes(32).toString('base64url')}});
  let contributor=(await cms.find({collection:'contributors',where:{slug:{equals:'chris-james'}},user:owner,overrideAccess:false,limit:1})).docs[0];
- if(!contributor)contributor=await cms.create({collection:'contributors',user:owner,overrideAccess:false,data:{name:'Chris James',slug:'chris-james',bio:'Founder and CEO of Lumiere Media and Entertainment Technologies.'}});
+ if(!contributor)contributor=await cms.create({collection:'contributors',user:owner,overrideAccess:false,data:{name:'Chris James',slug:'chris-james',bio:'Founder and CEO of Lumiere Media.'}});
  await cms.update({collection:'users',id:owner.id,user:owner,overrideAccess:false,data:{contributor:contributor.id}});
  for(const [i,[name,slug]]of [['Celebrity','celebrity'],['Film & TV','film-tv'],['Music','music'],['Culture','culture'],['Exclusives','exclusives']].entries()){
   if(!(await cms.find({collection:'sections',where:{slug:{equals:slug}},user:owner,overrideAccess:false,limit:1})).totalDocs)await cms.create({collection:'sections',user:owner,overrideAccess:false,data:{name,slug,navOrder:i}});

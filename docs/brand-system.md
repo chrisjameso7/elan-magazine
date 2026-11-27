@@ -1,3 +1,5 @@
+> Superseded on 26 November 2026 by docs/index-magazine.md (The Index Magazine by Lumière identity).
+
 # Lumière Index identity
 
 16 November 2026. The founder supplied a compact news-site reference and selected tomato orange. The design uses an original rectangular LI monogram, Arial typography for navigation/headlines, and Georgia for long article text. It does not reproduce USA Today marks or import celebrity material from the reference.

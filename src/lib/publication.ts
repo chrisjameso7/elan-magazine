@@ -16,6 +16,7 @@ export type PublicStory = Pick<
   | "updatedAt"
   | "format"
   | "isFeatured"
+  | "verdict"
 >;
 export function populated<T>(value: unknown): T | undefined {
   return typeof value === "object" && value ? (value as T) : undefined;
@@ -41,6 +42,7 @@ export async function storyList({
   page = 1,
   limit = 12,
   featured = false,
+  reviewsOnly = false,
 }: {
   q?: string;
   section?: number;
@@ -49,6 +51,7 @@ export async function storyList({
   page?: number;
   limit?: number;
   featured?: boolean;
+  reviewsOnly?: boolean;
 } = {}) {
   const cms = await getCMS();
   const where: Where = {
@@ -60,6 +63,7 @@ export async function storyList({
       ...(contributor ? [{ contributors: { contains: contributor } }] : []),
       ...(format ? [{ format: { equals: format } }] : []),
       ...(featured ? [{ isFeatured: { equals: true } }] : []),
+      ...(reviewsOnly ? [{ verdict: { exists: true } }] : []),
     ],
   };
   const result = await cms.find({
@@ -84,6 +88,7 @@ export async function storyList({
       updatedAt: true,
       format: true,
       isFeatured: true,
+      verdict: true,
     },
   });
   return { ...result, docs: result.docs as PublicStory[] };

@@ -2,7 +2,19 @@ import { isHostedRuntime } from "./hosting";
 export function cmsEnvironment(
   env: Record<string, string | undefined> = process.env,
 ) {
-  const uri = env.DATABASE_URI?.trim();
+  let uri = env.DATABASE_URI?.trim();
+  // On Cloudflare the Worker connects only through its Hyperdrive binding,
+  // which holds the restricted database login. No URI is needed there.
+  if (!uri && env.LUMIERE_HOSTING_PLATFORM === "cloudflare") {
+    const secret = env.PAYLOAD_SECRET?.trim();
+    if (!secret || secret.length < 32)
+      throw new Error("PAYLOAD_SECRET must contain at least 32 characters.");
+    const owner = env.LUMIERE_OWNER_EMAIL?.trim().toLowerCase();
+    if (!owner || !/^\S+@\S+\.\S+$/.test(owner))
+      throw new Error("LUMIERE_OWNER_EMAIL is required.");
+    uri = "";
+    return { uri, secret, owner, hyperdriveOnly: true as const };
+  }
   if (!uri) throw new Error("DATABASE_URI is required for CMS commands.");
   const parsed = new URL(uri);
   if (!["postgres:", "postgresql:"].includes(parsed.protocol))
@@ -30,5 +42,5 @@ export function cmsEnvironment(
   const owner = env.LUMIERE_OWNER_EMAIL?.trim().toLowerCase();
   if (!owner || !/^\S+@\S+\.\S+$/.test(owner))
     throw new Error("LUMIERE_OWNER_EMAIL is required.");
-  return { uri, secret, owner };
+  return { uri, secret, owner, hyperdriveOnly: false as const };
 }

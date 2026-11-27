@@ -57,7 +57,7 @@ try {
       data: {
         name: "Chris James",
         slug: "chris-james",
-        bio: "Founder and CEO of Lumiere Media and Entertainment Technologies.",
+        bio: "Founder and CEO of Lumiere Media.",
       },
     });
   await cms.update({

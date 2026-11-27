@@ -1,9 +1,14 @@
 export const editorialNavigation = [
-  { label: "Latest", href: "/", slug: "" },
-  { label: "Celebrity", href: "/sections/celebrity", slug: "celebrity" },
-  { label: "Film & TV", href: "/sections/film-tv", slug: "film-tv" },
-  { label: "Music", href: "/sections/music", slug: "music" },
-  { label: "Culture", href: "/sections/culture", slug: "culture" },
-  { label: "Exclusives", href: "/sections/exclusives", slug: "exclusives" },
-  { label: "Features", href: "/sections/features", slug: "features" },
+  { label: "Discover", href: "/sections/discover", slug: "discover" },
+  { label: "Critique", href: "/sections/critique", slug: "critique" },
+  { label: "Personal", href: "/sections/personal", slug: "personal" },
+  { label: "The Index", href: "/the-index", slug: "the-index" },
+  { label: "Called It", href: "/called-it", slug: "called-it" },
 ] as const;
+export const verdicts = {
+  obsessed: { label: "Obsessed", tone: "highlight" },
+  "on-repeat": { label: "On repeat", tone: "outline" },
+  fine: { label: "It’s fine", tone: "dashed" },
+  skip: { label: "Skip", tone: "ink" },
+} as const;
+export type VerdictKey = keyof typeof verdicts;

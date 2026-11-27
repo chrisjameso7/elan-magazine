@@ -3,40 +3,50 @@ import InfoPage from "@/components/InfoPage";
 import { brand } from "@/lib/brand";
 export const metadata = {
   title: "About",
-  description:
-    "About Lumière Index, an entertainment and pop-culture publication.",
+  description: `About ${brand.fullName}.`,
   alternates: { canonical: "/about" },
 };
 export default function About() {
   return (
-    <InfoPage title="News that matters." eyebrow="About Lumière Index">
+    <InfoPage title="Who’s next, first." eyebrow={`About ${brand.name}`}>
       <p className="standfirst">
-        Entertainment and pop culture, with a clear editorial point of view.
+        {brand.fullName} is a culture magazine. We cover people before
+        they’re everywhere, and we review what’s out now with a straight
+        verdict.
       </p>
       <p>
-        Lumière Index is an entertainment and pop-culture publication operated
-        by {brand.operator}.
+        Some of the people we write about are already famous. The ones we
+        care about most aren’t yet. Music, film, TV, the internet, style,
+        sport, books: if people are about to be talking about it, it’s ours.
       </p>
-      <h2>The editorial direction</h2>
+      <h2>What we publish</h2>
       <p>
-        We focus on the creative work, personalities and conversations that
-        shape entertainment and popular culture. News, features, interviews,
-        analysis and reviews have distinct editorial roles; each story
-        identifies its format and contributors.
-      </p>
-      <h2>Leadership</h2>
-      <p>
-        <strong>{brand.founder}</strong>
+        <strong>Discover.</strong> First looks at people we think are next.
         <br />
-        Founder and CEO
+        <strong>Critique.</strong> Reviews that end in a verdict: Obsessed, On
+        repeat, It’s fine or Skip.
+        <br />
+        <strong>Personal.</strong> First-person essays about a song, a show or
+        a person that mattered to the writer.
+        <br />
+        <strong>The Index 50.</strong> A weekly ranked list. Public numbers build
+        the shortlist, and editors set the order, moving an entry five places
+        at most.
+        <br />
+        <strong>Called It.</strong> A dated record of who we covered early, so
+        you can check our work.
       </p>
+      <h2>Publisher</h2>
+      <p>Published by Lumiere.</p>
       <h2>Get in touch</h2>
       <p>
-        Editorial enquiries and pitches:{" "}
-        <a href={`mailto:${brand.contactEmail}`}>{brand.contactEmail}</a>.
+        Pitches and enquiries:{" "}
+        <a href={`mailto:${brand.contactEmail}`}>{brand.contactEmail}</a>. Know
+        someone we should cover? <Link href="/put-us-on">Put us on</Link>. Want to write for us?{" "}
+        <Link href="/write-for-us">Apply here</Link>.
       </p>
       <p>
-        <Link href="/standards">Read our editorial standards ↗</Link>
+        <Link href="/standards">Read our editorial standards</Link>
       </p>
     </InfoPage>
   );

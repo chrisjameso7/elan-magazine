@@ -1,3 +1,3 @@
-export function Logo(){return <span className="newsroom-mark">LUMIÈRE<small>INDEX</small></span>;}
-export function Icon(){return <span className="newsroom-mark">LI<span style={{color:'#ff4f32'}}>.</span></span>;}
-export function LoginInfo(){return <div className="newsroom-note"><h2>Lumière Index newsroom</h2><p>Sign in with your staff account. Accounts are provisioned by an administrator.</p><p>For account recovery, ask an administrator for a secure password-reset link.</p></div>;}
+export function Logo(){return <span className="newsroom-mark">the <i>index</i><small>NEWSROOM</small></span>;}
+export function Icon(){return <svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true"><rect x="2" y="12" width="22" height="26" rx="7" fill="currentColor"/><rect x="18" y="15" width="28" height="9" rx="4.5" fill="#FF5A1F"/></svg>;}
+export function LoginInfo(){return <div className="newsroom-note"><h2>The Index newsroom</h2><p>Sign in with your staff account. Accounts are provisioned by an administrator.</p><p>For account recovery, ask an administrator for a secure password-reset link.</p></div>;}
