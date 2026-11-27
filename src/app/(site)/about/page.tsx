@@ -37,11 +37,7 @@ export default function About() {
         you can check our work.
       </p>
       <h2>Publisher</h2>
-      <p>
-        {brand.name} is published by {brand.operator}.
-        <br />
-        <strong>{brand.founder}</strong>, Founder and CEO
-      </p>
+      <p>Published by Lumiere.</p>
       <h2>Get in touch</h2>
       <p>
         Pitches and enquiries:{" "}
