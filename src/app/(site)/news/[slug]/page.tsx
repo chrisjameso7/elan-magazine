@@ -8,14 +8,14 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const a = await getPublishedArticle(slug);
   const hero = a ? populated<Media>(a.hero) : undefined;
-  const share = hero?.sizes?.story?.url || hero?.url;
-  const images = share
+  const images = hero?.url
     ? [
         {
-          url: share,
-          width: hero?.sizes?.story?.width || hero?.width || undefined,
-          height: hero?.sizes?.story?.height || hero?.height || undefined,
-          alt: hero?.alt,
+          url: `/share/${slug}.jpg`,
+          width: 1200,
+          height: 630,
+          type: "image/jpeg",
+          alt: hero.alt,
         },
       ]
     : undefined;
