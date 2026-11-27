@@ -269,3 +269,17 @@ test("Newsletter sign-up opts readers in to The Index topic only", async () => {
   assert.equal(created.unsubscribed, false);
   await assert.rejects(subscribe("ada@example.com", config, (async () => new Response("{}", { status: 500 })) as typeof fetch));
 });
+test("Newsletter welcome email is plain, branded and never throws", async () => {
+  const { sendWelcome, welcomeEmailHTML } = await import("../src/lib/newsletter");
+  const html = welcomeEmailHTML();
+  assert.match(html, /You’re on the <i>list\.<\/i>/);
+  assert.equal(html.includes("—"), false);
+  let sent: Record<string, unknown> = {};
+  await sendWelcome("ada@example.com", "k", (async (_u: string, init?: RequestInit) => {
+    sent = JSON.parse(init!.body as string);
+    return new Response("{}", { status: 200 });
+  }) as typeof fetch);
+  assert.equal(sent.from, "The Index <newsletter@lumiereindex.com>");
+  assert.equal(sent.reply_to, "contact@lumiereindex.com");
+  await sendWelcome("ada@example.com", "k", (async () => { throw new Error("down"); }) as typeof fetch);
+});

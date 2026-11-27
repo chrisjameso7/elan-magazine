@@ -1,4 +1,4 @@
-import { parseSubscriber, subscribe } from "@/lib/newsletter";
+import { parseSubscriber, sendWelcome, subscribe } from "@/lib/newsletter";
 import { siteURL } from "@/lib/brand";
 export const dynamic = "force-dynamic";
 const json = (body: unknown, status = 200) =>
@@ -24,7 +24,10 @@ export async function POST(request: Request) {
   if (!apiKey || !segmentId || !topicId)
     return json({ error: "Sign-ups open soon. Try again later." }, 503);
   try {
-    await subscribe(parsed.email, { apiKey, segmentId, topicId });
+    const { created } = await subscribe(parsed.email, { apiKey, segmentId, topicId });
+    // Only brand-new contacts get the welcome, so the form can't be used to
+    // send repeated emails to someone else's inbox.
+    if (created) await sendWelcome(parsed.email, process.env.RESEND_API_KEY || apiKey);
     return json({ ok: true });
   } catch (error) {
     console.error("Newsletter sign-up failed", error instanceof Error ? error.message : error);
