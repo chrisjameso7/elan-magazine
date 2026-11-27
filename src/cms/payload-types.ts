@@ -101,8 +101,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'index-page': IndexPage;
+  };
+  globalsSelect: {
+    'index-page': IndexPageSelect<false> | IndexPageSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -765,6 +769,41 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * The text at the top of /the-index. Entries themselves live in Index Entries.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "index-page".
+ */
+export interface IndexPage {
+  id: number;
+  /**
+   * One or two sentences under the headline.
+   */
+  intro: string;
+  /**
+   * How the list is made. One rule per line.
+   */
+  rules: string;
+  /**
+   * Optional note for this week, shown above the list. Clear it when the next list goes up.
+   */
+  weekNote?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "index-page_select".
+ */
+export interface IndexPageSelect<T extends boolean = true> {
+  intro?: T;
+  rules?: T;
+  weekNote?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

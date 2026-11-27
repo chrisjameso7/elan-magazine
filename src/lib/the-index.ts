@@ -88,3 +88,19 @@ export function isoWeek(value: string) {
   const yearStart = new Date(Date.UTC(target.getUTCFullYear(), 0, 1));
   return Math.ceil(((target.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
 }
+
+export async function getIndexPage() {
+  const { indexPageDefaults } = await import("@/cms/globals/index-page");
+  try {
+    const { getCMS } = await import("@/lib/cms");
+    const cms = await getCMS();
+    const page = await cms.findGlobal({ slug: "index-page", depth: 0, overrideAccess: false, user: null });
+    return {
+      intro: page.intro || indexPageDefaults.intro,
+      rules: (page.rules || indexPageDefaults.rules).split("\n").map((r) => r.trim()).filter(Boolean),
+      weekNote: page.weekNote?.trim() || "",
+    };
+  } catch {
+    return { intro: indexPageDefaults.intro, rules: indexPageDefaults.rules.split("\n"), weekNote: "" };
+  }
+}

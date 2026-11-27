@@ -2,6 +2,7 @@ import Link from "next/link";
 import { populated, type Article } from "@/lib/publication";
 import {
   formatDate,
+  getIndexPage,
   getLatestIndex,
   indexCategories,
   isoWeek,
@@ -11,11 +12,11 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "The Index 50",
   description:
-    "The people and work moving culture this week, ranked every Thursday.",
+    "Fifty people on the way up, picked before everyone else catches on. A new list every Thursday.",
   alternates: { canonical: "/the-index" },
 };
 export default async function TheIndexPage() {
-  const { week, entries } = await getLatestIndex(50);
+  const [{ week, entries }, page] = await Promise.all([getLatestIndex(50), getIndexPage()]);
   return (
     <main id="main-content" className="wrap">
       <header className="page-head">
@@ -26,14 +27,18 @@ export default async function TheIndexPage() {
           <h1>
             The Index <i className="signal-text">50</i>
           </h1>
-          <p>
-            Who and what people are talking about this week. We build the
-            shortlist from public numbers like views, streams and search
-            interest. Editors set the order, and can move an entry five places
-            at most.
-          </p>
+          <p>{page.intro}</p>
         </div>
       </header>
+      <details className="index-rules">
+        <summary>How we make the list</summary>
+        <ul>
+          {page.rules.map((rule) => (
+            <li key={rule}>{rule}</li>
+          ))}
+        </ul>
+      </details>
+      {page.weekNote && entries.length > 0 && <p className="index-note">{page.weekNote}</p>}
       {entries.length ? (
         <ol className="index-list">
           {entries.map((e) => {

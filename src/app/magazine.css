@@ -1381,3 +1381,34 @@ textarea {
 .newsletter--compact h2 {
   font-size: 30px;
 }
+.index-rules {
+  border: var(--hair);
+  background: var(--white);
+  margin: 0 0 24px;
+  max-width: 900px;
+}
+.index-rules summary {
+  cursor: pointer;
+  padding: 14px 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.index-rules ul {
+  margin: 0;
+  padding: 0 18px 18px 36px;
+  display: grid;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.index-note {
+  max-width: 900px;
+  margin: 0 0 28px;
+  padding-left: 14px;
+  border-left: 4px solid var(--signal);
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.35;
+}

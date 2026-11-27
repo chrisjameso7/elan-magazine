@@ -6,6 +6,7 @@ import { cloudflareImages } from "./cms/cloudflare-images";
 import { cloudflarePostgresPool } from "./cms/cloudflare-postgres";
 import { newsroomIntegrations } from "./cms/integrations";
 import { newsroomCollections } from "./cms/collections";
+import { IndexPage } from "./cms/globals/index-page";
 import { cmsEnvironment } from "./cms/environment";
 const env = cmsEnvironment();
 const integrations = newsroomIntegrations();
@@ -32,6 +33,7 @@ export default buildConfig({
     },
   },
   collections: newsroomCollections,
+  globals: [IndexPage],
   editor: lexicalEditor(),
   sharp: cloudflareImages,
   db: postgresAdapter({
